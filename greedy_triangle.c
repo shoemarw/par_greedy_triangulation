@@ -16,6 +16,13 @@
  
 #include "greedy_triangle.h"
 
+// timer marcros written by Professor Lam, borrowed from PA2
+#define START_TIMER(NAME) gettimeofday(&tv, NULL); \
+    double NAME ## _time = tv.tv_sec+(tv.tv_usec/1000000.0);
+#define STOP_TIMER(NAME) gettimeofday(&tv, NULL); \
+    NAME ## _time = tv.tv_sec+(tv.tv_usec/1000000.0) - (NAME ## _time);
+#define GET_TIMER(NAME) (NAME##_time)
+
 int main(int argc, char *argv[]) {
 	
 	// Make sure we get the expected input.
