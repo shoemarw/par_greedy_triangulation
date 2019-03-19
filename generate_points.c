@@ -12,6 +12,7 @@
  */
 
 #include "greedy_triangle.h"
+#define RANGE 100
 
 int main(int argc, char *argv[]) {
 	
@@ -44,8 +45,8 @@ int main(int argc, char *argv[]) {
 	// generate 2*num_points pseudo-random numbers
 	char *pts = allocate(iterations);
 	for (int i = 0; i < iterations; i++) {
-		seed = (11*seed + 67) % 100;
-		pts[i] = seed - 49;
+		seed = (1103515245*seed + 12345) & ((1<<31) - 1);
+		pts[i] = seed%RANGE - (RANGE/2 +1);
 	}
 	
 	// store the number of points on the first line of
