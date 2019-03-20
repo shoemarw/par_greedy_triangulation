@@ -57,8 +57,19 @@ int main(int argc, char *argv[]) {
 	disps[1] = offsetof(point_t, y);
 
 	MPI_Type_create_struct(2, block_lens, disps, types, &dt_point);
-	MPI_Type_create_resized(dt_point, 0, sizeof(line_t), &dt_line);
 	MPI_Type_commit(&dt_point);
+
+	// MPI_Type_create_resized(dt_point, 0, sizeof(line_t), &dt_line);
+
+	MPI_Aint disps[3];	
+	disps[0] = offsetof(line_t, p);
+	disps[1] = offsetof(line_t, q);
+	disps[2] = offsetof(line_t, len);
+
+	int block_lens[] = {1,1,1};
+	MPI_Datatype types = {dt_point, dt_point, MPI_DOUBLE}
+	MPI_Type_create_struct(3, block_lens, disps, types, &dt_line);
+
 	MPI_Type_commit(&dt_line);
 
 
