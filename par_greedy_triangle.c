@@ -56,6 +56,7 @@ int main(int argc, char *argv[]) {
 	disps_p[0] = offsetof(point_t, x);
 	disps_p[1] = offsetof(point_t, y);
 
+	printf("line 59\n", );
 	MPI_Type_create_struct(2, block_lens_p, disps_p, types_p, &MPI_point_t);
 	MPI_Type_commit(&MPI_point_t);
 
