@@ -25,13 +25,15 @@
 
 
 point_t* my_points; // a processes' portion of the point set.
+line_t*  my_lines;  // a processes' portion of lines.
+
 
 int main(int argc, char *argv[]) {
 	
 	// Set up MPI stuff
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);	
 	
 	// Make sure we get the expected input.
 	if (argc != 2) {
@@ -39,6 +41,21 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
+	// Create MPI derived data types needed to communicate points and lines.
+	// We time this to see how much overhead cost it adds in terms of time.
+	// utility struct for timing calls
+    struct timeval tv;
+	START_TIMER(MPIoverhead)
+	// create an MPI data type for points
+	int array_of_blocklengths_points[2] = {1, 1};
+	MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
+	MPI_Aint array_of_displacements_points[2] = {0,8};
+	MPI_Datatype MPI_point_t;
+	MPI_Type_create_struct(2, array_of_blocklengths_points, 
+	    array_of_displacements_points, array_of_types_points, &MPI_point_t);
+	//commit the type
+	//build line type
+	STOP_TIMER(MPIoverhead)
 	
 	if (my_rank == 0) {
 		// Open the input file for reading. 
@@ -79,20 +96,73 @@ int main(int argc, char *argv[]) {
 		fclose(fin);
 	}
 	
-	
-	// Scatter all the points in points[] among the processes and store
-	// locally in my_points.
-//TODO	MPI_Scatter(
-	
 	  //                      //
 	 //  Generate all lines  //
 	//                      //
-	// utility struct for timing calls
-    struct timeval tv;
+	
 	START_TIMER(generate)
+	// Scatter all the points in points[] among the processes and store
+	// locally in my_points so Eliza's binomial tree structure can be used.
+//TODO	MPI_Scatter(
+
+//////////////////////////////////////////////////////////////////////////////
+//TEMPORARY SERIAL CODE SO THAT PHASES 2 AND 3 CAN BE DEVELOPED...////////////
+//THIS SHOULD BE REMOVED WHEN ELIZA'S BINOMIAL TREE STRUCTURE IS IMPLEMENTED//
+	if (my_rank == 0) {														//
+		int num_lines = ((num_points)*(num_points-1))/2;					//
+		line_t* lines = (line_t*) allocate(num_lines * sizeof(line_t));		//
+																			//
+		long index = 0;														//
+		for (int i = 0; i < num_points; i++) {								//
+			// Compute the distance between point i and every point			//
+			// from i+1 onward. Then 'make' and store the corresponding		//
+			// line.														//
+			for (int j = i+1; j < num_points; j++) {						//
+				double length = distance(&points[i], &points[j]);			//
+				line_t* l = (line_t*) allocate(sizeof(line_t));				//
+				// set the values of the line and store it.					//
+				l->p =         &points[i];									//
+				l->q =         &points[j];									//
+				l->len =       length;										//
+				lines[index] = *l;											//
+				index++;													//
+				free(l);													//
+			}																//
+		}																	//
+	}																		//
+//TEMPORARY CODE TO SCATTER THE LINES FROM PROC 0 TO ALL PROCS////////////////
+//	MPI_Scatter(lines);
+//////////////////////////////////////////////////////////////////////////////
+
+
+
 	STOP_TIMER(generate)
 	
+	  //                                      //
+	 //  Sort the lines from small to large  //
+	//                                      //
 	
+	START_TIMER(sort)
+//	qsort(lines, num_lines, sizeof(line_t), compare);
+	STOP_TIMER(sort)
+	
+	  //                                   //
+     //  Greedily build the tringulation  //
+    //	                                 //
+	
+	START_TIMER(triangulate)
+	STOP_TIMER(triangulate)
+	
+	  //                                     //
+     //  Triangulation Done, Display Stats  //
+    //	                                   //
+	
+	// These stats are only for the portions of the code specific to the three
+	// phases of building the greedy triangulation. Generate all lines, sort the
+	// lines in non-decreasing order, and greedily adding line segments to the
+	// triangulation.
+	printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n",
+	        GET_TIMER(generate), GET_TIMER(sort), GET_TIMER(triangulate));
 	
 	
 	// Clean up and exit
