@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
 
 	MPI_Aint disps_p[2];
 	MPI_Datatype MPI_point_t, MPI_line_t;
-	int block_lens_p[] = {1,1};
-	MPI_Datatype types_p = {MPI_DOUBLE, MPI_DOUBLE};
+	int block_lens_p[] = {2};
+	MPI_Datatype types_p = {MPI_DOUBLE};
 
 	disps_p[0] = offsetof(point_t, x);
 	disps_p[1] = offsetof(point_t, y);
