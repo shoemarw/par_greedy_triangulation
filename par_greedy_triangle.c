@@ -48,27 +48,27 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	MPI_Aint disps[2];
+	MPI_Aint disps_p[2];
 	MPI_Datatype MPI_point_t, MPI_line_t;
-	int block_lens[] = {1,1};
-	MPI_Datatype types = {MPI_DOUBLE, MPI_DOUBLE};
+	int block_lens_p[] = {1,1};
+	MPI_Datatype types_p = {MPI_DOUBLE, MPI_DOUBLE};
 
-	disps[0] = offsetof(point_t, x);
-	disps[1] = offsetof(point_t, y);
+	disps_p[0] = offsetof(point_t, x);
+	disps_p[1] = offsetof(point_t, y);
 
-	MPI_Type_create_struct(2, block_lens, disps, types, &MPI_point_t);
+	MPI_Type_create_struct(2, block_lens_p, disps_p, types_p, &MPI_point_t);
 	MPI_Type_commit(&MPI_point_t);
 
 	// MPI_Type_create_resized(MPI_point_t, 0, sizeof(line_t), &MPI_line_t);
 
-	MPI_Aint disps[3];	
-	disps[0] = offsetof(line_t, p);
-	disps[1] = offsetof(line_t, q);
-	disps[2] = offsetof(line_t, len);
+	MPI_Aint disps_l[3];	
+	disps_l[0] = offsetof(line_t, p);
+	disps_l[1] = offsetof(line_t, q);
+	disps_l[2] = offsetof(line_t, len);
 
-	block_lens[] = {1,1,1};
-	types = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
-	MPI_Type_create_struct(3, block_lens, disps, types, &MPI_line_t);
+	int block_lens_l[] = {1,1,1};
+	MPI_Datatype types_l = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
+	MPI_Type_create_struct(3, block_lens_l, disps_l, types_l, &MPI_line_t);
 
 	MPI_Type_commit(&MPI_line_t);
 
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
 	free(points);
 	free(lines);
 	MPI_Type_free(&MPI_point_t);
-	MPI_Type_free(&MPI_line_t)
+	MPI_Type_free(&MPI_line_t);
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
 }
