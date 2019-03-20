@@ -48,6 +48,11 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
+	// Create MPI derived data types needed to communicate points and lines.
+	// We time this to see how much overhead cost it adds in terms of time.
+	// utility struct for timing calls
+    struct timeval tv;
+	START_TIMER(MPIoverhead)
 
 	//Build MPI_point_t
 	MPI_Aint disps_p[2];
@@ -73,34 +78,10 @@ int main(int argc, char *argv[]) {
 
 	// MPI_Type_commit(&MPI_line_t);
 
-
-	
-	// Create MPI derived data types needed to communicate points and lines.
-	// We time this to see how much overhead cost it adds in terms of time.
-	// utility struct for timing calls
-    struct timeval tv;
-	START_TIMER(MPIoverhead)
-	// Create an MPI data type for points
-	// int array_of_blocklengths_points[2] = {1, 1};
-	// MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
-	// MPI_Aint array_of_displacements_points[2];
-	// array_of_displacements_points[1] = offsetof(point_t, x);
-	// array_of_displacements_points[2] = offsetof(point_t, y);
-
-	// MPI_Datatype MPI_point_t;
-	// MPI_Type_create_struct(2, array_of_blocklengths_points, 
-	//     array_of_displacements_points, array_of_types_points, &MPI_point_t);
-	// // Commit the new type
-	// MPI_Type_commit(&MPI_point_t);
-
-	// // Create an MPI line type
-	// int array_of_blocklengths_lines[3] = {1, 1, 1};
-	// MPI_Datatype array_of_types_lines[3] = {MPI_point_t, MPI_point_t, 
-	// 										MPI_DOUBLE};
-	// MPI_Aint array_of_displacements_lines[3];
-	// array_of_displacements_lines[1] = 										
-	
 	STOP_TIMER(MPIoverhead)
+
+	
+
 	
 	if (my_rank == 0) {
 		// Open the input file for reading. 
