@@ -278,7 +278,7 @@ void generate_image(line_t lines[], int number_lines)
         turtle_draw_line(p_x * scale, p_y * scale , q_x * scale , q_y * scale);
     }
     
-    turtle_save_bmp("triangulation graphics.bmp"); // save image
+    turtle_save_bmp("triangulation_graphics.bmp"); // save image
     
     turtle_cleanup(); // clean turtle
     

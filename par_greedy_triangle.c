@@ -10,6 +10,7 @@
  
 #include <sys/time.h> 
 #include "greedy_triangle.h"
+#include <mpi.h>
 
 // Timer marcros written by Professor Lam, borrowed from PA2
 #define START_TIMER(NAME) gettimeofday(&tv, NULL); \
@@ -23,9 +24,15 @@
 // image created will only be useful for a point set of less than 1000.
 //#define IMAGE
 
-
+int nprocs;         // number of processes
+int my_rank;        // rank of a particular process
 point_t* my_points; // a processes' portion of the point set.
 line_t*  my_lines;  // a processes' portion of lines.
+
+//TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
+long num_points;
+point_t* points;
+line_t* lines;
 
 
 int main(int argc, char *argv[]) {
@@ -53,8 +60,14 @@ int main(int argc, char *argv[]) {
 	MPI_Datatype MPI_point_t;
 	MPI_Type_create_struct(2, array_of_blocklengths_points, 
 	    array_of_displacements_points, array_of_types_points, &MPI_point_t);
-	//commit the type
+	//commit the new type
+	MPI_Type_commit(&MPI_point_t);
 	//build line type
+	int array_of_blocklengths_lines[3] = {1, 1, 1};
+	MPI_Datatype array_of_types_lines[3] = {MPI_point_t, MPI_point_t, 
+											MPI_DOUBLE};
+	//TODO MPI_Aint array_of_displacements_lines[3] = {}											
+	
 	STOP_TIMER(MPIoverhead)
 	
 	if (my_rank == 0) {
@@ -135,7 +148,6 @@ int main(int argc, char *argv[]) {
 //////////////////////////////////////////////////////////////////////////////
 
 
-
 	STOP_TIMER(generate)
 	
 	  //                                      //
@@ -161,13 +173,15 @@ int main(int argc, char *argv[]) {
 	// phases of building the greedy triangulation. Generate all lines, sort the
 	// lines in non-decreasing order, and greedily adding line segments to the
 	// triangulation.
-	printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n",
-	        GET_TIMER(generate), GET_TIMER(sort), GET_TIMER(triangulate));
+	printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n Overhead: %.4f\n",
+	        GET_TIMER(generate), GET_TIMER(sort), 
+	        GET_TIMER(triangulate), GET_TIMER(MPIoverhead));
 	
 	
 	// Clean up and exit
 	free(points);
 	free(lines);
+	MPI_Type_free(&MPI_point_t);
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
 }

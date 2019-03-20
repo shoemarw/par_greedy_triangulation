@@ -27,7 +27,7 @@
 // Toggle to generate image. It is recommended that this be commented out
 // if more than 1000 points are in the point set. This is because the 
 // image created will only be useful for a point set of less than 1000.
-//#define IMAGE
+#define IMAGE
 
 int main(int argc, char *argv[]) {
 	
