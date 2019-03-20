@@ -24,7 +24,7 @@
     NAME ## _time = tv.tv_sec+(tv.tv_usec/1000000.0) - (NAME ## _time);
 #define GET_TIMER(NAME) (NAME##_time)
 
-// Toggle to generate image. It is reccomended that this be commented out
+// Toggle to generate image. It is recommended that this be commented out
 // if more than 1000 points are in the point set. This is because the 
 // image created will only be useful for a point set of less than 1000.
 //#define IMAGE
