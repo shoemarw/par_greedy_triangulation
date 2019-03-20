@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 
 	//Build MPI_point_t
 	MPI_Datatype MPI_point_t, MPI_line_t;
-	
+
 	int block_lens_p[] = {2};
 
 	MPI_Aint disps_p[2];
@@ -68,17 +68,19 @@ int main(int argc, char *argv[]) {
 	MPI_Type_create_struct(2, block_lens_p, disps_p, types_p, &MPI_point_t);
 	MPI_Type_commit(&MPI_point_t);
 
-	// //Build MPI_line_t
-	// MPI_Aint disps_l[3];	
-	// disps_l[0] = offsetof(line_t, p);
-	// disps_l[1] = offsetof(line_t, q);
-	// disps_l[2] = offsetof(line_t, len);
+	//Build MPI_line_t
+	int block_lens_l[] = {1,1,1};
 
-	// int block_lens_l[] = {1,1,1};
-	// MPI_Datatype types_l = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
-	// MPI_Type_create_struct(3, block_lens_l, disps_l, types_l, &MPI_line_t);
+	MPI_Aint disps_l[3];	
+	disps_l[0] = offsetof(line_t, p);
+	disps_l[1] = offsetof(line_t, q);
+	disps_l[2] = offsetof(line_t, len);
 
-	// MPI_Type_commit(&MPI_line_t);
+	MPI_Datatype types_l[3] = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
+	
+	MPI_Type_create_struct(3, block_lens_l, disps_l, types_l, &MPI_line_t);
+
+	MPI_Type_commit(&MPI_line_t);
 
 	STOP_TIMER(MPIoverhead)
 
