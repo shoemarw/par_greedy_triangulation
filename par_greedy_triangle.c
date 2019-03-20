@@ -197,7 +197,7 @@ int main(int argc, char *argv[]) {
 	free(points);
 	free(lines);
 	MPI_Type_free(&MPI_point_t);
-	MPI_Type_free(&MPI_line_t);
+	// MPI_Type_free(&MPI_line_t);
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
 }
