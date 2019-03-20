@@ -13,15 +13,21 @@
  *
  * Name(s): Randy, Eliza, Alex
  */
- 
+
+#include <sys/time.h> 
 #include "greedy_triangle.h"
 
-// timer marcros written by Professor Lam, borrowed from PA2
+// Timer marcros written by Professor Lam, borrowed from PA2
 #define START_TIMER(NAME) gettimeofday(&tv, NULL); \
     double NAME ## _time = tv.tv_sec+(tv.tv_usec/1000000.0);
 #define STOP_TIMER(NAME) gettimeofday(&tv, NULL); \
     NAME ## _time = tv.tv_sec+(tv.tv_usec/1000000.0) - (NAME ## _time);
 #define GET_TIMER(NAME) (NAME##_time)
+
+// Toggle to generate image. It is reccomended that this be commented out
+// if more than 1000 points are in the point set. This is because the 
+// image created will only be useful for a point set of less than 1000.
+//#define IMAGE
 
 int main(int argc, char *argv[]) {
 	
@@ -31,7 +37,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
-	// Open the input file for reading.
+	// Open the input file for reading. 
 	char *fn = argv[1];
 	FILE* fin = open_file(fn, "r");
 	
@@ -47,9 +53,10 @@ int main(int argc, char *argv[]) {
 	point_t* points = (point_t*) allocate(num_points * sizeof(point_t));
 	
 	// Read in and store the point s.
-	long x, y;     // The Cartesian coordinates of a point.
+	double x, y;     // The Cartesian coordinates of a point.
 	long i = 0;    // Index for storing points.
-	while (fscanf(fin, "%ld %ld\n", &x, &y) == 2) {
+
+	while (fscanf(fin, "%lf %lf\n", &x, &y) == 2) {
 		// Put the values in a point struct and store.
 		point_t *p = (point_t*) allocate(sizeof(point_t));
 		p->x = x;
@@ -71,6 +78,9 @@ int main(int argc, char *argv[]) {
 	 //  Generate all lines  //
 	//                      //
 	
+	// utility struct for timing calls
+    struct timeval tv;
+	START_TIMER(generate)
 	// Make all possible line segments between the points
 	// and compute the length of each line.
 	// Compute the number of lines, note that the below formula
@@ -96,29 +106,21 @@ int main(int argc, char *argv[]) {
 			free(l);
 		}
 	}
+	STOP_TIMER(generate)
 	
 	  //                                      //
 	 //  Sort the lines from small to large  //
 	//                                      //
 	
+	START_TIMER(sort)
 	qsort(lines, num_lines, sizeof(line_t), compare);
-	
-    //TEST code to see if lines are sorted correctly.
-	for (int i = 0; i < num_lines; i++) {
-		// Get the length of the line.
-		double length = (&lines[i])->len;
-		// Get the values of the first point of the line.
-		int p_x   = (&lines[i])->p->x;
-		int p_y   = (&lines[i])->p->y;
-		// Get the values of the second point of the line.
-		int q_x   = (&lines[i])->q->x;
-		int q_y   = (&lines[i])->q->y;
-	}
-	
+	STOP_TIMER(sort)
+		
       //                                   //
      //  Greedily build the tringulation  //
     //	                                 //
 	
+	START_TIMER(triangulate)
 	// The triangulation will be stored as an array of lines.
 	// Allocate space for the triangulation.
 	line_t* triang = (line_t*) allocate(num_lines*sizeof(line_t));
@@ -166,12 +168,41 @@ int main(int argc, char *argv[]) {
 		copy_array(temp, lines, temp_size);
 		free(temp);
 	}
+	STOP_TIMER(triangulate)
 	
+	  //                                     //
+     //  Triangulation Done, Display Stats  //
+    //	                                   //
 	
-	// generate image, the time this takes is not included in analysis
-	// because it is not part of the greedy triangulation algorithm.
-	// this is included so the triangulation can be verified visually.
+	// These stats are only for the portions of the code specific to the three
+	// phases of building the greedy triangulation. Generate all lines, sort the
+	// lines in non-decreasing order, and greedily adding line segments to the
+	// triangulation.
+	printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n",
+	        GET_TIMER(generate), GET_TIMER(sort), GET_TIMER(triangulate));
+	
+	// Generate image
+# ifdef IMAGE	
 	generate_image(triang, tlines);
+# endif	
+	
+	// Store the triangulation in a file. Each line in the file corresponds to 
+	// a line in the triangulation. Each line consists of two tuples representing
+	// the end points of the line.
+	FILE* write_file = open_file("triangle_result.txt", "w");
+	
+	// The first line of the file specifies the number of lines in the file.
+	fprintf(write_file, "%ld\n", tlines);
+	
+	// Write triangulation to file for turtle processing
+	for (int i = 0; i < tlines; i++)
+	{
+	    point_t p = *(triang[i].p);
+	    point_t q = *(triang[i].q);
+	    fprintf(write_file, "(%lf, %lf) (%lf, %lf)\n", p.x, p.y, q.x, q.y);
+	}
+	
+	fclose(write_file);
 	
 	// Clean up and exit
 	free(points);

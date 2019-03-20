@@ -12,24 +12,31 @@
  */
 
 #include "greedy_triangle.h"
-#define RANGE 100
 
 int main(int argc, char *argv[]) {
 	
-	// make sure we get the expected input.
+	// Make sure we get the expected input.
 	if (argc != 3) {
 		printf("Usage %s <filename>, argv[0] <number of points>	<seed>\n",
 				argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	
-	// the number of points to be generated
+	// The number of points to be generated
 	unsigned long num_points = strtol(argv[1], NULL, 10);
-	// the seed for generating pseudo-random numbers
-	long seed = strtol(argv[2], NULL, 10);
+	// The seed for generating pseudo-random numbers
+	unsigned long seed = strtol(argv[2], NULL, 10);
 	
-	// create the name of the file where the points will be stored.
-	// the name will be "test<number of points>pts<seed>"
+	// Set the range in which all x-y values are generated
+	int range;
+	if (num_points < 10000) {
+		range = 100;
+	} else {
+		range = sqrt(num_points);
+	}
+	
+	// Create the name of the file where the points will be stored.
+	// The name will be "test<number of points>pts<seed>"
 	char *fname;
 	fname = allocate(strlen(argv[1]) + strlen(argv[2]) + 8);			 
 	fname[0] = '\0';
@@ -40,21 +47,22 @@ int main(int argc, char *argv[]) {
 	
 	// Create a file for writing
 	FILE* fin = open_file(fname, "w");
-	long long iterations = 2*num_points;
-	
-	// generate 2*num_points pseudo-random numbers
-	char *pts = allocate(iterations);
-	for (int i = 0; i < iterations; i++) {
-		seed = (1103515245*seed + 12345) & ((1<<31) - 1);
-		pts[i] = seed%RANGE - (RANGE/2 +1);
+		
+	// Generate 2*num_points pseudo-random numbers
+	char *pts = allocate(2*num_points);
+	for (int i = 0; i < 2*num_points; i++) {
+		// Compute the next pseudo random number in the sequence
+		seed = (1103515245*seed + 12345) % ((1<<31));
+		// Mod the value into the proper range and shift it so the
+		// values fall into the interval [-(range/2)-1, range/2]
+		pts[i] = seed%range - (range/2 +1);
 	}
 	
-	// store the number of points on the first line of
-	// the file
+	// Store the number of points on the first line of the file
 	fprintf(fin, "%s", argv[1]);
 	fprintf(fin, "\n");
-	// store the numbers in a file
-	for (int i = 0; i < iterations; i += 2) {
+	// store the numbers in the file
+	for (int i = 0; i < 2*num_points; i += 2) {
 		fprintf(fin, "%d", pts[i]);
 		fprintf(fin, " ");
 		fprintf(fin, "%d", pts[i+1]);
