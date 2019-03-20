@@ -55,13 +55,15 @@ int main(int argc, char *argv[]) {
 	START_TIMER(MPIoverhead)
 
 	//Build MPI_point_t
-	MPI_Aint disps_p[2];
 	MPI_Datatype MPI_point_t, MPI_line_t;
+	
 	int block_lens_p[] = {2};
-	MPI_Datatype types_p = {MPI_DOUBLE};
 
+	MPI_Aint disps_p[2];
 	disps_p[1] = offsetof(point_t, x);
 	disps_p[2] = offsetof(point_t, y);
+
+	MPI_Datatype types_p[2] = {MPI_DOUBLE,MPI_DOUBLE};
 
 	MPI_Type_create_struct(2, block_lens_p, disps_p, types_p, &MPI_point_t);
 	MPI_Type_commit(&MPI_point_t);
