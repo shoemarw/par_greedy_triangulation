@@ -47,26 +47,46 @@ int main(int argc, char *argv[]) {
 		printf("Usage %s <filename>, argv[0] \n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
+
+	MPI_Aint disps[2];
+	MPI_Datatype dt_point, dt_line;
+	int block_lens[] = {1,1};
+	MPI_Datatype types = {MPI_DOUBLE, MPI_DOUBLE}
+
+	disps[0] = offsetof(point_t, x);
+	disps[1] = offsetof(point_t, y);
+
+	MPI_Type_create_struct(2, block_lens, disps, types, &dt_point);
+	MPI_Type_create_resized(dt_point, 0, sizeof(line_t), &dt_line);
+	MPI_Type_commit(&dt_point);
+	MPI_Type_commit(&dt_line);
+
+
 	
 	// Create MPI derived data types needed to communicate points and lines.
 	// We time this to see how much overhead cost it adds in terms of time.
 	// utility struct for timing calls
     struct timeval tv;
 	START_TIMER(MPIoverhead)
-	// create an MPI data type for points
-	int array_of_blocklengths_points[2] = {1, 1};
-	MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
-	MPI_Aint array_of_displacements_points[2] = {0,8};
-	MPI_Datatype MPI_point_t;
-	MPI_Type_create_struct(2, array_of_blocklengths_points, 
-	    array_of_displacements_points, array_of_types_points, &MPI_point_t);
-	//commit the new type
-	MPI_Type_commit(&MPI_point_t);
-	//build line type
-	int array_of_blocklengths_lines[3] = {1, 1, 1};
-	MPI_Datatype array_of_types_lines[3] = {MPI_point_t, MPI_point_t, 
-											MPI_DOUBLE};
-	//TODO MPI_Aint array_of_displacements_lines[3] = {}											
+	// Create an MPI data type for points
+	// int array_of_blocklengths_points[2] = {1, 1};
+	// MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
+	// MPI_Aint array_of_displacements_points[2];
+	// array_of_displacements_points[1] = offsetof(point_t, x);
+	// array_of_displacements_points[2] = offsetof(point_t, y);
+
+	// MPI_Datatype MPI_point_t;
+	// MPI_Type_create_struct(2, array_of_blocklengths_points, 
+	//     array_of_displacements_points, array_of_types_points, &MPI_point_t);
+	// // Commit the new type
+	// MPI_Type_commit(&MPI_point_t);
+
+	// // Create an MPI line type
+	// int array_of_blocklengths_lines[3] = {1, 1, 1};
+	// MPI_Datatype array_of_types_lines[3] = {MPI_point_t, MPI_point_t, 
+	// 										MPI_DOUBLE};
+	// MPI_Aint array_of_displacements_lines[3];
+	// array_of_displacements_lines[1] = 										
 	
 	STOP_TIMER(MPIoverhead)
 	
