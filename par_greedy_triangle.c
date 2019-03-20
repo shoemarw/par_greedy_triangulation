@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	//Build MPI_point_t
+	// //Build MPI_point_t
 	// MPI_Aint disps_p[2];
 	// MPI_Datatype MPI_point_t, MPI_line_t;
 	// int block_lens_p[] = {2};
@@ -80,18 +80,18 @@ int main(int argc, char *argv[]) {
 	// utility struct for timing calls
     struct timeval tv;
 	START_TIMER(MPIoverhead)
-	Create an MPI data type for points
-	int array_of_blocklengths_points[2] = {1, 1};
-	MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
-	MPI_Aint array_of_displacements_points[2];
-	array_of_displacements_points[1] = offsetof(point_t, x);
-	array_of_displacements_points[2] = offsetof(point_t, y);
+	// Create an MPI data type for points
+	// int array_of_blocklengths_points[2] = {1, 1};
+	// MPI_Datatype array_of_types_points[2] = {MPI_DOUBLE, MPI_DOUBLE};
+	// MPI_Aint array_of_displacements_points[2];
+	// array_of_displacements_points[1] = offsetof(point_t, x);
+	// array_of_displacements_points[2] = offsetof(point_t, y);
 
-	MPI_Datatype MPI_point_t;
-	MPI_Type_create_struct(2, array_of_blocklengths_points, 
-	    array_of_displacements_points, array_of_types_points, &MPI_point_t);
-	// Commit the new type
-	MPI_Type_commit(&MPI_point_t);
+	// MPI_Datatype MPI_point_t;
+	// MPI_Type_create_struct(2, array_of_blocklengths_points, 
+	//     array_of_displacements_points, array_of_types_points, &MPI_point_t);
+	// // Commit the new type
+	// MPI_Type_commit(&MPI_point_t);
 
 	// // Create an MPI line type
 	// int array_of_blocklengths_lines[3] = {1, 1, 1};
