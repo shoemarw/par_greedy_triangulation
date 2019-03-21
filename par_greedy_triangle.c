@@ -132,7 +132,7 @@ void distrib_points() {
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		// point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
+		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
 		// MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
                  // MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
