@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 	if (my_rank==0) {
 
 		for (int i = 0; i < num_points; i++){
-			printpoint(&points[i]);
+			print_point(&points[i]);
 		}
 
 
