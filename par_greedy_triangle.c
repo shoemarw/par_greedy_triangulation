@@ -141,9 +141,9 @@ int main(int argc, char *argv[]) {
 	// Scatter all the points in points[] among the processes and store
 	// locally in my_points so Eliza's binomial tree structure can be used.
 
-	int* send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
+	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
 	int points_to_recv;						// a single number from send_counts
-	int* displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
+	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
 
 	if (my_rank==0) {
 		// use interger division to determin the base amount for points each process will recieve 
@@ -248,7 +248,7 @@ int main(int argc, char *argv[]) {
 		// calculate how many total lines are being sent and the displs
         for (int i=1; i < nprocs; i++) {
            total_line_num += recv_lines_count[i];
-           displs[i] = disps[i-1] + recv_lines_count[i-1];
+           displs[i] = displs[i-1] + recv_lines_count[i-1];
         }
 
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
