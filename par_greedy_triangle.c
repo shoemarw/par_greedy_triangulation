@@ -199,7 +199,7 @@ int main(int argc, char *argv[]) {
 	line_t* my_lines;				// Array of the process's calculated lines
 	long num_of_lines;				// number of lines
 
-
+	num_points = sizeof(my_points)/sizeof(point_t);
 	num_lines = ((num_points)*(num_points-1))/2;
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	// calculate lines 
@@ -263,6 +263,8 @@ int main(int argc, char *argv[]) {
 
 
 	    // root scatterv
+
+	    free(recv_lines);
 	}
 	else {
 		// non-root scatterv
