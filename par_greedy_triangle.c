@@ -24,6 +24,10 @@
 // image created will only be useful for a point set of less than 1000.
 //#define IMAGE
 
+const int  TAG = 1;
+const int  ROOT = 0;
+
+
 int nprocs;         // number of processes
 int my_rank;        // rank of a particular process
 point_t* my_points; // a processes' portion of the point set.
@@ -166,17 +170,17 @@ int main(int argc, char *argv[]) {
 			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
 		}
 		// send each process how many points it should expect
-		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, 0, MPI_COMM_WORLD);
+                 MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 	else {
-		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, 0, MPI_COMM_WORLD);
+                 MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 
 
@@ -197,10 +201,10 @@ int main(int argc, char *argv[]) {
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	// calculate lines 
 
-	for (int iteration_square = 1; iteration_square < nprocs, iteration_square *= 2) {
+	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
 			int num_cur_point = sizeof(my_points)/sizeof(point_t);
-			int send_to = (my_rank-i+nprocs)%nprocs;
+			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
 			
 			// send the number of points the receiver should expect
 			MPI_Send(num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
@@ -220,7 +224,7 @@ int main(int argc, char *argv[]) {
 
 			// receive number of points
 			MPI_Recv(recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
-					 MPI_STATUS_IGNORE)
+					 MPI_STATUS_IGNORE);
 
 			// receive points into new_points
 			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
@@ -236,20 +240,20 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank==0) {
 		// get the number of line_t each process is sending
-		MPI_Gather(num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		MPI_Gather(num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 		displs[0] = 0;
 		long total_line_num = recv_lines_count[0];
 
 		// calculate how many total lines are being sent and the displs
-        for (int i=1; i<size; i++) {
+        for (int i=1; i < nprocs; i++) {
            total_line_num += recv_lines_count[i];
            displs[i] = disps[i-1] + recv_lines_count[i-1];
         }
 
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
 		MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-	    displs, MPI_line_t, 0, MPI_COMM_WORLD);
+	    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 
 
 	    // root scatterv
