@@ -37,6 +37,7 @@ line_t*  my_lines;  // a processes' portion of lines.
 long num_points;
 point_t* points;
 line_t* lines;
+MPI_Datatype MPI_point_t, MPI_line_t;
 
 
 
@@ -86,7 +87,7 @@ void distrib_points() {
 	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
 	int points_to_recv;						// a single number from send_counts
 	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
-	
+
 	if (my_rank==ROOT) {
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
@@ -129,6 +130,10 @@ void distrib_points() {
 
 void gen_lines() {
 //  //  //  //  //  // calc lines  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+
+	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
+	int* recv_lines_count;			// Used by root only
+
 
 	// In this for loop we calculated all the lines
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
@@ -223,8 +228,6 @@ int main(int argc, char *argv[]) {
 	START_TIMER(MPIoverhead)
 
 	//Build MPI_point_t
-	MPI_Datatype MPI_point_t, MPI_line_t;
-
 	int block_lens_p[] = {2};
 
 	MPI_Aint disps_p[2];
@@ -282,10 +285,8 @@ int main(int argc, char *argv[]) {
   // - - - - - - - //
  //  Eliza start  //
 // - - - - - - - //
-	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
 	int num_lines;					// Number of lines to be calculated
 	line_t* recv_lines = 0; 		// Used by root only
-	int* recv_lines_count;			// Used by root only
 	int displs[nprocs];				// Used by root only
 	line_t* my_lines;				// Array of the process's calculated lines
 	long num_of_lines;				// number of lines
