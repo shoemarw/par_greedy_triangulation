@@ -217,11 +217,6 @@ void distrib_lines() {
 
 
 
-
-
-
-
-
 ////			  //
 /// 	Main 	 ///
 // 				////
@@ -278,6 +273,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", 
 	STOP_TIMER(MPIoverhead)
 
 	
+	
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
@@ -287,7 +283,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273\n");
 
 	// Root scatters the points
-	distrib_points();
+	// distrib_points();
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 
 
