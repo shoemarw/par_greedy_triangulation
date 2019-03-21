@@ -254,7 +254,7 @@ void distrib_lines() {
 	long l_num_d_lines;
 	long l_base ;
 	int remainder;
-	long *l_send_counts;
+	int *i_send_counts;
 	long l_recv_num;
 	long *l_displs;
 
@@ -262,13 +262,13 @@ void distrib_lines() {
 		l_num_d_lines = sizeof(d_recv_lines) / (sizeof(double) * 5);	// Number of lines (5 doubles)
 	 	l_base = l_num_d_lines/nprocs;		// Base number of lines to send (lines being 5 doub;es)
 	 	remainder = l_num_d_lines%nprocs;	// if there are any remaining lines after the base amount is spilt up
-	 	l_send_counts = (long*) allocate(sizeof(long)*nprocs); // Amount of lines (5 doubles) to send to each process 
+	 	i_send_counts = (int*) allocate(sizeof(int)*nprocs); // Amount of lines (5 doubles) to send to each process 
 
-	 	// Calculate l_send_counts
+	 	// Calculate i_send_counts
 	 	for (int i = 0; i < nprocs; i++) {
-	 		l_send_counts[i] = l_base*5;
+	 		i_send_counts[i] = l_base*5;
 	 		if (remainder) {
-	 			l_send_counts[i] += 5;
+	 			i_send_counts[i] += 5;
 	 			remainder--;	
 	 		}
 	 	}
@@ -276,15 +276,15 @@ void distrib_lines() {
 		// build displacement array
 		l_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			l_displs[i] = l_displs[i-1] + l_send_counts[i-1];
+			l_displs[i] = l_displs[i-1] + i_send_counts[i-1];
 		}	
 	}
 	//tell processes how many to expect
-	MPI_Scatter(l_send_counts, 1, MPI_LONG, &l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	MPI_Scatter(i_send_counts, 1, MPI_LONG, &l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
 	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
-	MPI_Scatterv(d_recv_lines, &l_send_counts, &l_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, &i_send_counts, &l_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 }
 
 
