@@ -121,19 +121,19 @@ void distrib_points() {
 			printf("displs_point_scatter %d\n", displs_point_scatter[i]);
 		}
 		printf("points_to_recv %d\n", points_to_recv);
+		printf("sizeof point_t %d\n", sizeof(point_t));
 
-
-		point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
+		// point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+		// MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
+                 // MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+		// point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
+		// MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
+                 // MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 }
 
