@@ -122,6 +122,7 @@ void distrib_points() {
 		}
 		printf("points_to_recv %d\n", points_to_recv);
 		printf("sizeof point_t %d\n", sizeof(point_t));
+		printf("points_to_recv*sizeof(point_t) %d\n", points_to_recv*sizeof(point_t));
 
 		// point_t *temp_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
