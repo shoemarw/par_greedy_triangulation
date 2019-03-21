@@ -87,8 +87,9 @@ void distrib_points() {
 	int* send_counts						// an array of how many points each process will recieve / how many root sends
 		 = allocate (sizeof(int) * nprocs);
 	int points_to_recv = 0;					// used to store a single number from send_counts
-	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
-
+	int displs_point_scatter				// the displacements for the scatterv, significant only to root
+		 = allocate (sizeof(int) * nprocs);
+		 
 	if (my_rank==ROOT) {
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
