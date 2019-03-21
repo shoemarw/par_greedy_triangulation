@@ -316,7 +316,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 	
 	// Clean up and exit
 	// free(points);
-	free(lines);
+	// free(lines);
 	MPI_Type_free(&MPI_point_t);
 	MPI_Type_free(&MPI_line_t);
 	MPI_Finalize();
