@@ -30,8 +30,9 @@ const int  ROOT = 0;
 
 int nprocs;         // number of processes
 int my_rank;        // rank of a particular process
-point_t* pt_my_points; // a processes' portion of the point set.
-line_t*  ln_my_lines;  // a processes' portion of lines.
+point_t* pt_my_points; 	// a processes' portion of the point set.
+line_t*  ln_my_lines;  	// a processes' portion of lines.
+double* d_my_lines;		// a processes' portion of lines while in double format.
 
 //TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
 long l_num_points;
@@ -136,7 +137,7 @@ void gen_lines() {
 	// Generate lines as array of (5) doubles		
 	l_num_points = sizeof(pt_my_points)/sizeof(point_t);
 	int i_num_lines = ((l_num_points)*(l_num_points-1))/2;
-	double* d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
+	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
 	const int X0 = 0;
 	const int Y0 = 1;
 	const int X1 = 2;
@@ -224,32 +225,31 @@ void gen_lines() {
 void distrib_lines() {
 	long num_of_lines;				// number of lines
 	int displs[nprocs];				// Used by root only
-	line_t* recv_lines = 0; 		// Used by root only
-	int* recv_lines_count;			// Used by root only
+	double* recv_lines = 0; 		// Used by root only
+	int* i_recv_counts;				// Used by root only
 
 	if (my_rank == 0) {
-		recv_lines_count = allocate (sizeof(int) * nprocs);
+		i_recv_counts = allocate (sizeof(int) * nprocs);
 	}
 
-	num_of_lines = sizeof(ln_my_lines);
+	num_of_lines = sizeof(d_my_lines);
 	// send the number of lines the receiver should expect
-	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+	MPI_Gather(&num_of_lines, 1, MPI_INT, i_recv_counts, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 	if (my_rank==ROOT) {
 		displs[0] = 0;
-		long total_line_num = recv_lines_count[0];
+		long total_line_num = i_recv_counts[0];
 
 		// calculate how many total lines are being sent and the displs
         for (int i=1; i < nprocs; i++) {
-           total_line_num += recv_lines_count[i];
-           displs[i] = displs[i-1] + recv_lines_count[i-1];
+           total_line_num += i_recv_counts[i];
+           displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
-		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
+		recv_lines = (double*) allocate( total_line_num* sizeof(double)*5);        
 	}
 
 //  //  //  //  //  // gather lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
-	// send all lines to ROOT
-	MPI_Gatherv(&ln_my_lines, num_of_lines, MPI_BYTE, recv_lines, recv_lines_count, 
+	MPI_Gatherv(&d_my_lines, num_of_lines, MPI_BYTE, recv_lines, i_recv_counts, 
 			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
 //  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
