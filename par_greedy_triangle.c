@@ -174,7 +174,7 @@ void distrib_lines() {
 	int* recv_lines_count;			// Used by root only
 
 	if (my_rank == 0) {
-		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
+		recv_lines_count = allocate (sizeof(int) * nprocs);
 	}
 
 	num_of_lines = sizeof(my_lines)/sizeof(line_t);
