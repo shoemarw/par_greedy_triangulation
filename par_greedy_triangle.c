@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	if (my_rank == 0) {
-		recv_lines_count = (long *) allocate(sizeof(long)*nprocs);
+		recv_lines_count = (long *) allocate(sizeof(long)*(long)nprocs);
 	}
 
 	num_of_lines = sizeof(my_lines)/sizeof(line_t);
