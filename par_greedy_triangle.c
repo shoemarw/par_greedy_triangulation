@@ -290,29 +290,12 @@ int main(int argc, char *argv[]) {
  //  Eliza start  //
 // - - - - - - - //
 	int num_lines;					// Number of lines to be calculated
-	line_t* my_lines;				// Array of the process's calculated lines
 
 	num_points = sizeof(my_points)/sizeof(point_t);
 	num_lines = ((num_points)*(num_points-1))/2;
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	
 
-  // - - - - - - - - - - - - - - - - - - - -  // 
- //  Gather all lines to Prepare for scatter //
-// - - - - - - - - - - - - - - - - - - - -  //
-	
-	
-
-
-
-  // - - - - - - - - - - - - - - - - - - - -  // 
- //      Scatter Lines to all processes      //
-// - - - - - - - - - - - - - - - - - - - -  //
-
-
-  // - - - - - - - //
- //   Eliza end   //
-// - - - - - - - //
 
 
 	STOP_TIMER(generate)
