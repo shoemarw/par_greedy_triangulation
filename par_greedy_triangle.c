@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 		// it to allocate storage for the points.
 		long num_points;
 		fscanf(fin, "%ld\n", &num_points);
-		point_t* points = (point_t*) allocate(num_points * sizeof(point_t));
+		points = (point_t*) allocate(num_points * sizeof(point_t));
 		
 		// Read in and store the point s.
 		double x, y;     // The Cartesian coordinates of a point.
@@ -149,7 +149,6 @@ int main(int argc, char *argv[]) {
 	if (my_rank==0) {
 
 		printf("line 151\n");
-		printf("%lf\n", points[0].x);
 		for (int i = 0; i < num_points; i++){
 			print_point(&points[i]);
 		}
