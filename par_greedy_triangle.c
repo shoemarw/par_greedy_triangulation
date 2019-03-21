@@ -130,32 +130,52 @@ void distrib_points() {
 
 
 void gen_lines() {
-//  //  //  //  //  // calc lines  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 
-	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
+	// num lines = points*(points-1)/2
+	num_points = sizeof(my_points)/sizeof(point_t);
+	int num_lines = ((num_points)*(num_points-1))/2;
+	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
+	
+	long index = 0;
+	for (int i = 0; i < num_points; i++) {
+		// Compute the distance between point i and every point
+		// from i+1 onward. Then 'make' and store the corresponding
+		// line.
+		for (int j = i+1; j < num_points; j++) {
+			double length = distance(&points[i], &points[j]);
+			line_t* l = (line_t*) allocate(sizeof(line_t));
+			// set the values of the line and store it.
+			l->p =         &points[i];
+			l->q =         &points[j];
+			l->len =       length;
+			my_lines[index] = *l;
+			index++;
+			free(l);
+		}
+	}
 
-
+	int recv_buff; 	// Used to check how many objects will be sent in MPI_send 
 	// In this for loop we calculated all the lines
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
-			int num_cur_point = sizeof(my_points)/sizeof(point_t);
+			long sizeof_cur_points = sizeof(my_points);
 			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
 
 			// send the number of points the receiver should expect
-			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(&sizeof_cur_points, 1, MPI_LONG, send_to, TAG, MPI_COMM_WORLD);
 			// send the points
-			MPI_Send(my_points, num_cur_point, MPI_BYTE, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(my_points, sizeof_cur_points, MPI_BYTE, send_to, TAG, MPI_COMM_WORLD);
 			
 			break;
 		}
 		else {
 			int recv_from = my_rank+iteration_square; 
 			// receive number of points
-			MPI_Recv(&recv_buff, 1, MPI_INT, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+			MPI_Recv(&recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
 
 			// receive points into new_points
-			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
+			point_t* new_points = (point_t*) allocate(recv_buff);
 			MPI_Recv(new_points, recv_buff, MPI_BYTE, recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
