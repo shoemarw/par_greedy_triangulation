@@ -92,7 +92,7 @@ void distrib_points() {
 
 	if (my_rank==ROOT) {
 		displs_point_scatter = (int*) allocate (sizeof(int) * nprocs);
-		send_counts = = (int*) allocate (sizeof(int) * nprocs);
+		send_counts = (int*) allocate (sizeof(int) * nprocs);
 		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
