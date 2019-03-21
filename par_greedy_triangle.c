@@ -132,7 +132,6 @@ void gen_lines() {
 //  //  //  //  //  // calc lines  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 
 	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
-	int* recv_lines_count;			// Used by root only
 
 
 	// In this for loop we calculated all the lines
@@ -172,6 +171,7 @@ void distrib_lines() {
 	long num_of_lines;				// number of lines
 	int displs[nprocs];				// Used by root only
 	line_t* recv_lines = 0; 		// Used by root only
+	int* recv_lines_count;			// Used by root only
 
 	if (my_rank == 0) {
 		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
