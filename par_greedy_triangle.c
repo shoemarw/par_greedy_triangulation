@@ -170,22 +170,19 @@ int main(int argc, char *argv[]) {
 		for (int i = 1; i < nprocs; i++) {
 			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
 		}		
-printf("line 173\n");
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
-printf("line 177\n");
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
-
-printf("line 183\n");
 	}
+// error is in this else	
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+printf("line 83\n");
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
-printf("line 189\n");
 	}
 	free(points);
 
