@@ -284,7 +284,7 @@ void distrib_lines() {
 	
 	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
-	MPI_Scatterv(d_recv_lines, &l_send_counts, &l_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, l_send_counts, l_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 }
 
 
