@@ -128,7 +128,10 @@ void distrib_points() {
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
-		
+		for (int i = 0; i < points_to_recv; i++) {
+			printf("%lf %lf\n",temp_points[i].x, temp_points[i].y );
+			printf("%ld\n", sizeof(temp_points[i]));
+		}
 	}
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
