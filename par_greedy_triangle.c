@@ -122,6 +122,8 @@ void distrib_points() {
 			printf("send_counts %d\n", send_counts[i]);
 			printf("displs_point_scatter %d\n", displs_point_scatter[i]);
 		}
+		printf("points_to_recv %d\n", points_to_recv);
+
 
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
