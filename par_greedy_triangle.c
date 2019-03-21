@@ -30,15 +30,19 @@ const int  ROOT = 0;
 
 int nprocs;         // number of processes
 int my_rank;        // rank of a particular process
-point_t* my_points; // a processes' portion of the point set.
-line_t*  my_lines;  // a processes' portion of lines.
+point_t* pt_my_points; // a processes' portion of the point set.
+line_t*  ln_my_lines;  // a processes' portion of lines.
 
 //TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
-long num_points;
+long l_num_points;
 point_t* points;
 line_t* lines;
 
 
+
+void double_array_to_struct(double* arr, long size){
+	//do stuff
+}
 
 void read_points(char *argv[]) {
 
@@ -50,8 +54,8 @@ void read_points(char *argv[]) {
 	// The first line of a file must contain a number indicating
 	// the number of points in the file. Read this value and use
 	// it to allocate storage for the points.
-	fscanf(fin, "%ld\n", &num_points);
-	points = (point_t*) allocate(num_points * sizeof(point_t));
+	fscanf(fin, "%ld\n", &l_num_points);
+	points = (point_t*) allocate(l_num_points * sizeof(point_t));
 	
 	// Read in and store the point s.
 	double x, y;     // The Cartesian coordinates of a point.
@@ -63,8 +67,8 @@ void read_points(char *argv[]) {
 		p->x = x;
 		p->y = y;
 		
-		// Make sure input file didn't make num_points too small.
-		if (i >= num_points) 
+		// Make sure input file didn't make l_num_points too small.
+		if (i >= l_num_points) 
 		{
 			error("ERROR: the number of lines exceeds expectation\n");
 		}
@@ -80,47 +84,47 @@ void read_points(char *argv[]) {
 
 void distrib_points() {
 
-	int send_counts[nprocs];			// an array of how many points each process will recieve / how many root sends
-	int displs_point_scatter[nprocs];	// the displacements for the scatterv, significant only to root
-	int points_to_recv = 0;				// used to store a single number from send_counts
+	int i_send_counts[nprocs];			// an array of how many points each process will recieve / how many root sends
+	int i_displs_p[nprocs];	// the displacements for the scatterv, significant only to root
+	int i_points_to_recv = 0;				// used to store a single number from i_send_counts
 
 	if (my_rank==ROOT) {
 		// use interger division to determine the base amount for points each process will recieve 
-		long base_point_count = num_points/(long)nprocs;
+		long base_point_count = l_num_points/(long)nprocs;
 
 		// get the remainder to see how many leftover points there are
-		int remainder = num_points%nprocs;
+		int remainder = l_num_points%nprocs;
 
 
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
-			send_counts[i] = base_point_count * sizeof(point_t);
+			i_send_counts[i] = base_point_count * sizeof(point_t);
 			if (remainder > 0) {
-				send_counts[i] += 1 * sizeof(point_t);
+				i_send_counts[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
 		} // end for
 
 		// build displacement array
-		displs_point_scatter[0] = 0;
+		i_displs_p[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
+			i_displs_p[i] = i_displs_p[i-1] + i_send_counts[i-1];
 		}		
 		// send each process how many points it should expect
-		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(i_send_counts, 1, MPI_INT, &i_points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 
-		my_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
+		pt_my_points = (point_t*) allocate((int)(i_points_to_recv*sizeof(point_t)));
 		// send each process its points
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_BYTE, my_points, points_to_recv,
+		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, i_points_to_recv,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 	else { // NOT root
-		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(i_send_counts, 1, MPI_INT, &i_points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		my_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_BYTE, my_points, points_to_recv,
+		pt_my_points = (point_t*) allocate((int)(i_points_to_recv*sizeof(point_t)));
+		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, i_points_to_recv,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 }
@@ -128,82 +132,90 @@ void distrib_points() {
 
 
 void gen_lines() {
-
-	// num lines = points*(points-1)/2
-	num_points = sizeof(my_points)/sizeof(point_t);
-	int num_lines = ((num_points)*(num_points-1))/2;
-	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	
-	long index = 0;
-	for (int i = 0; i < num_points; i++) {
+	// Generate lines as array of (5) doubles		
+	l_num_points = sizeof(pt_my_points)/sizeof(point_t);
+	int i_num_lines = ((l_num_points)*(l_num_points-1))/2;
+	double d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
+	const int X0 = 0;
+	const int Y0 = 1;
+	const int X1 = 2;
+	const int Y1 = 3;
+	const int LEN = 4;
+	long l_index = 0;
+
+
+	for (int i = 0; i < l_num_points; i++) {
 		// Compute the distance between point i and every point
 		// from i+1 onward. Then 'make' and store the corresponding
 		// line.
-		for (int j = i+1; j < num_points; j++) {
-			double length = distance(&points[i], &points[j]);
-			line_t* l = (line_t*) allocate(sizeof(line_t));
-			// set the values of the line and store it.
-			l->p =         &points[i];
-			l->q =         &points[j];
-			l->len =       length;
-			my_lines[index] = *l;
-			index++;
-			free(l);
+		for (int j = i+1; j < l_num_points) {
+			double length = distance(&pt_my_points[i], &pt_my_points[j]);
+			d_my_lines[l_index + X0] = pt_my_points[i].x;
+			d_my_lines[l_index + Y0] = pt_my_points[i].y;
+			d_my_lines[l_index + X1] = pt_my_points[j].x;
+			d_my_lines[l_index + Y1] = pt_my_points[j].y;
+			d_my_lines[l_index + LEN] = length;
+
+			l_index +=5;
 		}
 	}
+
 
 	int recv_buff; 	// Used to check how many objects will be sent in MPI_send 
 	// In this for loop we calculated all the lines
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
-			long sizeof_cur_points = sizeof(my_points);
-			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
+			long l_size_cur_pt = sizeof(pt_my_points);
+			int i_send_to = (my_rank-iteration_square+nprocs)%nprocs;
 
 			// send the number of points the receiver should expect
-			MPI_Send(&sizeof_cur_points, 1, MPI_LONG, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(&l_size_cur_pt, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
 			// send the points
-			MPI_Send(my_points, sizeof_cur_points, MPI_BYTE, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(pt_my_points, l_size_cur_pt, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 			
 			break;
 		}
 		else {
-			int recv_from = my_rank+iteration_square; 
+			int i_recv_from = my_rank+iteration_square; 
 			// receive number of points
-			MPI_Recv(&recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+			MPI_Recv(&recv_buff, 1, MPI_LONG, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
 
 			// receive points into new_points
 			point_t* new_points = (point_t*) allocate(recv_buff);
-			MPI_Recv(new_points, recv_buff, MPI_BYTE, recv_from, MPI_ANY_TAG, 
+			MPI_Recv(new_points, recv_buff, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-			int num_my_point = sizeof(my_points)/sizeof(point_t);
+			int num_my_point = sizeof(pt_my_points)/sizeof(point_t);
 			int num_new_points = sizeof(new_points)/sizeof(point_t);
-			line_t* new_lines = (line_t*) allocate(sizeof(line_t)*num_my_point*num_new_points);
+
+			double* d_new_lines = (double*) allocate(sizeof(double)*num_my_point*num_new_points*5);
+
 			int new_line_index = 0;
 			for (int j = 0; j < num_my_point; j++){
 				for (int k = 0; k < num_new_points; ++k)
 				{
-					double length = distance(&my_points[j], &new_points[k]);
-					line_t* l = (line_t*) allocate(sizeof(line_t));
-					l->p =         &my_points[j];
-					l->q =         &new_points[k];
-					l->len =       length;
-					new_lines[new_line_index] = *l;
-					new_line_index++;
-					free(l);
+					double length = distance(&pt_my_points[k], &new_points[j]);
+					d_my_lines[new_line_index + X0] = pt_my_points[j].x;
+					d_my_lines[new_line_index + Y0] = pt_my_points[j].y;
+					d_my_lines[new_line_index + X1] = new_points[k].x;
+					d_my_lines[new_line_index + Y1] = new_points[k].y;
+					d_my_lines[new_line_index + LEN] = length;
+
+					new_line_index +=5;
 				}
 			}
-			line_t* temp = (line_t*) allocate(sizeof(my_lines)+sizeof(new_lines));
-			int num_my_linr = sizeof(my_lines)/sizeof(line_t);
-			copy_array(my_lines, temp, num_my_linr);
-			copy_array(new_lines, &temp[num_my_linr], sizeof(new_lines)/sizeof(line_t));
+			double* temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
+			int num_my_linr = sizeof(d_my_lines)/sizeof(line_t);
+			copy_array(d_my_lines, temp, num_my_linr);
+			copy_array(d_new_lines, &temp[num_my_linr], sizeof(d_new_lines)/sizeof(line_t));
 
-			free(my_lines);
-			my_lines = allocate(sizeof(temp));
-			copy_array(temp, my_lines, sizeof(temp)/sizeof(line_t));
+			free(d_my_lines);
+			d_my_lines = allocate(sizeof(temp));
+			copy_array(temp, d_my_lines, sizeof(temp)/sizeof(line_t));
 			free(temp);
-			free(new_lines);
+			free(d_new_lines);
 		}
 	}// end for
 }
@@ -219,7 +231,7 @@ void distrib_lines() {
 		recv_lines_count = allocate (sizeof(int) * nprocs);
 	}
 
-	num_of_lines = sizeof(my_lines);
+	num_of_lines = sizeof(ln_my_lines);
 	// send the number of lines the receiver should expect
 	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
@@ -235,8 +247,9 @@ void distrib_lines() {
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
 	}
 
+//  //  //  //  //  // gather lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 	// send all lines to ROOT
-	MPI_Gatherv(&my_lines, num_of_lines, MPI_BYTE, recv_lines, recv_lines_count, 
+	MPI_Gatherv(&ln_my_lines, num_of_lines, MPI_BYTE, recv_lines, recv_lines_count, 
 			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
 //  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
@@ -292,7 +305,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	
 	START_TIMER(sort)
-//	qsort(lines, num_lines, sizeof(line_t), compare);
+//	qsort(lines, i_num_lines, sizeof(line_t), compare);
 	STOP_TIMER(sort)
 	
 	  //                                   //
