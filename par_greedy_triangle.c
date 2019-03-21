@@ -100,7 +100,7 @@ void distrib_points() {
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
 			send_counts[i] = base_point_count;
-			if (remainder) {
+			if (remainder > 0) {
 				send_counts[i] += 1;
 				remainder--;
 			} // end if
@@ -114,29 +114,25 @@ void distrib_points() {
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		printf("Points[0].x %lf\n",points[0].x);
-		printf("Points[0].y %lf\n",points[0].y);
-		for (int i = 0; i < nprocs; i++) {
-			printf("send_counts %d\n", send_counts[i]);
-			printf("displs_point_scatter %d\n", displs_point_scatter[i]);
-		}
-		printf("points_to_recv %d\n", points_to_recv);
-		printf("sizeof point_t %d\n", sizeof(point_t));
-		printf("points_to_recv*sizeof(point_t) %d\n", points_to_recv*sizeof(point_t));
+		// printf("Points[0].x %lf\n",points[0].x);
+		// printf("Points[0].y %lf\n",points[0].y);
+		// for (int i = 0; i < nprocs; i++) {
+		// 	printf("send_counts %d\n", send_counts[i]);
+		// 	printf("displs_point_scatter %d\n", displs_point_scatter[i]);
+		// }
+		// printf("points_to_recv %d\n", points_to_recv);
+		// printf("sizeof point_t %d\n", sizeof(point_t));
+		// printf("points_to_recv*sizeof(point_t) %d\n", points_to_recv*sizeof(point_t));
 
-		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)+1));
+		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
-		for (int i = 0; i < points_to_recv; i++) {
-			printf("%lf %lf\n",temp_points[i].x, temp_points[i].y );
-			printf("%ld\n", sizeof(temp_points[i]));
-		}
 	}
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)*10));
+		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
