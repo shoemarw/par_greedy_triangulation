@@ -118,9 +118,10 @@ void distrib_points() {
 
 		printf("Points[0].x %lf\n",points[0].x);
 		printf("Points[0].y %lf\n",points[0].y);
-		for (int i = 0; i < nprocs; i++)
+		for (int i = 0; i < nprocs; i++) {
 			printf("send_counts %d\n", send_counts[i]);
 			printf("displs_point_scatter %d\n", displs_point_scatter[i]);
+		}
 
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
