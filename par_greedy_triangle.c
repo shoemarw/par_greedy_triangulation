@@ -254,14 +254,15 @@ printf("line249\n");
         }
 
 
-printf("line 258\n");
+printf("line 257\n");
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
+printf("line 259\n");
 		MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 	   			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 
 
 	    // root scatterv
-	    
+
 printf("line 265\n");
 	    free(recv_lines);
 	}
