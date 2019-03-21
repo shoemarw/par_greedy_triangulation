@@ -71,10 +71,13 @@ int main(int argc, char *argv[]) {
 	//Build MPI_line_t
 	int block_lens_l[] = {1,1,1};
 
+
+	MPI_Aint point_type_extent;
+	MPI_Type_get_extent(MPI_point_t, NULL, point_type_extent);
 	MPI_Aint disps_l[3];	
-	disps_l[0] = offsetof(line_t, p);
-	disps_l[1] = offsetof(line_t, q);
-	disps_l[2] = offsetof(line_t, len);
+	disps_l[0] = 0;
+	disps_l[1] = disps_l[0] + point_type_extent;
+	disps_l[2] = disps_l[1] + point_type_extent;
 
 	MPI_Datatype types_l[3] = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
 	
