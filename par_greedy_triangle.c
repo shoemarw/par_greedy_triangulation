@@ -184,6 +184,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (my_rank==0) {
+printf("line 187\n");
 //		free(points);	
 	}
 
@@ -249,6 +250,7 @@ int main(int argc, char *argv[]) {
 	
 	if (my_rank == 0) {
 		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
+printf("line 253\n");	
 	}
 
 	num_of_lines = sizeof(my_lines)/sizeof(line_t);
@@ -256,6 +258,7 @@ int main(int argc, char *argv[]) {
 	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 	if (my_rank==0) {
+printf("line 261\n");
 		displs[0] = 0;
 		long total_line_num = recv_lines_count[0];
 
@@ -264,15 +267,19 @@ int main(int argc, char *argv[]) {
            total_line_num += recv_lines_count[i];
            displs[i] = displs[i-1] + recv_lines_count[i-1];
         }
-
+printf("line 270\n");
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
+printf("line 272\n");	
 	}
 
 	// send all lines to ROOT
 	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 
-
+if (my_rank==0)
+{
+printf("line 281\n");
+}
 
   // - - - - - - - - - - - - - - - - - - - -  // 
  //      Scatter Lines to all processes      //
