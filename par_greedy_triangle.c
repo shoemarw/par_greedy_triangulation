@@ -274,6 +274,7 @@ void distrib_lines() {
 	 	}
 
 		// build displacement array
+		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
 			i_displs[i] = i_displs[i-1] + i_send_counts[i-1];
