@@ -312,7 +312,7 @@ int main(int argc, char *argv[]) {
 	
 	
 	// Clean up and exit
-	free(points);
+	// free(points);
 	free(lines);
 	MPI_Type_free(&MPI_point_t);
 	MPI_Type_free(&MPI_line_t);
