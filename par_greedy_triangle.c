@@ -203,7 +203,7 @@ void gen_lines() {
 
 			free(my_lines);
 			my_lines = allocate(sizeof(temp));
-			copy_array(temp, my_lines);
+			copy_array(temp, my_lines, sizeof(temp)/sizeof(line_t));
 			free(temp);
 			free(new_lines);
 		}
