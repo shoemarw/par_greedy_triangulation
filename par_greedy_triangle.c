@@ -147,13 +147,6 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank==0) {
 
-		printf("line 151\n");
-		// printf("%lf\n", points[0].x);
-		for (int i = 0; i < num_points; i++){
-			print_point(&points[i]);
-		}
-
-
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
@@ -187,6 +180,7 @@ int main(int argc, char *argv[]) {
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 
 		free(points);
+		printf("line 183\n");
 	}
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -252,6 +246,7 @@ int main(int argc, char *argv[]) {
 	}// end for
 
 	if (my_rank==0) {
+		printf("line249\n");
 		// get the number of line_t each process is sending
 		MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
