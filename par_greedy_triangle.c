@@ -115,8 +115,6 @@ void distrib_points() {
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_BYTE, my_points, points_to_recv,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
-
-		printf("%lf %lf\n", my_points[0].x, my_points[0].y);
 	}
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -257,7 +255,6 @@ int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);	
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", nprocs);
 	
 	// Make sure we get the expected input.
 	if (argc != 2) {
@@ -274,25 +271,18 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", 
 	STOP_TIMER(MPIoverhead)
 
 	
-
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
 		read_points(argv);
 	}
 
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273\n");
-
 	// Root scatters the points
 	distrib_points();
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
-
 
 	
 	START_TIMER(generate)
 
 	gen_lines();
-
 	distrib_lines();
 
 	STOP_TIMER(generate)
