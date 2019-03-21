@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 	else {
-		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
@@ -207,7 +207,7 @@ int main(int argc, char *argv[]) {
 			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
 			
 			// send the number of points the receiver should expect
-			MPI_Send(num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
 			// send the points
 			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
 			
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
 			// send the number of lines the receiver should expect
 			MPI_Gather(num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, 0, MPI_COMM_WORLD);
 			// send the lines
-			MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+			MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 					    displs, MPI_line_t, 0, MPI_COMM_WORLD);
 			break;
 		}
@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
 			int recv_from = my_rank+iteration_square; 
 
 			// receive number of points
-			MPI_Recv(recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+			MPI_Recv(&recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
 
 			// receive points into new_points
