@@ -43,7 +43,7 @@ line_t* lines;
 
 
 
-void read_points() {
+void read_points(char *argv[]) {
 
 	// Open the input file for reading. 
 	char *fn = argv[1];
@@ -82,6 +82,11 @@ void read_points() {
 
 
 void distrib_points() {
+
+	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
+	int points_to_recv;						// a single number from send_counts
+	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
+	
 	if (my_rank==ROOT) {
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
@@ -254,7 +259,7 @@ int main(int argc, char *argv[]) {
 	
 
 	if (my_rank==ROOT) {
-		read_points();
+		read_points(argv);
 	}
 	
 
@@ -271,9 +276,7 @@ int main(int argc, char *argv[]) {
 	
 	START_TIMER(generate)
 
-	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
-	int points_to_recv;						// a single number from send_counts
-	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
+
 
 
   // - - - - - - - //
