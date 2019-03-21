@@ -91,7 +91,7 @@ void distrib_points() {
 		 = (int*) allocate (sizeof(int) * nprocs);
 
 	if (my_rank==ROOT) {
-		// use interger division to determin the base amount for points each process will recieve 
+		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
 		// get the remainder to see how many leftover points there are
@@ -115,16 +115,21 @@ void distrib_points() {
 		}		
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+		printf("Points[0] ->x %lf\n",points[0]->x);
+		printf("Points[0] ->x %lf\n",points[0]->x);
+
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+		// MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
+  //                MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 	else {
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+
+		// MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
+                 // MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 	free(send_counts);
 }
