@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (my_rank==0) {
-		free(points);	
+//		free(points);	
 	}
 
 
@@ -238,7 +238,7 @@ int main(int argc, char *argv[]) {
 
 
 			//resize my_points and add new_points
-			free(new_points);
+//			free(new_points);
 		}
 	}// end for
 
