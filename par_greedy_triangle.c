@@ -142,7 +142,7 @@ void gen_lines() {
 			// send the number of points the receiver should expect
 			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
 			// send the points
-			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(my_points, num_cur_point, MPI_BYTE, send_to, TAG, MPI_COMM_WORLD);
 			
 			break;
 		}
@@ -154,7 +154,7 @@ void gen_lines() {
 
 			// receive points into new_points
 			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
-			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
+			MPI_Recv(new_points, recv_buff, MPI_BYTE, recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 //  //  //  //  //  // calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
