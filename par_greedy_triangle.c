@@ -201,6 +201,11 @@ void gen_lines() {
 			copy_array(my_lines, temp, num_my_linr);
 			copy_array(new_lines, temp[num_my_linr], sizeof(new_lines)/sizeof(line_t))
 
+			free(my_lines);
+			my_lines = allocate(sizeof(temp));
+			copy_array(temp, my_lines);
+			free(temp);
+			free(new_lines);
 		}
 	}// end for
 }
