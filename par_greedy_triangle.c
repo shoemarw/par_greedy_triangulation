@@ -179,7 +179,6 @@ printf("line 177\n");
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 
-		free(points);
 printf("line 183\n");
 	}
 	else {
@@ -188,6 +187,7 @@ printf("line 183\n");
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 printf("line 189\n");
 	}
+	free(points);
 
 
 
