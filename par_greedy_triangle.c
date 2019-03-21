@@ -273,7 +273,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273\n");
 
 	// Root scatters the points
-	distrib_points();
+	// distrib_points();
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 
 
