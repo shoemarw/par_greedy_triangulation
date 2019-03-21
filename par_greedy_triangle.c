@@ -107,13 +107,6 @@ int main(int argc, char *argv[]) {
 			free(p);
 		}
 		fclose(fin);
-
-		// root scatter points
-
-
-	}
-	else {
-		// non-root scatter
 	}
 	
 	  //                      //
@@ -123,6 +116,51 @@ int main(int argc, char *argv[]) {
 	START_TIMER(generate)
 	// Scatter all the points in points[] among the processes and store
 	// locally in my_points so Eliza's binomial tree structure can be used.
+
+	long points_to_recv;
+	// create an array of how many points each process will recieve / how many root sends
+	long* send_counts[nprocs];
+
+	if (my_rank==0) {
+		// use interger division to determin the base amount for points each process will recieve 
+		long base_point_count = num_points/(long)nprocs;
+
+		// get the remainder to see how many leftover points there are
+		int remainder = num_points%nprocs;
+
+
+
+		// fill the array with the base number, then if there are remainders left add one to the 
+		// count of how many points the process will recieve.
+		for (int i = 0; i < nprocs; i++) {
+			send_counts[i] = base_point_count;
+			if (remainder) {
+				send_counts[i] += 1;
+				remainder--;
+			} // end if
+		} // end for
+
+		// build displacement array
+		int* displs[nprocs];
+		displs[0] = 0;
+		for (int i = 1; i < nprocs; i++) {
+			displs[i] = displs[i-1] + send_counts[i];
+		}
+		// send each process how many points it should expect
+		MPI_Scatter(send_counts, 1, MPI_LONG, points_to_recv, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
+
+		// send each process its points
+		MPI_Scatterv(points, send_counts, displs, MPI_point_t, my_points, points_to_recv,
+                 MPI_point_t, 0, MPI_COMM_WORLD);
+	}
+	else {
+		MPI_Scatter(send_counts, 1, MPI_LONG, points_to_recv, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+		MPI_Scatterv(points, send_counts, displs, MPI_point_t, my_points, points_to_recv,
+                 MPI_point_t, 0, MPI_COMM_WORLD);
+	}
+
+
 
   // - - - - - - - //
  //  Eliza start  //
@@ -140,18 +178,15 @@ int main(int argc, char *argv[]) {
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	// calculate lines 
 
-	cur_points = (point_t*) allocate(sizeof(my_points));
-	memcopy(cur_points, my_points, sizeof(my_points));
-
 	for (int iteration_square = 1; iteration_square < nprocs, iteration_square *= 2) {
 		if (my_rank&iteration_square) {
-			int num_cur_point = sizeof(cur_points)/sizeof(point_t);
+			int num_cur_point = sizeof(my_points)/sizeof(point_t);
 			int send_to = (my_rank-i+nprocs)%nprocs;
 			
 			// send the number of points the receiver should expect
 			MPI_Send(num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
 			// send the points
-			MPI_Send(cur_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
 			
 			num_of_lines = sizeof(my_lines)/sizeof(line_t);
 			// send the number of lines the receiver should expect
@@ -174,6 +209,9 @@ int main(int argc, char *argv[]) {
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		
 			// calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+
+
+//resize my_points and add new_points	
 		}
 	}// end for
 
