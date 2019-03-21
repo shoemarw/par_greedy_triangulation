@@ -116,8 +116,8 @@ void distrib_points() {
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		printf("Points[0] ->x %lf\n",points[0]->x);
-		printf("Points[0] ->x %lf\n",points[0]->x);
+		printf("Points[0].x %lf\n",points[0].x);
+		printf("Points[0].y %lf\n",points[0].y);
 
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 		// send each process its points
