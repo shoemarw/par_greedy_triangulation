@@ -84,8 +84,8 @@ void read_points(char *argv[]) {
 
 void distrib_points() {
 
-	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
-	int points_to_recv;						// a single number from send_counts
+	int* send_counts; 						// an array of how many points each process will recieve / how many root sends
+	int points_to_recv = 0;					// used to store a single number from send_counts
 	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
 
 	if (my_rank==ROOT) {
@@ -95,7 +95,7 @@ void distrib_points() {
 		// get the remainder to see how many leftover points there are
 		int remainder = num_points%nprocs;
 
-
+		send_counts = allocate (sizeof(int) * nprocs);
 
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
@@ -273,7 +273,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273\n");
 
 	// Root scatters the points
-	// distrib_points();
+	distrib_points();
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 
 
