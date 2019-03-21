@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
 	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
 	int num_lines;					// Number of lines to be calculated
 	line_t* recv_lines = 0; 		// Used by root only
-	long recv_lines_count[nprocs];	// Used by root only
+	int recv_lines_count[nprocs];	// Used by root only
 	int displs[nprocs];				// Used by root only
 	line_t* my_lines;				// Array of the process's calculated lines
 	long num_of_lines;				// number of lines
@@ -245,12 +245,12 @@ int main(int argc, char *argv[]) {
 	
 	
 	if (my_rank == 0) {
-		recv_lines_count = (long *) allocate(sizeof(long)*(long)nprocs);
+		recv_lines_count = (int *) allocate(sizeof(int)*nprocs);
 	}
 
 	num_of_lines = sizeof(my_lines)/sizeof(line_t);
 	// send the number of lines the receiver should expect
-	MPI_Gather(&num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 	if (my_rank==0) {
 		displs[0] = 0;
