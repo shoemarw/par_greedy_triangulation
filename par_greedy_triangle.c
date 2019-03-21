@@ -291,7 +291,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 	
 	START_TIMER(generate)
 
-	// gen_lines();
+	gen_lines();
 
 	// distrib_lines();
 
