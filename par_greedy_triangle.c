@@ -137,9 +137,9 @@ int main(int argc, char *argv[]) {
 	// Scatter all the points in points[] among the processes and store
 	// locally in my_points so Eliza's binomial tree structure can be used.
 
-	int* send_counts[nprocs]; 	// an array of how many points each process will recieve / how many root sends
-	int points_to_recv;			// a single number from send_counts
-	int* displs[nprocs];		// the displacements for the scatterv, significant only to root
+	int* send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
+	int points_to_recv;						// a single number from send_counts
+	int* displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
 
 	if (my_rank==0) {
 		// use interger division to determin the base amount for points each process will recieve 
@@ -161,21 +161,21 @@ int main(int argc, char *argv[]) {
 		} // end for
 
 		// build displacement array
-		displs[0] = 0;
+		displs_point_scatter[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			displs[i] = displs[i-1] + send_counts[i];
+			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
 		}
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, 0, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 
 		// send each process its points
-		MPI_Scatterv(points, send_counts, displs, MPI_point_t, my_points, points_to_recv,
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, 0, MPI_COMM_WORLD);
 	}
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, 0, MPI_COMM_WORLD);
-		MPI_Scatterv(points, send_counts, displs, MPI_point_t, my_points, points_to_recv,
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, 0, MPI_COMM_WORLD);
 	}
 
