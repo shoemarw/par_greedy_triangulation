@@ -176,7 +176,6 @@ int main(int argc, char *argv[]) {
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
-printf("line 179\n");
 	}
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -200,6 +199,9 @@ printf("line 179\n");
 	num_lines = ((num_points)*(num_points-1))/2;
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	// calculate lines 
+
+if (my_rank==0)
+printf("line 204\n");	
 
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
