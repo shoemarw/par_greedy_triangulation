@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
 		}
 		// send each process how many points it should expect
-		MPI_Scatter(send_counts, 1, MPI_INT, points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(send_counts, 1, MPI_INT, *points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
 
 		// send each process its points
