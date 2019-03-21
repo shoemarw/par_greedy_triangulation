@@ -199,7 +199,7 @@ void gen_lines() {
 			line_t* temp = (line_t*) allocate(sizeof(my_lines)+sizeof(new_lines));
 			int num_my_linr = sizeof(my_lines)/sizeof(line_t);
 			copy_array(my_lines, temp, num_my_linr);
-			copy_array(new_lines, temp[num_my_linr], sizeof(new_lines)/sizeof(line_t));
+			copy_array(new_lines, &temp[num_my_linr], sizeof(new_lines)/sizeof(line_t));
 
 			free(my_lines);
 			my_lines = allocate(sizeof(temp));
