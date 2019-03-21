@@ -270,11 +270,11 @@ int main(int argc, char *argv[]) {
 		read_points(argv);
 	}
 
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==Root) printf("line 273\n");
+MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273\n");
 
 	// Root scatters the points
 	distrib_points();
-MPI_Barrier(MPI_COMM_WORLD); if (my_rank==Root) printf("line 277\n");
+MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 
 
 	
