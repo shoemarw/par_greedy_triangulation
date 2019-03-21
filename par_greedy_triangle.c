@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
 			
 			num_of_lines = sizeof(my_lines)/sizeof(line_t);
 			// send the number of lines the receiver should expect
-			MPI_Gather(&num_of_lines, 1, MPI_LONG, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+			MPI_Gather(&num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 			// send the lines
 			MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 					    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
 	if (my_rank==0) {
 printf("line249\n");
 		// get the number of line_t each process is sending
-		MPI_Gather(&num_of_lines, 1, MPI_LONG, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+		MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 		displs[0] = 0;
 		long total_line_num = recv_lines_count[0];
@@ -254,8 +254,10 @@ printf("line249\n");
            displs[i] = displs[i-1] + recv_lines_count[i-1];
         }
 
+
+printf("line 258\n");
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
-		MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+		MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 	   			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 		free(my_lines);
 
