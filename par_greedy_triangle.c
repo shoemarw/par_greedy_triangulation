@@ -41,8 +41,30 @@ line_t* lines;
 
 
 
-void double_array_to_struct(double* arr, long size){
-	//do stuff
+void double_array_to_struct(double* arr, line_t* new_arr, long size){
+	const int X0 = 0;
+	const int Y0 = 1;
+	const int X1 = 2;
+	const int Y1 = 3;
+	const int LEN = 4;
+	long index = 0;
+	for (long i = 0; i < size; i+=5) {
+		point_t *p0 = (point_t*) allocate(sizeof(point_t));
+		point_t *p1 = (point_t*) allocate(sizeof(point_t));
+		p0->x = arr[i+X0];
+		p0->y = arr[i+Y0];
+		p1->x = arr[i+X1];
+		p1->y = arr[i+Y1];
+
+		line_t* l = (line_t*) allocate(sizeof(line_t));
+		// set the values of the line and store it.
+		l->p = p0;
+		l->q = p1;
+		l->len = arr[i+LEN];
+		lines[index] = *l;
+		index++;
+		free(l);
+	}
 }
 
 void read_points(char *argv[]) {
@@ -286,6 +308,9 @@ void distrib_lines() {
 	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
 	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+
+	ln_my_lines = (line_t *) allocate((l_recv_num/5)*sizeof(line_t));
+	double_array_to_struct(d_my_lines, ln_my_lines, (long)(l_recv_num/5));
 }
 
 
