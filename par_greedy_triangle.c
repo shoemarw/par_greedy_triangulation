@@ -176,7 +176,7 @@ void distrib_lines() {
 		recv_lines_count = allocate (sizeof(int) * nprocs);
 	}
 
-	num_of_lines = sizeof(my_lines)/sizeof(line_t);
+	num_of_lines = sizeof(my_lines);
 	// send the number of lines the receiver should expect
 	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
@@ -193,8 +193,8 @@ void distrib_lines() {
 	}
 
 	// send all lines to ROOT
-	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
+	MPI_Gatherv(&my_lines, num_of_lines, MPI_Byte, recv_lines, recv_lines_count, 
+			    displs, MPI_Byte, ROOT, MPI_COMM_WORLD);
 
 //  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 }
