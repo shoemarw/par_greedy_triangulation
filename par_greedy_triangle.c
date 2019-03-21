@@ -85,9 +85,9 @@ void read_points(char *argv[]) {
 
 void distrib_points() {
 
-	int i_send_counts[nprocs];			// an array of how many points each process will recieve / how many root sends
-	int i_displs_p[nprocs];	// the displacements for the scatterv, significant only to root
-	int i_points_to_recv = 0;				// used to store a single number from i_send_counts
+	int i_send_counts[nprocs];	// an array of how many points each process will recieve / how many root sends
+	int i_displs_p[nprocs];		// the displacements for the scatterv, significant only to root
+	int i_points_to_recv = 0;	// used to store a single number from i_send_counts
 
 	if (my_rank==ROOT) {
 		// use interger division to determine the base amount for points each process will recieve 
@@ -225,7 +225,7 @@ void gen_lines() {
 void distrib_lines() {
 	long num_of_lines;				// number of lines
 	int displs[nprocs];				// Used by root only
-	double* recv_lines = 0; 		// Used by root only
+	double* d_recv_lines = 0; 		// Used by root only
 	int* i_recv_counts;				// Used by root only
 
 	if (my_rank == 0) {
@@ -245,14 +245,46 @@ void distrib_lines() {
            total_line_num += i_recv_counts[i];
            displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
-		recv_lines = (double*) allocate( total_line_num* sizeof(double)*5);        
+		d_recv_lines = (double*) allocate( total_line_num* sizeof(double)*5);        
 	}
 
-//  //  //  //  //  // gather lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
-	MPI_Gatherv(&d_my_lines, num_of_lines, MPI_BYTE, recv_lines, i_recv_counts, 
+	MPI_Gatherv(&d_my_lines, num_of_lines, MPI_BYTE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
-//  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+	long l_num_d_lines;
+	long l_base ;
+	int remainder;
+	long *l_send_counts;
+	long l_recv_num;
+	long *l_displs;
+
+	if(my_rank==ROOT) {
+		l_num_d_lines = sizeof(d_recv_lines) / (sizeof(double) * 5);	// Number of lines (5 doubles)
+	 	l_base = l_num_d_lines/nprocs;		// Base number of lines to send (lines being 5 doub;es)
+	 	remainder = l_num_d_lines%nprocs;	// if there are any remaining lines after the base amount is spilt up
+	 	l_send_counts = (long*) allocate(sizeof(long)*nprocs); // Amount of lines (5 doubles) to send to each process 
+
+	 	// Calculate l_send_counts
+	 	for (int i = 0; i < nprocs; i++) {
+	 		l_send_counts[i] = l_base*5;
+	 		if (remainder) {
+	 			l_send_counts[i] += 5;
+	 			remainder--;	
+	 		}
+	 	}
+
+		// build displacement array
+		l_displs[0] = 0;
+		for (int i = 1; i < nprocs; i++) {
+			l_displs[i] = l_displs[i-1] + l_send_counts[i-1];
+		}	
+	}
+	//tell processes how many to expect
+	MPI_Scatter(l_send_counts, 1, MPI_LONG, l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	
+	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5)
+	//sent lines
+	MPI_Scatterv(d_recv_lines, l_send_counts, l_displs, MPI_DOUBLE, d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 }
 
 
