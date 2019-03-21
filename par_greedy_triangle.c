@@ -116,36 +116,86 @@ int main(int argc, char *argv[]) {
 	START_TIMER(generate)
 	// Scatter all the points in points[] among the processes and store
 	// locally in my_points so Eliza's binomial tree structure can be used.
-//TODO	MPI_Scatter(
 
-//////////////////////////////////////////////////////////////////////////////
-//TEMPORARY SERIAL CODE SO THAT PHASES 2 AND 3 CAN BE DEVELOPED...////////////
-//THIS SHOULD BE REMOVED WHEN ELIZA'S BINOMIAL TREE STRUCTURE IS IMPLEMENTED//
-	if (my_rank == 0) {														//
-		int num_lines = ((num_points)*(num_points-1))/2;					//
-		line_t* lines = (line_t*) allocate(num_lines * sizeof(line_t));		//
-																			//
-		long index = 0;														//
-		for (int i = 0; i < num_points; i++) {								//
-			// Compute the distance between point i and every point			//
-			// from i+1 onward. Then 'make' and store the corresponding		//
-			// line.														//
-			for (int j = i+1; j < num_points; j++) {						//
-				double length = distance(&points[i], &points[j]);			//
-				line_t* l = (line_t*) allocate(sizeof(line_t));				//
-				// set the values of the line and store it.					//
-				l->p =         &points[i];									//
-				l->q =         &points[j];									//
-				l->len =       length;										//
-				lines[index] = *l;											//
-				index++;													//
-				free(l);													//
-			}																//
-		}																	//
-	}																		//
-//TEMPORARY CODE TO SCATTER THE LINES FROM PROC 0 TO ALL PROCS////////////////
-//	MPI_Scatter(lines);
-//////////////////////////////////////////////////////////////////////////////
+  // - - - - - - - //
+ //  Eliza start  //
+// - - - - - - - //
+	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
+	int num_lines;					// Number of lines to be calculated
+	line_t* recv_lines; 			// Used by root only
+	int recv_lines_count[nprocs];	// Used by root only
+	int displs[nprocs];				// Used by root only
+	line_t* my_lines;				// Array of the process's calculated lines
+	long num_of_lines;				// number of lines
+
+
+	num_lines = ((num_points)*(num_points-1))/2;
+	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
+	// calculate lines 
+
+	cur_points = (point_t*) allocate(sizeof(my_points));
+	memcopy(cur_points, my_points, sizeof(my_points));
+
+	for (int iteration_square = 1; iteration_square < nprocs, iteration_square *= 2) {
+		if (my_rank&iteration_square) {
+			int num_cur_point = sizeof(cur_points)/sizeof(point_t);
+			int send_to = (my_rank-i+nprocs)%nprocs;
+			
+			// send the number of points the receiver should expect
+			MPI_Send(num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
+			// send the points
+			MPI_Send(cur_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
+			
+			num_of_lines = sizeof(my_lines)/sizeof(line_t);
+			// send the number of lines the receiver should expect
+			MPI_Gather(num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+			// send the lines
+			MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+					    displs, MPI_line_t, 0, MPI_COMM_WORLD);
+			break;
+		}
+		else {
+			int recv_from = my_rank+iteration_square; 
+
+			// receive number of points
+			MPI_Recv(recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+					 MPI_STATUS_IGNORE)
+
+			// receive points into new_points
+			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
+			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
+					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		
+			// calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+		}
+	}// end for
+
+	if (my_rank==0) {
+		// get the number of line_t each process is sending
+		MPI_Gather(num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+		displs[0] = 0;
+		long total_line_num = recv_lines_count[0];
+
+		// calculate how many total lines are being sent and the displs
+        for (int i=1; i<size; i++) {
+           total_line_num += recv_lines_count[i];
+           displs[i] = disps[i-1] + recv_lines_count[i-1];
+        }
+
+		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
+		MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+	    displs, MPI_line_t, 0, MPI_COMM_WORLD);
+
+
+	    // root scatterv
+	}
+	else {
+		// non-root scatterv
+	}
+  // - - - - - - - //
+ //   Eliza end   //
+// - - - - - - - //
 
 
 	STOP_TIMER(generate)
