@@ -268,6 +268,9 @@ printf("line 265\n");
 	else {
 		// non-root scatterv
 	}
+
+	free(my_lines);
+
   // - - - - - - - //
  //   Eliza end   //
 // - - - - - - - //
