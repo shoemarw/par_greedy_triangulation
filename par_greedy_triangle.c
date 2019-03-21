@@ -218,6 +218,7 @@ int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);	
+MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", nprocs);
 	
 	// Make sure we get the expected input.
 	if (argc != 2) {
@@ -246,7 +247,6 @@ int main(int argc, char *argv[]) {
 	//Build MPI_line_t
 	int block_lens_l[] = {1,1,1};
 
-
 	MPI_Aint point_type_extent;
 	MPI_Aint lb;
 	MPI_Type_get_extent(MPI_point_t, &lb, &point_type_extent);
@@ -264,7 +264,7 @@ int main(int argc, char *argv[]) {
 	STOP_TIMER(MPIoverhead)
 
 	
-
+MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
 		read_points(argv);
