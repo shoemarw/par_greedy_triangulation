@@ -180,7 +180,7 @@ void gen_lines() {
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 			int num_my_point = sizeof(my_points)/sizeof(point_t);
-			int num_new_points sizeof(new_points)/sizeof(point_t);
+			int num_new_points = sizeof(new_points)/sizeof(point_t);
 			line_t* new_lines = (line_t*) allocate(sizeof(line_t)*num_my_point*num_new_points);
 			int new_line_index = 0;
 			for (int j = 0; j < num_my_point; j++){
