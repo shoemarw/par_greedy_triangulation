@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 
 
 	MPI_Aint point_type_extent;
-	MPI_Type_get_extent(MPI_point_t, NULL, point_type_extent);
+	MPI_Type_get_extent(MPI_point_t, NULL, &point_type_extent);
 	MPI_Aint disps_l[3];	
 	disps_l[0] = 0;
 	disps_l[1] = disps_l[0] + point_type_extent;
