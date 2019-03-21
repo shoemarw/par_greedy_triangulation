@@ -37,10 +37,6 @@ line_t*  my_lines;  // a processes' portion of lines.
 long num_points;
 point_t* points;
 line_t* lines;
-MPI_Datatype MPI_point_t, MPI_line_t;
-
-
-
 
 
 
@@ -99,9 +95,9 @@ void distrib_points() {
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
-			send_counts[i] = base_point_count;
+			send_counts[i] = base_point_count * sizeof(point_t);
 			if (remainder > 0) {
-				send_counts[i] += 1;
+				send_counts[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
 		} // end for
@@ -114,27 +110,18 @@ void distrib_points() {
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		// printf("Points[0].x %lf\n",points[0].x);
-		// printf("Points[0].y %lf\n",points[0].y);
-		// for (int i = 0; i < nprocs; i++) {
-		// 	printf("send_counts %d\n", send_counts[i]);
-		// 	printf("displs_point_scatter %d\n", displs_point_scatter[i]);
-		// }
-		// printf("points_to_recv %d\n", points_to_recv);
-		// printf("sizeof point_t %d\n", sizeof(point_t));
-		// printf("points_to_recv*sizeof(point_t) %d\n", points_to_recv*sizeof(point_t));
 
 		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
 		// send each process its points
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_BYTE, temp_points, points_to_recv,
+                 MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 	else { // NOT root
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 		point_t *temp_points = (point_t*) allocate((int)(points_to_recv*sizeof(point_t)));
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, temp_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_BYTE, temp_points, points_to_recv,
+                 MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 }
 
@@ -239,35 +226,6 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", 
     struct timeval tv;
 	START_TIMER(MPIoverhead)
 
-	//Build MPI_point_t
-	int block_lens_p[] = {2};
-
-	MPI_Aint disps_p[2];
-	disps_p[1] = offsetof(point_t, x);
-	disps_p[2] = offsetof(point_t, y);
-
-	MPI_Datatype types_p[2] = {MPI_DOUBLE,MPI_DOUBLE};
-
-	MPI_Type_create_struct(2, block_lens_p, disps_p, types_p, &MPI_point_t);
-	MPI_Type_commit(&MPI_point_t);
-
-	//Build MPI_line_t
-	int block_lens_l[] = {1,1,1};
-
-	MPI_Aint point_type_extent;
-	MPI_Aint lb;
-	MPI_Type_get_extent(MPI_point_t, &lb, &point_type_extent);
-	MPI_Aint disps_l[3];	
-	disps_l[0] = 0;
-	disps_l[1] = disps_l[0] + point_type_extent;
-	disps_l[2] = disps_l[1] + point_type_extent;
-
-	MPI_Datatype types_l[3] = {MPI_point_t, MPI_point_t, MPI_DOUBLE};
-	
-	MPI_Type_create_struct(3, block_lens_l, disps_l, types_l, &MPI_line_t);
-
-	MPI_Type_commit(&MPI_line_t);
-
 	STOP_TIMER(MPIoverhead)
 
 	
@@ -326,10 +284,6 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 	// Clean up and exit
 	// free(points);
 	// free(lines);
-	// if (my_rank==ROOT) {
-	// 	MPI_Type_free(&MPI_point_t);
-	// 	MPI_Type_free(&MPI_line_t);
-	// }
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
 }
