@@ -107,6 +107,13 @@ int main(int argc, char *argv[]) {
 			free(p);
 		}
 		fclose(fin);
+
+		// root scatter points
+
+
+	}
+	else {
+		// non-root scatter
 	}
 	
 	  //                      //
