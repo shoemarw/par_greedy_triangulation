@@ -193,8 +193,8 @@ void distrib_lines() {
 	}
 
 	// send all lines to ROOT
-	MPI_Gatherv(&my_lines, num_of_lines, MPI_Byte, recv_lines, recv_lines_count, 
-			    displs, MPI_Byte, ROOT, MPI_COMM_WORLD);
+	MPI_Gatherv(&my_lines, num_of_lines, MPI_BYTE, recv_lines, recv_lines_count, 
+			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
 //  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 }
