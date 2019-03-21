@@ -177,6 +177,8 @@ int main(int argc, char *argv[]) {
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
+
+		free(points);
 	}
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -218,6 +220,7 @@ int main(int argc, char *argv[]) {
 			// send the lines
 			MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 					    displs, MPI_line_t, 0, MPI_COMM_WORLD);
+			free(my_lines);
 			break;
 		}
 		else {
@@ -254,7 +257,8 @@ int main(int argc, char *argv[]) {
 
 		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
 		MPI_Gatherv(my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-	    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
+	   			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
+		free(my_lines);
 
 
 	    // root scatterv
