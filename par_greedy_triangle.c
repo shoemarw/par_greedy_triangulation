@@ -107,7 +107,6 @@ int main(int argc, char *argv[]) {
 		// The first line of a file must contain a number indicating
 		// the number of points in the file. Read this value and use
 		// it to allocate storage for the points.
-		long num_points;
 		fscanf(fin, "%ld\n", &num_points);
 		points = (point_t*) allocate(num_points * sizeof(point_t));
 		
@@ -149,7 +148,7 @@ int main(int argc, char *argv[]) {
 	if (my_rank==0) {
 
 		printf("line 151\n");
-		printf("%lf\n", points[0].x);
+		// printf("%lf\n", points[0].x);
 		for (int i = 0; i < num_points; i++){
 			print_point(&points[i]);
 		}
