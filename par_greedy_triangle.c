@@ -148,6 +148,7 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank==0) {
 
+		printf("line 151\n");
 		for (int i = 0; i < num_points; i++){
 			print_point(&points[i]);
 		}
