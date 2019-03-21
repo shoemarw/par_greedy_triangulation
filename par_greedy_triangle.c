@@ -132,11 +132,11 @@ void distrib_points() {
 
 
 void gen_lines() {
-	
+
 	// Generate lines as array of (5) doubles		
 	l_num_points = sizeof(pt_my_points)/sizeof(point_t);
 	int i_num_lines = ((l_num_points)*(l_num_points-1))/2;
-	double d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
+	double* d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
 	const int X0 = 0;
 	const int Y0 = 1;
 	const int X1 = 2;
@@ -149,7 +149,7 @@ void gen_lines() {
 		// Compute the distance between point i and every point
 		// from i+1 onward. Then 'make' and store the corresponding
 		// line.
-		for (int j = i+1; j < l_num_points) {
+		for (int j = i+1; j < l_num_points; j++) {
 			double length = distance(&pt_my_points[i], &pt_my_points[j]);
 			d_my_lines[l_index + X0] = pt_my_points[i].x;
 			d_my_lines[l_index + Y0] = pt_my_points[i].y;
