@@ -282,7 +282,7 @@ void distrib_lines() {
 	//tell processes how many to expect
 	MPI_Scatter(l_send_counts, 1, MPI_LONG, l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
-	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5)
+	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
 	MPI_Scatterv(d_recv_lines, l_send_counts, l_displs, MPI_DOUBLE, d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 }
