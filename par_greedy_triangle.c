@@ -256,7 +256,7 @@ void distrib_lines() {
 	int remainder;
 	int *i_send_counts;
 	long l_recv_num;
-	long *l_displs;
+	int *i_displs;
 
 	if(my_rank==ROOT) {
 		l_num_d_lines = sizeof(d_recv_lines) / (sizeof(double) * 5);	// Number of lines (5 doubles)
@@ -274,9 +274,9 @@ void distrib_lines() {
 	 	}
 
 		// build displacement array
-		l_displs[0] = 0;
+		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			l_displs[i] = l_displs[i-1] + i_send_counts[i-1];
+			i_displs[i] = i_displs[i-1] + i_send_counts[i-1];
 		}	
 	}
 	//tell processes how many to expect
@@ -284,7 +284,7 @@ void distrib_lines() {
 	
 	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
-	MPI_Scatterv(d_recv_lines, i_send_counts, &l_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 }
 
 
