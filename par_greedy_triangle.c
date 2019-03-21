@@ -265,38 +265,21 @@ int main(int argc, char *argv[]) {
 
 	
 
+	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
 		read_points(argv);
 	}
 	
-
+	// Root scatters the points
 	distrib_points();
 
-	gen_lines();
 
-	distrib_lines();
-
-	
-	  //                      //
-	 //  Generate all lines  //
-	//                      //
 	
 	START_TIMER(generate)
 
+	// gen_lines();
 
-
-
-  // - - - - - - - //
- //  Eliza start  //
-// - - - - - - - //
-	int num_lines;					// Number of lines to be calculated
-
-	num_points = sizeof(my_points)/sizeof(point_t);
-	num_lines = ((num_points)*(num_points-1))/2;
-	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
-	
-
-
+	// distrib_lines();
 
 	STOP_TIMER(generate)
 	
