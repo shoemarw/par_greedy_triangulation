@@ -169,6 +169,10 @@ void gen_lines() {
 
 
 void distrib_lines() {
+	long num_of_lines;				// number of lines
+	int displs[nprocs];				// Used by root only
+	line_t* recv_lines = 0; 		// Used by root only
+
 	if (my_rank == 0) {
 		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
 	}
@@ -286,10 +290,7 @@ int main(int argc, char *argv[]) {
  //  Eliza start  //
 // - - - - - - - //
 	int num_lines;					// Number of lines to be calculated
-	line_t* recv_lines = 0; 		// Used by root only
-	int displs[nprocs];				// Used by root only
 	line_t* my_lines;				// Array of the process's calculated lines
-	long num_of_lines;				// number of lines
 
 	num_points = sizeof(my_points)/sizeof(point_t);
 	num_lines = ((num_points)*(num_points-1))/2;
