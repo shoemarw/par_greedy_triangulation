@@ -238,7 +238,8 @@ int main(int argc, char *argv[]) {
 			// calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 
 
-//resize my_points and add new_points	
+			//resize my_points and add new_points
+			free(new_points);
 		}
 	}// end for
 
