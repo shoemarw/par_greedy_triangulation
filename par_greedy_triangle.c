@@ -84,15 +84,11 @@ void read_points(char *argv[]) {
 
 void distrib_points() {
 
-	int* send_counts;						// an array of how many points each process will recieve / how many root sends
-		 //= (int*) allocate (sizeof(int) * nprocs);
-	int points_to_recv = 0;					// used to store a single number from send_counts
-	int* displs_point_scatter;				// the displacements for the scatterv, significant only to root
-		 //= (int*) allocate (sizeof(int) * nprocs);
+	int send_counts[nprocs];			// an array of how many points each process will recieve / how many root sends
+	int displs_point_scatter[nprocs];	// the displacements for the scatterv, significant only to root
+	int points_to_recv = 0;				// used to store a single number from send_counts
 
 	if (my_rank==ROOT) {
-		displs_point_scatter = (int*) allocate (sizeof(int) * nprocs);
-		send_counts = (int*) allocate (sizeof(int) * nprocs);
 		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
@@ -139,8 +135,6 @@ void distrib_points() {
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
-	// free(displs_point_scatter);
-	// free(send_counts);
 }
 
 
