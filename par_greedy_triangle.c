@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
 	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
 
 	if (my_rank==0) {
-
+printf("line 149\n");
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
 		int remainder = num_points%nprocs;
 
 
-
+printf("line 157\n");
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
