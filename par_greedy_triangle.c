@@ -262,7 +262,7 @@ printf("line 258\n");
 
 
 	    // root scatterv
-
+printf("line 265\n");
 	    free(recv_lines);
 	}
 	else {
