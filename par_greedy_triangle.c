@@ -190,10 +190,14 @@ int main(int argc, char *argv[]) {
 	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
 	int num_lines;					// Number of lines to be calculated
 	line_t* recv_lines = 0; 		// Used by root only
-	int recv_lines_count[nprocs];	// Used by root only
+	long recv_lines_count[nprocs];	// Used by root only
 	int displs[nprocs];				// Used by root only
 	line_t* my_lines;				// Array of the process's calculated lines
 	long num_of_lines;				// number of lines
+
+  // - - - - - - - - - - - - - - - - - - - -  // 
+ //          Calculate all lines             //
+// - - - - - - - - - - - - - - - - - - - -  //
 
 	num_points = sizeof(my_points)/sizeof(point_t);
 	num_lines = ((num_points)*(num_points-1))/2;
@@ -201,6 +205,7 @@ int main(int argc, char *argv[]) {
 	// calculate lines 
 
 
+	// In this for loop we calculated all the lines
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
 			int num_cur_point = sizeof(my_points)/sizeof(point_t);
@@ -211,12 +216,6 @@ int main(int argc, char *argv[]) {
 			// send the points
 			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
 			
-			num_of_lines = sizeof(my_lines)/sizeof(line_t);
-			// send the number of lines the receiver should expect
-			MPI_Gather(&num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
-			// send the lines
-			MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-					    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 			break;
 		}
 		else {
@@ -238,12 +237,22 @@ int main(int argc, char *argv[]) {
 			free(new_points);
 		}
 	}// end for
+	free(points);
+
+  // - - - - - - - - - - - - - - - - - - - -  // 
+ //  Gather all lines to Prepare for scatter //
+// - - - - - - - - - - - - - - - - - - - -  //
+	
+	
+	if (my_rank == 0) {
+		recv_lines_count = (long *) allocate(sizeof(int)*nprocs)
+	}
+
+	num_of_lines = sizeof(my_lines)/sizeof(line_t);
+	// send the number of lines the receiver should expect
+	MPI_Gather(&num_of_lines, 1, MPI_LONG, recv_lines_count, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 
 	if (my_rank==0) {
-printf("line249\n");
-		// get the number of line_t each process is sending
-		MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-
 		displs[0] = 0;
 		long total_line_num = recv_lines_count[0];
 
@@ -253,24 +262,19 @@ printf("line249\n");
            displs[i] = displs[i-1] + recv_lines_count[i-1];
         }
 
-
-printf("line 257\n");
-		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));
-printf("line 259\n");
-		MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-	   			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
-
-
-	    // root scatterv
-
-printf("line 265\n");
-	    free(recv_lines);
-	}
-	else {
-		// non-root scatterv
+		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
 	}
 
-	free(my_lines);
+	// send all lines to ROOT
+	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
+
+
+
+  // - - - - - - - - - - - - - - - - - - - -  // 
+ //      Scatter Lines to all processes      //
+// - - - - - - - - - - - - - - - - - - - -  //
+
 
   // - - - - - - - //
  //   Eliza end   //
