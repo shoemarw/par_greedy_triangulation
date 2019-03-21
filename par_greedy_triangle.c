@@ -208,8 +208,8 @@ void gen_lines() {
 			}
 			double* temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
 			int num_my_linr = sizeof(d_my_lines)/sizeof(line_t);
-			copy_array(d_my_lines, temp, num_my_linr);
-			copy_array(d_new_lines, &temp[num_my_linr], sizeof(d_new_lines)/sizeof(line_t));
+			copy_array(&d_my_lines, &temp, num_my_linr);
+			copy_array(&d_new_lines, &temp[num_my_linr], sizeof(d_new_lines)/sizeof(line_t));
 
 			free(d_my_lines);
 			d_my_lines = allocate(sizeof(temp));
