@@ -178,15 +178,11 @@ int main(int argc, char *argv[]) {
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 printf("line 179\n");
 	}
-// error is in this else	
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-printf("line 184\n");
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
-	free(points);
-
 
 
   // - - - - - - - //
