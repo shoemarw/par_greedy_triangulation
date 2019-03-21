@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
 	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
 
 	if (my_rank==0) {
-printf("line 149\n");
+
 		// use interger division to determin the base amount for points each process will recieve 
 		long base_point_count = num_points/(long)nprocs;
 
@@ -154,7 +154,7 @@ printf("line 149\n");
 		int remainder = num_points%nprocs;
 
 
-printf("line 157\n");
+
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
@@ -164,7 +164,7 @@ printf("line 157\n");
 				remainder--;
 			} // end if
 		} // end for
-printf("line 167\n");
+
 		// build displacement array
 		displs_point_scatter[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
@@ -174,7 +174,7 @@ printf("line 173\n");
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
-
+printf("line 177\n");
 		// send each process its points
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
