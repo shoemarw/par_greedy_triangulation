@@ -164,13 +164,13 @@ int main(int argc, char *argv[]) {
 				remainder--;
 			} // end if
 		} // end for
-
+printf("line 167\n");
 		// build displacement array
 		displs_point_scatter[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
 			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
 		}		
-
+printf("line 173\n");
 		// send each process how many points it should expect
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
@@ -180,12 +180,13 @@ int main(int argc, char *argv[]) {
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 
 		free(points);
-		printf("line 183\n");
+printf("line 183\n");
 	}
 	else {
 		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
+printf("line 189\n");
 	}
 
 
@@ -246,7 +247,7 @@ int main(int argc, char *argv[]) {
 	}// end for
 
 	if (my_rank==0) {
-		printf("line249\n");
+printf("line249\n");
 		// get the number of line_t each process is sending
 		MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
