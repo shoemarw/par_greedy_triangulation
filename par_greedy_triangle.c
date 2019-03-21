@@ -183,6 +183,10 @@ int main(int argc, char *argv[]) {
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
 
+	if (my_rank==0) {
+		free(points);	
+	}
+
 
   // - - - - - - - //
  //  Eliza start  //
@@ -237,7 +241,6 @@ int main(int argc, char *argv[]) {
 			free(new_points);
 		}
 	}// end for
-	free(points);
 
   // - - - - - - - - - - - - - - - - - - - -  // 
  //  Gather all lines to Prepare for scatter //
