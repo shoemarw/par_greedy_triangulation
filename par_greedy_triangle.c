@@ -217,7 +217,6 @@ int main(int argc, char *argv[]) {
 			// send the lines
 			MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 					    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
-			// free(my_lines);
 			break;
 		}
 		else {
@@ -232,7 +231,7 @@ int main(int argc, char *argv[]) {
 			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		
-			// calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+//  //  //  //  //  // calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 
 
 			//resize my_points and add new_points
@@ -262,6 +261,7 @@ printf("line 258\n");
 
 
 	    // root scatterv
+	    
 printf("line 265\n");
 	    free(recv_lines);
 	}
