@@ -196,8 +196,11 @@ void gen_lines() {
 					free(l);
 				}
 			}
+			line_t* temp = (line_t*) allocate(sizeof(my_lines)+sizeof(new_lines));
+			int num_my_linr = sizeof(my_lines)/sizeof(line_t);
+			copy_array(my_lines, temp, num_my_linr);
+			copy_array(new_lines, temp[num_my_linr], sizeof(new_lines)/sizeof(line_t))
 
-			//resize my_points and add new_points
 		}
 	}// end for
 }
