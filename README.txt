@@ -8,7 +8,7 @@ To use the software first use the makefile, three executables are made.
 Before using the makefile make sure to load mpi. The makefile produces the
 following executables: tri, gen, and par_tri. tri triangluates a point set
 serially and par_tri triangulates a point set using MPI. The executables are
-described below.
+described below, the other files are too.
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -67,6 +67,14 @@ Described above in the "USING THE SOFTWARE" section.
 
 par_greedy_triangle.c:
 Same as greedy_triangle.c except parallelized by using MPI.
+
+test20pts31:
+This is a sample input file for either the tri or the par_tri executables.
+This is also a sample output of generate_points.c (the gen executable).
+to use this with try type:
+    ./tri test20pts31
+This was produced by gen using the command line parameters: 20 for number
+of points and 31 as the seed for the LCG.
 
 turtle.c:
 Takes care of creating images: produced by Dr. Lam.
