@@ -309,10 +309,11 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 277\n");
 	// phases of building the greedy triangulation. Generate all lines, sort the
 	// lines in non-decreasing order, and greedily adding line segments to the
 	// triangulation.
-	printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n Overhead: %.4f\n",
+	if (my_rank==ROOT) {
+		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n Overhead: %.4f\n",
 	        GET_TIMER(generate), GET_TIMER(sort), 
 	        GET_TIMER(triangulate), GET_TIMER(MPIoverhead));
-	
+	}
 	
 	// Clean up and exit
 	// free(points);
