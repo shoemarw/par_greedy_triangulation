@@ -137,6 +137,7 @@ void distrib_points() {
 		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
                  MPI_point_t, ROOT, MPI_COMM_WORLD);
 	}
+	free(displs_point_scatter);
 	free(send_counts);
 }
 
@@ -273,7 +274,7 @@ MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 273, nprocs %i\n", 
 	STOP_TIMER(MPIoverhead)
 
 	
-	
+
 MPI_Barrier(MPI_COMM_WORLD); if (my_rank==ROOT) printf("line 267\n");
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
