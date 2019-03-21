@@ -39,6 +39,165 @@ point_t* points;
 line_t* lines;
 
 
+
+
+
+
+void read_points() {
+
+	// Open the input file for reading. 
+	char *fn = argv[1];
+	FILE* fin = open_file(fn, "r");
+	
+
+	// The first line of a file must contain a number indicating
+	// the number of points in the file. Read this value and use
+	// it to allocate storage for the points.
+	fscanf(fin, "%ld\n", &num_points);
+	points = (point_t*) allocate(num_points * sizeof(point_t));
+	
+	// Read in and store the point s.
+	double x, y;     // The Cartesian coordinates of a point.
+	long i = 0;    // Index for storing points.
+
+	while (fscanf(fin, "%lf %lf\n", &x, &y) == 2) {
+		// Put the values in a point struct and store.
+		point_t *p = (point_t*) allocate(sizeof(point_t));
+		p->x = x;
+		p->y = y;
+		
+		// Make sure input file didn't make num_points too small.
+		if (i >= num_points) 
+		{
+			error("ERROR: the number of lines exceeds expectation\n");
+		}
+		
+		points[i] = *p;
+		i++;
+		free(p);
+	}
+	fclose(fin);
+
+}
+
+
+void distrib_points() {
+	if (my_rank==ROOT) {
+		// use interger division to determin the base amount for points each process will recieve 
+		long base_point_count = num_points/(long)nprocs;
+
+		// get the remainder to see how many leftover points there are
+		int remainder = num_points%nprocs;
+
+
+
+		// fill the array with the base number, then if there are remainders left add one to the 
+		// count of how many points the process will recieve.
+		for (int i = 0; i < nprocs; i++) {
+			send_counts[i] = base_point_count;
+			if (remainder) {
+				send_counts[i] += 1;
+				remainder--;
+			} // end if
+		} // end for
+
+		// build displacement array
+		displs_point_scatter[0] = 0;
+		for (int i = 1; i < nprocs; i++) {
+			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
+		}		
+		// send each process how many points it should expect
+		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
+		// send each process its points
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
+                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+	}
+	else {
+		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
+                 MPI_point_t, ROOT, MPI_COMM_WORLD);
+	}
+}
+
+
+
+void gen_lines() {
+//  //  //  //  //  // calc lines  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+
+	// In this for loop we calculated all the lines
+	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
+		if (my_rank&iteration_square) {
+			int num_cur_point = sizeof(my_points)/sizeof(point_t);
+			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
+
+			// send the number of points the receiver should expect
+			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
+			// send the points
+			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
+			
+			break;
+		}
+		else {
+			int recv_from = my_rank+iteration_square; 
+			// receive number of points
+			MPI_Recv(&recv_buff, 1, MPI_INT, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+					 MPI_STATUS_IGNORE);
+
+			// receive points into new_points
+			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
+			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
+					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+//  //  //  //  //  // calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+
+
+			//resize my_points and add new_points
+		}
+	}// end for
+}
+
+
+void distrib_lines() {
+	if (my_rank == 0) {
+		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
+	}
+
+	num_of_lines = sizeof(my_lines)/sizeof(line_t);
+	// send the number of lines the receiver should expect
+	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+
+	if (my_rank==ROOT) {
+		displs[0] = 0;
+		long total_line_num = recv_lines_count[0];
+
+		// calculate how many total lines are being sent and the displs
+        for (int i=1; i < nprocs; i++) {
+           total_line_num += recv_lines_count[i];
+           displs[i] = displs[i-1] + recv_lines_count[i-1];
+        }
+		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
+	}
+
+	// send all lines to ROOT
+	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
+			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
+
+//  //  //  //  //  // scatter lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
+}
+
+
+
+
+
+
+
+
+
+////			  //
+/// 	Main 	 ///
+// 				////
+
 int main(int argc, char *argv[]) {
 
 	// Set up MPI stuff
@@ -94,99 +253,27 @@ int main(int argc, char *argv[]) {
 
 	
 
-	
-	if (my_rank == 0) {
-		// Open the input file for reading. 
-		char *fn = argv[1];
-		FILE* fin = open_file(fn, "r");
-		
-		  //                         //
-		 //  Read points from file  //
-		//                         // 
-		
-		// The first line of a file must contain a number indicating
-		// the number of points in the file. Read this value and use
-		// it to allocate storage for the points.
-		fscanf(fin, "%ld\n", &num_points);
-		points = (point_t*) allocate(num_points * sizeof(point_t));
-		
-		// Read in and store the point s.
-		double x, y;     // The Cartesian coordinates of a point.
-		long i = 0;    // Index for storing points.
-
-		while (fscanf(fin, "%lf %lf\n", &x, &y) == 2) {
-			// Put the values in a point struct and store.
-			point_t *p = (point_t*) allocate(sizeof(point_t));
-			p->x = x;
-			p->y = y;
-			
-			// Make sure input file didn't make num_points too small.
-			if (i >= num_points) 
-			{
-				error("ERROR: the number of lines exceeds expectation\n");
-			}
-			
-			points[i] = *p;
-			i++;
-			free(p);
-		}
-		fclose(fin);
+	if (my_rank==ROOT) {
+		read_points();
 	}
+	
+
+	distrib_points();
+
+	gen_lines();
+
+	distrib_lines();
+
 	
 	  //                      //
 	 //  Generate all lines  //
 	//                      //
 	
 	START_TIMER(generate)
-	// Scatter all the points in points[] among the processes and store
-	// locally in my_points so Eliza's binomial tree structure can be used.
 
 	int send_counts[nprocs]; 				// an array of how many points each process will recieve / how many root sends
 	int points_to_recv;						// a single number from send_counts
 	int displs_point_scatter[nprocs];		// the displacements for the scatterv, significant only to root
-
-	if (my_rank==0) {
-
-		// use interger division to determin the base amount for points each process will recieve 
-		long base_point_count = num_points/(long)nprocs;
-
-		// get the remainder to see how many leftover points there are
-		int remainder = num_points%nprocs;
-
-
-
-		// fill the array with the base number, then if there are remainders left add one to the 
-		// count of how many points the process will recieve.
-		for (int i = 0; i < nprocs; i++) {
-			send_counts[i] = base_point_count;
-			if (remainder) {
-				send_counts[i] += 1;
-				remainder--;
-			} // end if
-		} // end for
-
-		// build displacement array
-		displs_point_scatter[0] = 0;
-		for (int i = 1; i < nprocs; i++) {
-			displs_point_scatter[i] = displs_point_scatter[i-1] + send_counts[i-1];
-		}		
-		// send each process how many points it should expect
-		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-		my_points = (point_t*) allocate(points_to_recv*sizeof(point_t));
-		// send each process its points
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
-	}
-	else {
-		MPI_Scatter(send_counts, 1, MPI_INT, &points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-		MPI_Scatterv(points, send_counts, displs_point_scatter, MPI_point_t, my_points, points_to_recv,
-                 MPI_point_t, ROOT, MPI_COMM_WORLD);
-	}
-
-	if (my_rank==0) {
-printf("line 187\n");
-//		free(points);	
-	}
 
 
   // - - - - - - - //
@@ -195,88 +282,23 @@ printf("line 187\n");
 	int recv_buff; 					// Used to check how many objects will be sent in next MPI_send 
 	int num_lines;					// Number of lines to be calculated
 	line_t* recv_lines = 0; 		// Used by root only
-	int* recv_lines_count;	// Used by root only
+	int* recv_lines_count;			// Used by root only
 	int displs[nprocs];				// Used by root only
 	line_t* my_lines;				// Array of the process's calculated lines
 	long num_of_lines;				// number of lines
 
-  // - - - - - - - - - - - - - - - - - - - -  // 
- //          Calculate all lines             //
-// - - - - - - - - - - - - - - - - - - - -  //
-
 	num_points = sizeof(my_points)/sizeof(point_t);
 	num_lines = ((num_points)*(num_points-1))/2;
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
-	// calculate lines 
-
-if (my_rank==0) printf("line 212\n");
-	// In this for loop we calculated all the lines
-	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
-		if (my_rank&iteration_square) {
-			int num_cur_point = sizeof(my_points)/sizeof(point_t);
-			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
-if (my_rank==0) printf("line 218\n");
-			// send the number of points the receiver should expect
-			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
-			// send the points
-			MPI_Send(my_points, num_cur_point, MPI_point_t, send_to, TAG, MPI_COMM_WORLD);
-			
-			break;
-		}
-		else {
-			int recv_from = my_rank+iteration_square; 
-if (my_rank==0) printf("line 228\n");
-			// receive number of points
-			MPI_Recv(&recv_buff, 1, MPI_INT, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
-					 MPI_STATUS_IGNORE);
-
-			// receive points into new_points
-			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
-			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
-					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-if (my_rank==0) printf("line 237\n");		
-//  //  //  //  //  // calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
-
-
-			//resize my_points and add new_points
-//			free(new_points);
-		}
-	}// end for
+	
 
   // - - - - - - - - - - - - - - - - - - - -  // 
  //  Gather all lines to Prepare for scatter //
 // - - - - - - - - - - - - - - - - - - - -  //
 	
 	
-	if (my_rank == 0) {
-		recv_lines_count = (int) allocate (sizeof(int)*nprocs);
-printf("line 253\n");	
-	}
 
-	num_of_lines = sizeof(my_lines)/sizeof(line_t);
-	// send the number of lines the receiver should expect
-	MPI_Gather(&num_of_lines, 1, MPI_INT, recv_lines_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-	if (my_rank==0) {
-printf("line 261\n");
-		displs[0] = 0;
-		long total_line_num = recv_lines_count[0];
-
-		// calculate how many total lines are being sent and the displs
-        for (int i=1; i < nprocs; i++) {
-           total_line_num += recv_lines_count[i];
-           displs[i] = displs[i-1] + recv_lines_count[i-1];
-        }
-printf("line 270\n");
-		recv_lines = (line_t*) allocate( total_line_num* sizeof(line_t));        
-printf("line 272\n");	
-	}
-
-	// send all lines to ROOT
-	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
-			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
-
-if (my_rank==0) printf("line 279\n");
 
   // - - - - - - - - - - - - - - - - - - - -  // 
  //      Scatter Lines to all processes      //
