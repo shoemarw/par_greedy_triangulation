@@ -209,7 +209,7 @@ printf("line 187\n");
 	my_lines = (line_t*) allocate(num_lines * sizeof(line_t));
 	// calculate lines 
 
-
+if (my_rank==0) printf("line 212\n");
 	// In this for loop we calculated all the lines
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		if (my_rank&iteration_square) {
@@ -225,7 +225,7 @@ printf("line 187\n");
 		}
 		else {
 			int recv_from = my_rank+iteration_square; 
-
+if (my_rank==0) printf("line 228\n");
 			// receive number of points
 			MPI_Recv(&recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
@@ -234,7 +234,7 @@ printf("line 187\n");
 			point_t* new_points = (point_t*) allocate(recv_buff*sizeof(point_t));
 			MPI_Recv(new_points, recv_buff, MPI_point_t, recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		
+if (my_rank==0) printf("line 237\n");		
 //  //  //  //  //  // calc new lines //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  //  
 
 
@@ -276,10 +276,7 @@ printf("line 272\n");
 	MPI_Gatherv(&my_lines, num_of_lines, MPI_line_t, recv_lines, recv_lines_count, 
 			    displs, MPI_line_t, ROOT, MPI_COMM_WORLD);
 
-if (my_rank==0)
-{
-printf("line 281\n");
-}
+if (my_rank==0) printf("line 279\n");
 
   // - - - - - - - - - - - - - - - - - - - -  // 
  //      Scatter Lines to all processes      //
