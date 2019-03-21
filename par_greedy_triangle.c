@@ -215,7 +215,7 @@ if (my_rank==0) printf("line 212\n");
 		if (my_rank&iteration_square) {
 			int num_cur_point = sizeof(my_points)/sizeof(point_t);
 			int send_to = (my_rank-iteration_square+nprocs)%nprocs;
-			
+if (my_rank==0) printf("line 218\n");
 			// send the number of points the receiver should expect
 			MPI_Send(&num_cur_point, 1, MPI_INT, send_to, TAG, MPI_COMM_WORLD);
 			// send the points
@@ -227,7 +227,7 @@ if (my_rank==0) printf("line 212\n");
 			int recv_from = my_rank+iteration_square; 
 if (my_rank==0) printf("line 228\n");
 			// receive number of points
-			MPI_Recv(&recv_buff, 1, MPI_LONG, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+			MPI_Recv(&recv_buff, 1, MPI_INT, recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
 
 			// receive points into new_points
