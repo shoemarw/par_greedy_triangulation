@@ -205,6 +205,7 @@ int main(int argc, char *argv[]) {
 	fclose(write_file);
 	
 	// Clean up and exit
+	free(triang);
 	free(points);
 	free(lines);
 	return (EXIT_SUCCESS);
