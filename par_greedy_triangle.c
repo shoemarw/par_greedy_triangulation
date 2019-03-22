@@ -247,11 +247,11 @@ void gen_lines() {
 				for (int k = 0; k < point_recv_count; ++k)
 				{
 					double length = distance(&pt_my_points[k], &pt_new_points[j]);
-					d_my_lines[new_line_index + X0] = pt_my_points[j].x;
-					d_my_lines[new_line_index + Y0] = pt_my_points[j].y;
-					d_my_lines[new_line_index + X1] = pt_new_points[k].x;
-					d_my_lines[new_line_index + Y1] = pt_new_points[k].y;
-					d_my_lines[new_line_index + LEN] = length;
+					d_new_lines[new_line_index + X0] = pt_my_points[j].x;
+					d_new_lines[new_line_index + Y0] = pt_my_points[j].y;
+					d_new_lines[new_line_index + X1] = pt_new_points[k].x;
+					d_new_lines[new_line_index + Y1] = pt_new_points[k].y;
+					d_new_lines[new_line_index + LEN] = length;
 
 					new_line_index +=5;
 				}
