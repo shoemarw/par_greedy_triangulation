@@ -369,6 +369,17 @@ int main(int argc, char *argv[]) {
 	distrib_lines();
 
 	STOP_TIMER(generate)
+
+
+	if (my_rank==0){	
+		for (int i = 0; i < 10; i++) {
+			print_line(ln_my_lines[i]);
+		}
+	}
+
+
+
+
 	
 	  //                                      //
 	 //  Sort the lines from small to large  //
