@@ -232,7 +232,7 @@ void gen_lines() {
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 			// calculate number of new lines to be created
-			long new_line_count = my_point_count*point_recv_count;
+			// long new_line_count = my_point_count*point_recv_count;
 
 			// // create array to store lines about to be created
 			// d_new_lines = (double*) allocate(sizeof(double)*new_line_count*5);
