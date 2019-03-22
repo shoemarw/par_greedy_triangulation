@@ -303,10 +303,11 @@ void distrib_lines() {
         }
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
-printf("Hello for proc %d my line count is: %ld\n", my_rank, my_line_count);
+printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
+printf("Hello from proc %d d_my_lines[0]: %ld\n", my_rank, d_my_lines[0]);
 
-	MPI_Gatherv(&d_my_lines, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
-			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	// MPI_Gatherv(&d_my_lines, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
+			    // displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	long l_base;
 	int remainder;
