@@ -212,11 +212,12 @@ void gen_lines() {
 			break;  // done, nothing left for this process to do in this function
 		}
 		// If process is a receiver this iteration:
+/**
 		else {
 
 			// calculate the process number of whom to receive from
 			int i_recv_from = my_rank+iteration_square; // The process number to receive from
-/**			
+			
 			// receive the number of points about to get sent
 			MPI_Recv(&point_recv_count, 1, MPI_LONG, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
@@ -284,8 +285,8 @@ void gen_lines() {
 			printf("new_line_count 284 %ld\n", new_line_count);			
 			my_line_count += new_line_count;
 			printf("my line count 286 %ld\n", my_line_count);
-*/
 		} // end of receiver branch of if
+*/
 	}// end for
 }// end of gen_lines
 
