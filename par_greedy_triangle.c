@@ -335,10 +335,10 @@ void distrib_lines() {
 		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
 			i_displs[i] = i_displs[i-1] + i_send_count[i-1];
-		}	
+		}
 	}
 	// tell processes how many lines to expect in the scatterv
-	MPI_Scatter(i_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	MPI_Scatter(i_send_count, 1, MPI_LONG, l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	printf("338 Hello from %d\n", my_rank);
 
 	// calculate how many lines the process is responsible for
