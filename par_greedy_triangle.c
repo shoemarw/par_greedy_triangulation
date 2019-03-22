@@ -232,7 +232,7 @@ void gen_lines() {
 					new_line_index +=5;
 				}
 			}
-
+if(my_rank==ROOT) {printf("235 %ld\n", sizeof(d_my_lines));}
 			long l_size_my_points = sizeof(pt_my_points)/sizeof(point_t);
 			long l_size_new_points = sizeof(pt_new_points)/sizeof(point_t);
 			point_t *pt_temp = (point_t *) allocate(sizeof(pt_my_points) + sizeof(pt_new_points));
@@ -256,9 +256,7 @@ void gen_lines() {
 			free(d_new_lines);
 		}
 	}// end for
-	if(my_rank==ROOT) {
-		printf("260 %ld\n", sizeof(d_my_lines));
-	}
+if(my_rank==ROOT) {printf("259 %ld\n", sizeof(d_my_lines));}
 }
 
 
