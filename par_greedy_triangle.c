@@ -261,7 +261,7 @@ void gen_lines() {
 			free(pt_my_points);
 			free(pt_new_points);
 			memcpy(temp_p, pt_my_points, point_recv_count);
-			free(temp_p);
+			// free(temp_p);
 
 
 			// update my_point_count
@@ -273,7 +273,7 @@ void gen_lines() {
 			free(d_my_lines);
 			free(d_new_lines);
 			memcpy(temp_t, d_my_lines, new_line_count);
-			free(temp_t);
+			// free(temp_t);
 
 			// update my_line_count	
 			my_line_count += new_line_count;
