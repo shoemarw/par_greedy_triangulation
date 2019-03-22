@@ -139,13 +139,17 @@ void distrib_points() {
 		}
 	}
 	// send each process how many points it should expect
-	MPI_Scatter(i_send_count, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+	long bytes_to_expect;
+	MPI_Scatter(i_send_count, 1, MPI_INT, &bytes_to_expect, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-	// Allocate room for the points about to be recieved
-	pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
+	// calculate points a process is responsible for
+	my_point_count = bytes_to_expect/sizeof(point_t)
+
+	// Allocate room for the points about to be received
+	pt_my_points = (point_t*) allocate((int)(bytes_to_expect));
 
 	// send each process its points
-	MPI_Scatterv(points, i_send_count, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
+	MPI_Scatterv(points, i_send_count, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,
              MPI_BYTE, ROOT, MPI_COMM_WORLD);
 }
 
