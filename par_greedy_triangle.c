@@ -340,8 +340,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	 			remainder--;	
 	 		}
 	 	}
-		printf("i_send_counts[0] %d\n", i_send_counts[0]);
-		printf("i_send_counts[1] %d\n", i_send_counts[1]);
+
 
 		// build displacement array
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
@@ -358,22 +357,13 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	// create room for for the lines
 	d_my_lines = (double*) allocate(i_recv_doubs*sizeof(double));
+	
 	// scatter lines
-	if(my_rank==ROOT){
-		printf("i_send_counts[0] %d\n", i_send_counts[0]);
-		printf("i_send_counts[1] %d\n", i_send_counts[1]);
-		printf("i_displs[0] %d\n", i_displs[0]);
-		printf("i_displs[1] %d\n", i_displs[1]);
-		printf("Ready to hold %ld bytes\n", i_recv_doubs*sizeof(double));
-	}
-
-printf("Hello from proc %d i_recv_doubs: %d\n", my_rank, i_recv_doubs);
-//	MPI_Scatterv(points, i_send_count, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
+	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-	// double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 }
 
 
