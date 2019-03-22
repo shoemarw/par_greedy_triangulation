@@ -307,7 +307,7 @@ void distrib_lines() {
 
 	long l_base;
 	int remainder;
-	long *l_send_count;
+	int *i_send_count;
 	long l_recv_doubs;
 	int *i_displs;
 
@@ -316,12 +316,12 @@ void distrib_lines() {
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
-	 	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
-	 	// Calculate l_send_count
+	 	i_send_count = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
+	 	// Calculate i_send_count
 	 	for (int i = 0; i < nprocs; i++) {
-	 		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
+	 		i_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
 	 		if (remainder) {
-	 			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
+	 			i_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
 	 	}
@@ -330,11 +330,11 @@ void distrib_lines() {
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			i_displs[i] = i_displs[i-1] + l_send_count[i-1];
+			i_displs[i] = i_displs[i-1] + i_send_count[i-1];
 		}	
 	}
 	// tell processes how many lines to expect in the scatterv
-	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	MPI_Scatter(i_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	printf("338 Hello from %d\n", my_rank);
 
 	// calculate how many lines the process is responsible for
@@ -344,7 +344,7 @@ void distrib_lines() {
 	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 	printf("345 Hello from %d\n", my_rank);
 	// scatter lines
-	MPI_Scatterv(d_recv_lines, l_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, i_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	printf("348 Hello from %d\n", my_rank);
 
