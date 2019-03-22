@@ -325,7 +325,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	if(my_rank==ROOT) {
 		free(i_recv_counts);
-
+		printf("line 328 line count %ld\n", my_line_count);
 		my_line_count = total_line_num;
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
@@ -338,9 +338,9 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	 			i_send_counts[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
+	 	}
 		printf("i_send_counts[0] %d\n", i_send_counts[0]);
 		printf("i_send_counts[1] %d\n", i_send_counts[1]);
-	 	}
 
 		// build displacement array
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
