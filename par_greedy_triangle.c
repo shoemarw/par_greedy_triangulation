@@ -259,16 +259,9 @@ void gen_lines() {
 
 			point_t *temp = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				 point_recv_count, sizeof(point_t));
-
-			// // bunch of ugly code to combine both arrays of points into pt_my_points /////
-			// point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
-			// memcpy(pt_my_points, pt_temp, my_point_count);								//
-			// memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
-			// pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
-			// memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
-			// free(pt_temp);																//
-			// free(pt_new_points);														//
-			// //////////////////////////////////////////////////////////////////////////////
+			free(pt_my_points);
+			pt_my_points = *temp;
+			free(temp);
 
 			// // update my_point_count
 			// my_point_count += point_recv_count;
