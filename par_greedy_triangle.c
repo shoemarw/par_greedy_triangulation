@@ -117,6 +117,7 @@ void distrib_points() {
 	if (my_rank==ROOT) {
 		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = l_num_points/(long)nprocs;
+		printf("l_num_points %ld\n", l_num_points);
 
 		// get the remainder to see how many leftover points there are
 		int remainder = l_num_points%nprocs;
