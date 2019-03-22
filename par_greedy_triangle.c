@@ -339,7 +339,7 @@ printf("Proc0 is expecting %d doubles from proc0\n", i_recv_counts[0]);
 printf("Proc0 is expecting %d doubles from proc1\n", i_recv_counts[1]);
 
 	}
-printf("I am prco %d and I am sending %d doubles\n", my_rank, my_line_count);
+printf("I am prco %d and I am sending %d doubles\n", my_rank, my_line_count*5);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
