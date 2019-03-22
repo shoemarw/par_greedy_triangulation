@@ -185,7 +185,7 @@ void gen_lines() {
 			l_index +=5;
 		}
 	}
-/**
+
 	  //													  //
 	 // Start sending/receiving points to create more lines  //
 	//														//
@@ -287,7 +287,6 @@ void gen_lines() {
 			printf("my line count 286 %ld\n", my_line_count);
 		} // end of receiver branch of if
 	}// end for
-*/
 }// end of gen_lines
 
 
