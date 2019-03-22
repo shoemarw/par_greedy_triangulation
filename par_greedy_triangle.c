@@ -359,13 +359,13 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	if(my_rank==ROOT){
 		printf("i_send_counts[0] %d\n", i_send_counts[0]);
 		printf("i_send_counts[1] %d\n", i_send_counts[1]);
-		printf("i_displs[1] %d\n", i_displs[1]);
+		printf("i_displs[0] %d\n", i_displs[0]);
 		printf("i_displs[1] %d\n", i_displs[1]);
 	}
 
 // printf("Hello from proc %d i_send_counts: %d\n", my_rank, i_send_counts);
 
-	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(&d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
