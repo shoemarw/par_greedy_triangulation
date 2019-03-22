@@ -270,7 +270,7 @@ void gen_lines() {
 			double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
 			memcpy(&d_my_lines, &d_temp, my_line_count);								//
 			memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
-			// free(d_my_lines);															//
+			free(d_my_lines);															//
 			d_my_lines = allocate(my_line_count+new_line_count);						//
 			memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
 			free(d_temp);																//
