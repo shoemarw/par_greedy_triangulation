@@ -298,10 +298,13 @@ void distrib_lines() {
 
 		// calculate how many total lines are being sent and the displs
         for (int i=1; i < nprocs; i++) {
-        	printf("i_recv_counts %d\n", i_recv_counts[i]);
-           total_line_num += i_recv_counts[i];
-           displs[i] = displs[i-1] + i_recv_counts[i-1];
+           	total_line_num += i_recv_counts[i];
+           	displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
+    	printf("i_recv_counts[0] %d\n", i_recv_counts[0]);
+    	printf("i_recv_counts[1] %d\n", i_recv_counts[1]);
+    	printf("displs[0] %d\n", displs[0]);
+    	printf("displs[1] %d\n", displs[1]);
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
