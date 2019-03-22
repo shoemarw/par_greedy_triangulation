@@ -260,7 +260,7 @@ void gen_lines() {
 			point_t *temp = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				 point_recv_count, sizeof(point_t));
 			free(pt_my_points);
-			pt_my_points = *temp;
+			pt_my_points = temp;
 			free(temp);
 
 			// // update my_point_count
