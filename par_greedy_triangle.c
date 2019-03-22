@@ -339,7 +339,6 @@ void distrib_lines() {
 	}
 	// tell processes how many lines to expect in the scatterv
 	MPI_Scatter(i_send_count, 1, MPI_INT, &l_recv_doubs, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-	printf("338 Hello from proc%d my numbers I am expecting %ld \n", my_rank,l_recv_doubs);
 
 	// calculate how many lines the process is responsible for
 	my_line_count = l_recv_doubs/5;
@@ -389,14 +388,16 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Root scatters the points
+	MPI_Barrier(MPI_COMM_WORLD);
 	distrib_points();
 
-	
+	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 
 	gen_lines();
 	distrib_lines();
 
+	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
 
