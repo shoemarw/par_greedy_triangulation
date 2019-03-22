@@ -39,6 +39,9 @@ long l_num_points;
 point_t* points;
 line_t* lines;
 
+long my_point_count;
+long my_line_count = 0;
+
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
@@ -109,18 +112,18 @@ void read_points(char *argv[]) {
 
 
 void distrib_points() {
-
-	int i_send_counts[nprocs];	// an array of how many points each process will recieve / how many root sends
-	int i_displs_p[nprocs];		// the displacements for the scatterv, significant only to root
-	int i_points_to_recv = 0;	// used to store a single number from i_send_counts
+	int i_send_counts[nprocs];	// an array of how many points each process will recieve; significant only to root
+	int i_displs_p[nprocs];		// the displacements for the scatterv; significant only to root
 
 	if (my_rank==ROOT) {
 		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = l_num_points/(long)nprocs;
 		printf("l_num_points %ld\n", l_num_points);
+		printf("base_point_count %ld\n", base_point_count);
 
 		// get the remainder to see how many leftover points there are
 		int remainder = l_num_points%nprocs;
+		printf("remainder %d\n", remainder);
 
 
 		// fill the array with the base number, then if there are remainders left add one to the 
@@ -140,19 +143,19 @@ void distrib_points() {
 			i_displs_p[i] = i_displs_p[i-1] + i_send_counts[i-1];
 		}		
 		// send each process how many points it should expect
-		MPI_Scatter(i_send_counts, 1, MPI_INT, &i_points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(i_send_counts, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 
-		pt_my_points = (point_t*) allocate((int)(i_points_to_recv*sizeof(point_t)));
+		pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
 		// send each process its points
-		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, i_points_to_recv,
+		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 	else { // NOT root
-		MPI_Scatter(i_send_counts, 1, MPI_INT, &i_points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+		MPI_Scatter(i_send_counts, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		pt_my_points = (point_t*) allocate((int)(i_points_to_recv*sizeof(point_t)));
-		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, i_points_to_recv,
+		pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
+		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
 	}
 }
@@ -407,6 +410,7 @@ int main(int argc, char *argv[]) {
     //	                                 //
 	
 	START_TIMER(triangulate)
+
 	STOP_TIMER(triangulate)
 	
 	  //                                     //
