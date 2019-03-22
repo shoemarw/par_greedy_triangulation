@@ -399,9 +399,9 @@ void triangulate() {
 			// five doubles for Allgather.
 			double my_min_line[5];
 			break;
-/*
 			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
 			point_t q = *(ln_my_lines[0].q);
+/*
 			
 			my_min_line[0] = p.x;
 			my_min_line[1] = p.y;
