@@ -314,7 +314,7 @@ void distrib_lines() {
 printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
 printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
-	MPI_Gatherv(&d_my_lines, my_line_count*5, MPI_DOUBLE, d_recv_lines, i_recv_counts*5, 
+	MPI_Gatherv(&d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	long l_base;
