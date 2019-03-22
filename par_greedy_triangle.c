@@ -320,6 +320,7 @@ void distrib_lines() {
 		my_line_count = 0;
 		for (int i = 0; i < nprocs; i++) {
 			my_line_count += d_recv_lines[i];
+			printf("d_recv_lines[%d] is %ld \n" i, d_recv_lines[i]);
 		}
 
 
