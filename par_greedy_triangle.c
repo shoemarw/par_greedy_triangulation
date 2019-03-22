@@ -130,6 +130,7 @@ void distrib_points() {
 				i_send_counts[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
+			printf("i_send_counts %d\n", i_send_counts[i]);
 		} // end for
 
 		// build displacement array
@@ -145,7 +146,6 @@ void distrib_points() {
 		// send each process its points
 		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, i_points_to_recv,
                  MPI_BYTE, ROOT, MPI_COMM_WORLD);
-printf("how many points %d\n", i_send_counts[0]);
 	}
 	else { // NOT root
 		MPI_Scatter(i_send_counts, 1, MPI_INT, &i_points_to_recv, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
