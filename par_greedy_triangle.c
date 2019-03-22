@@ -305,14 +305,8 @@ void distrib_lines() {
            	total_line_num += i_recv_counts[i];
            	displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
-    	printf("i_recv_counts[0] %d\n", i_recv_counts[0]);
-    	printf("i_recv_counts[1] %d\n", i_recv_counts[1]);
-    	printf("displs[0] %d\n", displs[0]);
-    	printf("displs[1] %d\n", displs[1]);
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double));        
 	}
-printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
-printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
@@ -326,10 +320,8 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	if(my_rank==ROOT) {
 		free(i_recv_counts);
 		my_line_count = total_line_num/5;
-		printf("line 329 line count %ld\n", my_line_count);
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
-	 	printf("l_base %ld\n", l_base);
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
 	 	// Calculate i_send_counts
@@ -357,7 +349,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	// create room for for the lines
 	d_my_lines = (double*) allocate(i_recv_doubs*sizeof(double));
-	
+
 	// scatter lines
 	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
