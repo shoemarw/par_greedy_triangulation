@@ -484,22 +484,22 @@ void triangulate() {
 		// // distance of -1.
 		} // end if (my_unknown > 0)
 		else {
-			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);
-			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
-				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-			// Check if all of the lines have distance of -1. If so then we are
-			// done!
-			int count = 0;
-			for (int i = 0; i < nprocs; i++) {
-				if (recv_buf[i*4] == -1) {
-					count++;
-				}
-			}
-			if (count == nprocs) {
-				finished = true;
-			}
-			free(recv_buf); 
+			// // Prepare an array to receive each processe's minimal line.
+			// double* recv_buf = (double*) allocate(5*nprocs);
+			// MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
+			// 	          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+			// // Check if all of the lines have distance of -1. If so then we are
+			// // done!
+			// int count = 0;
+			// for (int i = 0; i < nprocs; i++) {
+			// 	if (recv_buf[i*4] == -1) {
+			// 		count++;
+			// 	}
+			// }
+			// if (count == nprocs) {
+			// 	finished = true;
+			// }
+			// free(recv_buf); 
 		} // end else
 	} // end while
 }
