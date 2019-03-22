@@ -24,14 +24,14 @@
 // image created will only be useful for a point set of less than 1000.
 //#define IMAGE
 
-const int  TAG = 1;		// Used for MPI_sends/revc
-const int  ROOT = 0;	// Used for MPI calls and if statements
+#define TAG = 1;		// Used for MPI_sends/revc
+#define ROOT = 0;		// Used for MPI calls and if statements
 
-const int X0 = 0;	// first point's x 			| These are used when lines are stored in arrays of 
-const int Y0 = 1;	// first point's y 			| doubles rather than structs.
-const int X1 = 2;	// second point's x 		| They are used as displacements, for example 
-const int Y1 = 3;	// second point's y 		| line_array[i + Y0] would be the i-th line's 
-const int LEN = 4;	// distance the points 		| y-coordinate for first point in the line.
+#define X0 = 0;		// first point's x 			| These are used when lines are stored in arrays of 
+#define Y0 = 1;		// first point's y 			| doubles rather than structs.
+#define X1 = 2;		// second point's x 		| They are used as displacements, for example 
+#define Y1 = 3;		// second point's y 		| line_array[i + Y0] would be the i-th line's 
+#define LEN = 4;	// distance the points 		| y-coordinate for first point in the line.
 
 int nprocs;         	// number of processes
 int my_rank;        	// rank of a particular process
@@ -175,11 +175,11 @@ void gen_lines() {
 		// line.
 		for (int j = i+1; j < my_point_count; j++) {
 			double length = distance(&pt_my_points[i], &pt_my_points[j]);
-			// d_my_lines[l_index + X0] = pt_my_points[i].x;
-			// d_my_lines[l_index + Y0] = pt_my_points[i].y;
-			// d_my_lines[l_index + X1] = pt_my_points[j].x;
-			// d_my_lines[l_index + Y1] = pt_my_points[j].y;
-			// d_my_lines[l_index + LEN] = length;	
+			d_my_lines[l_index + X0] = pt_my_points[i].x;
+			d_my_lines[l_index + Y0] = pt_my_points[i].y;
+			d_my_lines[l_index + X1] = pt_my_points[j].x;
+			d_my_lines[l_index + Y1] = pt_my_points[j].y;
+			d_my_lines[l_index + LEN] = length;	
 
 			// Increment index to next line
 			l_index +=5;
