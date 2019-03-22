@@ -295,7 +295,7 @@ void distrib_lines() {
 	// send the number of lines a process will be sending on the gatherv
 	// MPI_Gather(&my_line_count, 1, MPI_INT, i_recv_counts, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-printf("I am %d and d_my_lines is %ld\n", my_rank, d_my_lines);
+printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
 
 	if (my_rank==ROOT) {
 		displs[0] = 0;
@@ -309,7 +309,7 @@ printf("I am %d and d_my_lines is %ld\n", my_rank, d_my_lines);
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 
-	MPI_Gatherv(&d_my_lines, my_line_count, MPI_BYTE, d_recv_lines, i_recv_counts, 
+	MPI_Gatherv(&my_line_count, my_line_count, MPI_BYTE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
 	long l_base;
