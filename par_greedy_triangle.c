@@ -345,11 +345,11 @@ void distrib_lines() {
 	// calculate how many lines the process is responsible for
 	printf("l_recv_doubs is %ld\n", l_recv_doubs);
 	my_line_count = l_recv_doubs/5;
-/*
 
 	// create room for for the lines
 	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 
+/*
 	// scatter lines
 	MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
