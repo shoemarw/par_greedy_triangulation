@@ -337,6 +337,7 @@ void distrib_lines() {
 
 printf("Proc0 is expecting %d doubles from proc0\n", i_recv_counts[0]);
 printf("Proc0 is expecting %d doubles from proc1\n", i_recv_counts[1]);
+printf("Proc0 is making room for %ld doubles\n", total_line_num);
 
 	}
 printf("I am prco %d and I am sending %d doubles\n", my_rank, my_line_count*5);
