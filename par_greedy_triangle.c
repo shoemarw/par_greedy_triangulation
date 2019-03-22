@@ -187,7 +187,8 @@ void gen_lines() {
 	 // Start sending/receiving points to create more lines  //
 	//														//
 
-	int point_recv_count; 	// Used to check how many objects will be sent in MPI_send 
+	int point_recv_count; 	// Used to check how many objects will be sent in MPI_send
+	double* d_new_lines;
 	
 	// In this for loop we calculated all the remaining lines - which means we'll
 	// need to send/receive points from other processes. This is implemented
@@ -231,7 +232,7 @@ void gen_lines() {
 			long new_line_count = my_point_count*point_recv_count;
 
 			// create array to store lines about to be created
-			double* d_new_lines = (double*) allocate(sizeof(double)*new_line_count*5);
+			d_new_lines = (double*) allocate(sizeof(double)*new_line_count*5);
 
 			// create long to keep tract of d_new_lines index through for loop
 			long new_line_index = 0;
