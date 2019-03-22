@@ -210,9 +210,11 @@ void gen_lines() {
 			// send the number of points the receiver should expect
 			MPI_Send(&my_point_count, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
 
-printf("sent from proc0\n");
+printf("sent from proc1\n");
 printf("%lf\n", &pt_my_points[0].x);			
 printf("%lf\n", &pt_my_points[0].y);
+printf("%lf\n", &pt_my_points[1].x);			
+printf("%lf\n", &pt_my_points[1].y);
 
 			// send the points
 			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
@@ -263,7 +265,7 @@ printf("%lf\n", &pt_new_points[0].y);
 				for (int k = 0; k < point_recv_count; ++k)
 				{
 	
-					double length = distance(&pt_my_points[k], &pt_new_points[j]);
+					double length = distance(&pt_my_points[j], &pt_new_points[k]);
 					d_new_lines[new_line_index + X0] = pt_my_points[j].x;
 					d_new_lines[new_line_index + Y0] = pt_my_points[j].y;
 					d_new_lines[new_line_index + X1] = pt_new_points[k].x;
