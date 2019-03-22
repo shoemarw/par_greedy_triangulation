@@ -255,10 +255,38 @@ void gen_lines() {
 					new_line_index +=5;
 				}
 			} // end out for
+
+
+			// merge d_my_lines with d_new_lines
+			double* temp_doubles = (double*) allocate((my_line_count+new_line_count)*sizeof(double*5);
+			for (int i = 0; i < (my_line_count*5); i++) {
+				temp_doubles[i] = d_my_lines[i];
+			}
+			for(int i = 0; i < (new_line_count*5); i++) {
+				temp_doubles[i + my_line_count*5] = d_my_lines[i];
+			}
+			free(d_my_lines);
+			free(d_new_lines);
+			d_my_lines = temp_doubles;
+
 			// merge pt_my_points with pt_new_points
+			point_t* temp_points = (point_t*) allocate((my_point_count+point_recv_count)*sizeof(point_t));
+			for (int i = 0; i < my_point_count; i++) {
+				temp_points[i] = pt_my_points[i];
+			}
+			for(int i = 0; i < point_recv_count; i++) {
+				temp_points[i + my_point_count] = pt_new_points[i];
+			}
+			free(pt_my_points);
+			free(pt_new_points);
+			pt_my_points = temp_points;
+
+
+/*			
+		// merge pt_my_points with pt_new_points
 			point_t *temp_p = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				   point_recv_count, sizeof(point_t));
-			free(pt_my_points);
+			// free(pt_my_points);
 			// free(pt_new_points);
 			memcpy(temp_p, pt_my_points, point_recv_count);
 			// free(temp_p);
@@ -267,14 +295,14 @@ void gen_lines() {
 			// update my_point_count
 			my_point_count += point_recv_count;
 
-			// merge d_my_lines with d_new_lines
+		// merge d_my_lines with d_new_lines
 			double *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
-			free(d_my_lines);
+			// free(d_my_lines);
 			// free(d_new_lines);
 			memcpy(temp_t, d_my_lines, new_line_count);
 			// free(temp_t);
-
+*/
 			// update my_line_count	
 			my_line_count += new_line_count;
 		} // end of receiver branch of if
