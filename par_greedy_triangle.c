@@ -161,7 +161,7 @@ void gen_lines() {
 
 	// Generate lines as array of (5) doubles		
 	l_num_points = sizeof(pt_my_points)/sizeof(point_t);
-	int i_num_lines = ((l_num_points)*(l_num_points-1))/2;
+	int i_num_lines = ((l_num_points-1)*(l_num_points-2))/2;
 	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
 	const int X0 = 0;
 	const int Y0 = 1;
@@ -256,6 +256,9 @@ void gen_lines() {
 			free(d_new_lines);
 		}
 	}// end for
+	if(my_rank==ROOT) {
+		printf("%ld\n", sifeof(d_my_lines));
+	}
 }
 
 
