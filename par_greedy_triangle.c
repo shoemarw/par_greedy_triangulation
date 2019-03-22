@@ -398,8 +398,6 @@ void triangulate() {
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
 			double my_min_line[5];
-printf("Hello from proc%d my ln_my_lines[0].p.x is\n", nprocs);
-// print_line(&ln_my_lines[0]);
 			break;
 /*
 			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
@@ -552,7 +550,7 @@ int main(int argc, char *argv[]) {
 	START_TIMER(generate)
 
 	gen_lines();
-	// distrib_lines();
+	distrib_lines();
 
 	STOP_TIMER(generate)
 
@@ -572,8 +570,8 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	
 	START_TIMER(sort)
-	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
-		                sizeof(line_t), compare);
+	// qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
+	// 	                sizeof(line_t), compare);
 	STOP_TIMER(sort)
 	
 	  //                                   //
@@ -581,7 +579,7 @@ int main(int argc, char *argv[]) {
     //	                                 //
 	
 	START_TIMER(triangulate)
-	triangulate();
+	// triangulate();
 	STOP_TIMER(triangulate)
 	
 	   //                                        //
