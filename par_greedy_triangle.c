@@ -189,6 +189,7 @@ void gen_lines() {
 
 	int point_recv_count; 	// Used to check how many objects will be sent in MPI_send
 	double* d_new_lines;
+	point_t* pt_new_points;
 	
 	// In this for loop we calculated all the remaining lines - which means we'll
 	// need to send/receive points from other processes. This is implemented
@@ -222,7 +223,7 @@ void gen_lines() {
 			long bytes_to_recv = point_recv_count*sizeof(point_t);
 
 			// create a array for bytes/points about to be received
-			point_t* pt_new_points = (point_t*) allocate(bytes_to_recv);
+			pt_new_points = (point_t*) allocate(bytes_to_recv);
 
 			// receive points into pt_new_points
 			MPI_Recv(pt_new_points, bytes_to_recv, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
