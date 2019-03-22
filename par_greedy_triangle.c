@@ -401,7 +401,6 @@ void triangulate() {
 			break;
 			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
 			point_t q = *(ln_my_lines[0].q);
-/*
 			
 			my_min_line[0] = p.x;
 			my_min_line[1] = p.y;
@@ -485,11 +484,8 @@ void triangulate() {
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
-
-*/
 		} // end if (my_unknown > 0)
 		else {
-/*
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
@@ -506,7 +502,6 @@ void triangulate() {
 				finished = true;
 			}
 			free(recv_buf); 
-*/
 		} // end else
 	} // end while
 }
