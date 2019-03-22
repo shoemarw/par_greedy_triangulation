@@ -541,20 +541,13 @@ int main(int argc, char *argv[]) {
 
 	// Root scatters the points
 	distrib_points();
-
+	
+	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
-
 	gen_lines();
 	distrib_lines();
-
+	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
-
-
-	// if (my_rank==0){	
-	// 	for (int i = 0; i < 10; i++) {
-	// 		print_line(&ln_my_lines[i]);
-	// 	}
-	// }
 
 
 
@@ -563,18 +556,21 @@ int main(int argc, char *argv[]) {
 	  //                                      //
 	 //  Sort the lines from small to large  //
 	//                                      //
-	
+	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
-		                sizeof(line_t), compare);
+	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), sizeof(line_t), compare);
+	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 	
 	  //                                   //
      //  Greedily build the tringulation  //
     //	                                 //
 	
+	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
 	triangulate();
+
+	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	
 	   //                                        //
