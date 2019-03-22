@@ -213,6 +213,9 @@ void gen_lines() {
 			// send the points
 			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
+			printf("Proc1 line\n");
+			printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[5]);
+
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
@@ -291,6 +294,11 @@ void gen_lines() {
 
 			// update my_line_count	
 			my_line_count += new_line_count;
+
+for(int i = 0; i < my_line_count; i++) {
+
+}
+
 		} // end of receiver branch of if
 	}// end for
 }// end of gen_lines
@@ -327,7 +335,7 @@ void distrib_lines() {
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-// if (my_rank==ROOT){
+if (my_rank==ROOT){
 	for (int i = 0; i < total_line_num; i+=5)
 	{
 		printf("Line: %d\n", (i/5)+1);
@@ -337,7 +345,7 @@ void distrib_lines() {
 		}
 		printf("\n");
 	}
-// }
+}
 
 
 
