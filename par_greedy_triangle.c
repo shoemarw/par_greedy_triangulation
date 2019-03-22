@@ -329,6 +329,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 		my_line_count = total_line_num;
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
+	 	printf("l_base %ld\n", l_base);
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
 	 	// Calculate i_send_counts
