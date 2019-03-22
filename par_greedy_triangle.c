@@ -331,6 +331,7 @@ void distrib_lines() {
 	 		}
  			printf("l_send_count is %ld\n", l_send_count[i]);
 	 	}
+	 }
 
 /*
 		// build displacement array
