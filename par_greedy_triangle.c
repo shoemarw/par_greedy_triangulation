@@ -257,6 +257,7 @@ void gen_lines() {
 				}
 			} // end out for
 
+			// merge pt_my_points with pt_new_points
 			point_t *temp_p = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				   point_recv_count, sizeof(point_t));
 			free(pt_my_points);
@@ -266,6 +267,7 @@ void gen_lines() {
 			// update my_point_count
 			my_point_count += point_recv_count;
 
+			// merge d_my_lines with d_new_lines
 			line_t *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
 			free(d_my_lines);
@@ -303,7 +305,7 @@ void distrib_lines() {
         }
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
-/**
+
 	MPI_Gatherv(&d_my_lines, my_line_count, MPI_BYTE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
 
@@ -355,7 +357,6 @@ void distrib_lines() {
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
-*/
 }
 
 
