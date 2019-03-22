@@ -210,13 +210,6 @@ void gen_lines() {
 			// send the number of points the receiver should expect
 			MPI_Send(&my_point_count, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
 
-printf("sent from proc1\n");
-printf("%lf\n", pt_my_points[0].x);			
-printf("%lf\n", pt_my_points[0].y);
-printf("%lf\n", pt_my_points[1].x);			
-printf("%lf\n", pt_my_points[1].y);
-
-
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
@@ -245,12 +238,6 @@ printf("%lf\n", pt_my_points[1].y);
 			// receive points into pt_new_points
 			MPI_Recv(pt_new_points, bytes_to_recv, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-printf("received in proc0\n");
-printf("%lf\n", pt_new_points[0].x);			
-printf("%lf\n", pt_new_points[0].x);			
-printf("%lf\n", pt_new_points[1].x);			
-printf("%lf\n", pt_new_points[1].y);
 
 			// calculate number of new lines to be created
 			long new_line_count = my_point_count*point_recv_count;
