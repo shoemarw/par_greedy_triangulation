@@ -175,11 +175,11 @@ void gen_lines() {
 		// line.
 		for (int j = i+1; j < my_point_count; j++) {
 			double length = distance(&pt_my_points[i], &pt_my_points[j]);
-			d_my_lines[l_index + X0] = pt_my_points[i].x;
-			d_my_lines[l_index + Y0] = pt_my_points[i].y;
-			d_my_lines[l_index + X1] = pt_my_points[j].x;
-			d_my_lines[l_index + Y1] = pt_my_points[j].y;
-			d_my_lines[l_index + LEN] = length;	
+			// d_my_lines[l_index + X0] = pt_my_points[i].x;
+			// d_my_lines[l_index + Y0] = pt_my_points[i].y;
+			// d_my_lines[l_index + X1] = pt_my_points[j].x;
+			// d_my_lines[l_index + Y1] = pt_my_points[j].y;
+			// d_my_lines[l_index + LEN] = length;	
 
 			// Increment index to next line
 			l_index +=5;
