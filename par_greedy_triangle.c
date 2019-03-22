@@ -333,7 +333,11 @@ void distrib_lines() {
            	total_line_num += i_recv_counts[i];
            	displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
-		d_recv_lines = (double*) allocate(total_line_num* sizeof(double));        
+		d_recv_lines = (double*) allocate(total_line_num* sizeof(double));
+
+printf("Proc0 is expecting %d doubles from proc0\n", i_recv_counts[0]);
+printf("Proc0 is expecting %d doubles from proc1\n", i_recv_counts[1]);
+
 	}
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
