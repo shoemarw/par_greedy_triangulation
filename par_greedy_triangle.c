@@ -328,22 +328,22 @@ void distrib_lines() {
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
 
-	 	// Calculate l_send_count
-	 	for (int i = 0; i < nprocs; i++) {
-	 		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
-	 		if (remainder) {
-	 			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
-	 			remainder--;	
-	 		}
-	 	}
+	//  	// Calculate l_send_count
+	//  	for (int i = 0; i < nprocs; i++) {
+	//  		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
+	//  		if (remainder) {
+	//  			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
+	//  			remainder--;	
+	//  		}
+	//  	}
 
-		// build displacement array
-		i_displs = (int *) allocate(sizeof(int)*nprocs);
-		i_displs[0] = 0;
-		for (int i = 1; i < nprocs; i++) {
-			i_displs[i] = i_displs[i-1] + l_send_count[i-1];
-		}	
-	}
+	// 	// build displacement array
+	// 	i_displs = (int *) allocate(sizeof(int)*nprocs);
+	// 	i_displs[0] = 0;
+	// 	for (int i = 1; i < nprocs; i++) {
+	// 		i_displs[i] = i_displs[i-1] + l_send_count[i-1];
+	// 	}	
+	// }
 	// // tell processes how many lines to expect in the scatterv
 	// MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
