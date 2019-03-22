@@ -285,14 +285,14 @@ void distrib_lines() {
 	double* d_recv_lines;	// Used by root only
 	int* i_recv_counts;		// Used by root only
 
-	if (my_rank == 0) {
+	if (my_rank == ROOT) {
 		i_recv_counts = allocate (sizeof(int) * nprocs);
 	}
 
 	// send the number of lines a process will be sending on the gatherv
 	MPI_Gather(&my_line_count, 1, MPI_INT, i_recv_counts, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 	long total_line_num;
-	if (my_rank==ROOT) {
+	if (my_rank == ROOT) {
 		for(int i = 0; i < nprocs; i++) {
 			i_recv_counts[i] *= 5;
 		}
@@ -316,7 +316,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	MPI_Gatherv(&d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-
+/*
 	long l_base;
 	int remainder;
 	int *i_send_count;
@@ -361,6 +361,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	*/
 }
 
 
