@@ -208,7 +208,6 @@ void gen_lines() {
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
-	/*
 		// If process is a receiver this iteration:
 
 		else {
@@ -244,12 +243,14 @@ void gen_lines() {
 			for (int j = 0; j < my_point_count; j++){
 				for (int k = 0; k < point_recv_count; ++k)
 				{
+	/*
 					double length = distance(&pt_my_points[k], &pt_new_points[j]);
 					d_new_lines[new_line_index + X0] = pt_my_points[j].x;
 					d_new_lines[new_line_index + Y0] = pt_my_points[j].y;
 					d_new_lines[new_line_index + X1] = pt_new_points[k].x;
 					d_new_lines[new_line_index + Y1] = pt_new_points[k].y;
 					d_new_lines[new_line_index + LEN] = length;
+	*/
 
 					new_line_index +=5;
 				}
@@ -277,7 +278,6 @@ void gen_lines() {
 			// update my_line_count	
 			my_line_count += new_line_count;
 		} // end of receiver branch of if
-	*/
 	}// end for
 }// end of gen_lines
 
