@@ -400,7 +400,7 @@ int main(int argc, char *argv[]) {
 	START_TIMER(generate)
 
 	gen_lines();
-	// distrib_lines();
+	distrib_lines();
 
 	STOP_TIMER(generate)
 
