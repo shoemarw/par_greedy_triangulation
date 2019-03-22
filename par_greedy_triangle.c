@@ -319,8 +319,8 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	long l_base;
 	int remainder;
-	int *i_send_count;
-	long l_recv_doubs;
+	int *i_send_counts;
+	int i_recv_doubs;
 	int *i_displs;
 
 	if(my_rank==ROOT) {
@@ -330,12 +330,12 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
-	 	i_send_count = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
-	 	// Calculate i_send_count
+	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
+	 	// Calculate i_send_counts
 	 	for (int i = 0; i < nprocs; i++) {
-	 		i_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
+	 		i_send_counts[i] = l_base*5;	// (*5) is to account for lines being five doubles
 	 		if (remainder) {
-	 			i_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
+	 			i_send_counts[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
 	 	}
@@ -344,19 +344,28 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			i_displs[i] = i_displs[i-1] + i_send_count[i-1];
+			i_displs[i] = i_displs[i-1] + i_send_counts[i-1];
 		}
 	}
-	// tell processes how many lines to expect in the scatterv
-	MPI_Scatter(i_send_count, 1, MPI_INT, &l_recv_doubs, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+	// tell processes how many doubles to expect in the scatterv
+	MPI_Scatter(i_send_counts, 1, MPI_INT, &i_recv_doubs, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 	// calculate how many lines the process is responsible for
-	my_line_count = l_recv_doubs/5;
+	my_line_count = i_recv_doubs/5;
 
 	// create room for for the lines
-	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
+	d_my_lines = (double*) allocate(i_recv_doubs*sizeof(double));
 	// scatter lines
-	MPI_Scatterv(&d_recv_lines, i_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	if(my_rank==ROOT){
+		printf("i_send_counts[0] %d\n", i_send_counts[0]);
+		printf("i_send_counts[1] %d\n", i_send_counts[1]);
+		printf("i_displs[1] %d\n", i_displs[1]);
+		printf("i_displs[1] %d\n", i_displs[1]);
+	}
+
+printf("Hello from proc %d i_send_counts: %s\n", my_rank, i_send_counts);
+
+	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
