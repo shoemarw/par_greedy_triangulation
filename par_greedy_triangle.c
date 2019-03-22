@@ -399,7 +399,7 @@ void triangulate() {
 			// five doubles for Allgather.
 			double my_min_line[5];
 printf("Hello from proc%d my ln_my_lines[0].p.x is\n", nprocs);
-print_line(&ln_my_lines[0]);
+// print_line(&ln_my_lines[0]);
 			break;
 /*
 			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
