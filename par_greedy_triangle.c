@@ -369,7 +369,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 printf("Hello from proc %d i_recv_doubs: %d\n", my_rank, i_recv_doubs);
 //	MPI_Scatterv(points, i_send_count, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,MPI_BYTE, ROOT, MPI_COMM_WORLD);
-	MPI_Scatterv(&d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
