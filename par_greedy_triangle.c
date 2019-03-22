@@ -269,6 +269,7 @@ void gen_lines() {
 			double *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
 			free(d_my_lines);
+			free(d_new_lines);
 			d_my_lines = temp_t;
 			free(temp_t);
 
@@ -280,9 +281,9 @@ void gen_lines() {
 
 
 void distrib_lines() {
-	int displs[nprocs];				// Used by root only
-	double* d_recv_lines;	 		// Used by root only
-	int* i_recv_counts;				// Used by root only
+	int displs[nprocs];		// Used by root only
+	double* d_recv_lines;	// Used by root only
+	int* i_recv_counts;		// Used by root only
 
 	if (my_rank == 0) {
 		i_recv_counts = allocate (sizeof(int) * nprocs);
@@ -313,6 +314,8 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
+		free(i_recv_counts);
+
 		my_line_count = total_line_num;
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
