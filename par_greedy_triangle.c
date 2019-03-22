@@ -388,16 +388,16 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Root scatters the points
-	MPI_Barrier(MPI_COMM_WORLD);
+	// MPI_Barrier(MPI_COMM_WORLD);
 	distrib_points();
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	// MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 
 	gen_lines();
 	distrib_lines();
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	// MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
 
