@@ -294,7 +294,7 @@ void distrib_lines() {
 
 	// send the number of lines a process will be sending on the gatherv
 	MPI_Gather(&my_line_count, 1, MPI_INT, i_recv_counts, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-
+/*
 	long total_line_num;
 	if (my_rank==ROOT) {
 		displs[0] = 0;
@@ -308,56 +308,57 @@ void distrib_lines() {
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 
-	// MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
-	// 		    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
+			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-	// long l_base;
-	// int remainder;
-	// long *l_send_count;
-	// long l_recv_doubs;
-	// int *i_displs;
+	long l_base;
+	int remainder;
+	long *l_send_count;
+	long l_recv_doubs;
+	int *i_displs;
 
-	// if(my_rank==ROOT) {
-	// 	my_line_count = total_line_num;
+	if(my_rank==ROOT) {
+		my_line_count = total_line_num;
 
 
-	//  	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
-	//  	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
-	//  	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
+	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
+	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
+	 	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
 
-	//  	// Calculate l_send_count
-	//  	for (int i = 0; i < nprocs; i++) {
-	//  		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
-	//  		if (remainder) {
-	//  			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
-	//  			remainder--;	
-	//  		}
- // 			printf("l_send_count is %ld\n", l_send_count[i]);
-	//  	}
+	 	// Calculate l_send_count
+	 	for (int i = 0; i < nprocs; i++) {
+	 		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
+	 		if (remainder) {
+	 			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
+	 			remainder--;	
+	 		}
+ 			printf("l_send_count is %ld\n", l_send_count[i]);
+	 	}
 
-	// 	// build displacement array
-	// 	i_displs = (int *) allocate(sizeof(int)*nprocs);
-	// 	i_displs[0] = 0;
-	// 	for (int i = 1; i < nprocs; i++) {
-	// 		i_displs[i] = i_displs[i-1] + l_send_count[i-1];
-	// 	}	
-	// }
-	// // tell processes how many lines to expect in the scatterv
-	// MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+		// build displacement array
+		i_displs = (int *) allocate(sizeof(int)*nprocs);
+		i_displs[0] = 0;
+		for (int i = 1; i < nprocs; i++) {
+			i_displs[i] = i_displs[i-1] + l_send_count[i-1];
+		}	
+	}
+	// tell processes how many lines to expect in the scatterv
+	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
-	// // calculate how many lines the process is responsible for
-	// printf("l_recv_doubs is %ld\n", l_recv_doubs);
-	// my_line_count = l_recv_doubs/5;
+	// calculate how many lines the process is responsible for
+	printf("l_recv_doubs is %ld\n", l_recv_doubs);
+	my_line_count = l_recv_doubs/5;
 
-	// // create room for for the lines
-	// d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
+	// create room for for the lines
+	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 
-	// // scatter lines
-	// MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	// scatter lines
+	MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
+	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-	// double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	*/
 }
 
 
