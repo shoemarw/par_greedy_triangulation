@@ -397,7 +397,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Root scatters the points
-	// distrib_points();
+	distrib_points();
 
 	
 	START_TIMER(generate)
