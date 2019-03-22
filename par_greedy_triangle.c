@@ -130,7 +130,6 @@ void distrib_points() {
 				i_send_count[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
-			printf("i_send_count %d\n", i_send_count[i]);
 		} // end for
 
 		// build displacement array
