@@ -214,7 +214,7 @@ void gen_lines() {
 			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
 			printf("Proc1 line\n");
-			printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[5]);
+			printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[4]);
 
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
@@ -261,7 +261,12 @@ void gen_lines() {
 					d_new_lines[new_line_index + X1] = pt_new_points[k].x;
 					d_new_lines[new_line_index + Y1] = pt_new_points[k].y;
 					d_new_lines[new_line_index + LEN] = length;
-
+printf("Proc0 'new' lines: ");
+printf("%lf", d_new_lines[new_line_index + X0]);
+printf("%lf", d_new_lines[new_line_index + Y0]);
+printf("%lf", d_new_lines[new_line_index + X1]);
+printf("%lf", d_new_lines[new_line_index + Y1]);
+printf("%lf \n", d_new_lines[new_line_index + LEN]);
 
 					new_line_index +=5;
 				}
