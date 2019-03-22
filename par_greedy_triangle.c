@@ -48,6 +48,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 	const int Y1 = 3;
 	const int LEN = 4;
 	long index = 0;
+if (my_rank==ROOT) printf("%ld\n", size);
 	for (long i = 0; i < size; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
 		point_t *p1 = (point_t*) allocate(sizeof(point_t));
