@@ -258,7 +258,7 @@ void gen_lines() {
 			// merge pt_my_points with pt_new_points
 			point_t *temp_p = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				   point_recv_count, sizeof(point_t));
-			// free(pt_my_points);
+			free(pt_my_points);
 			// free(pt_new_points);
 			memcpy(temp_p, pt_my_points, point_recv_count);
 			// free(temp_p);
@@ -270,7 +270,7 @@ void gen_lines() {
 			// merge d_my_lines with d_new_lines
 			double *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
-			// free(d_my_lines);
+			free(d_my_lines);
 			// free(d_new_lines);
 			memcpy(temp_t, d_my_lines, new_line_count);
 			// free(temp_t);
