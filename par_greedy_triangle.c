@@ -198,7 +198,7 @@ void gen_lines() {
 	// in a binomial tree structure.
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		// If process is a sender this iteration:
-		if (my_rank&iteration_square) {
+/**		if (my_rank&iteration_square) {
 
 			// calculate the process number of whom to send to
 			int i_send_to = (my_rank-iteration_square+nprocs)%nprocs;
@@ -212,7 +212,7 @@ void gen_lines() {
 			break;  // done, nothing left for this process to do in this function
 		}
 		// If process is a receiver this iteration:
-/**
+
 		else {
 
 			// calculate the process number of whom to receive from
