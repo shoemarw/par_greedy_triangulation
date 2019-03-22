@@ -57,6 +57,7 @@ point_t* points;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
+	printf("%ld\n", size);
 	long index = 0;
 	for (long i = 0; i < size; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
