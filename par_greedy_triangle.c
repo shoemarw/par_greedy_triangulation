@@ -37,7 +37,7 @@ line_t* triang; // Will store the triangulation. Should only be used by proc 0.
 long tlines;    // Will keep track of how many lines are in the triangulation at
                 // any given time.
 bool finished;  // Will be true when the triangulation is complete.
-double* IMPOSSIBLE_LINE = [0, 0, 0, 0, -1]; // Processes send this during 
+double* IMPOSSIBLE_LINE = {0, 0, 0, 0, -1}; // Processes send this during 
 
 
 int nprocs;         	// number of processes
@@ -466,7 +466,7 @@ void triangulate() {
 				// conflict with the global min (min_line) It is ok if a line
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, ln_my_lines[j]) ||
-					 !intersects(min_line, ln_my_lines[j])) {
+					 !intersects(min_line, &ln_my_lines[j])) {
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
