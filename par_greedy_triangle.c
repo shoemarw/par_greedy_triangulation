@@ -50,8 +50,6 @@ line_t* lines;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
-	printf("Hello from double_array_to_struct\n");
-	printf("long size is %ld\n",size);
 	long index = 0;
 	for (long i = 0; i < size; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
@@ -67,8 +65,6 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		l->q = p1;
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
-if (my_rank==ROOT) printf("hello from line 65\n");
-if (my_rank==ROOT) print_line(l);
 		index++;
 		free(l);
 	}
@@ -289,7 +285,6 @@ void distrib_lines() {
 
 	if (my_rank == 0) {
 		i_recv_counts = allocate (sizeof(int) * nprocs);
-		printf("%ld\n", my_line_count);
 	}
 
 	// send the number of lines a process will be sending on the gatherv
@@ -329,7 +324,6 @@ void distrib_lines() {
 	 			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
- 			printf("l_send_count is %ld\n", l_send_count[i]);
 	 	}
 
 		// build displacement array
@@ -343,7 +337,6 @@ void distrib_lines() {
 	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
 	// calculate how many lines the process is responsible for
-	printf("l_recv_doubs is %ld\n", l_recv_doubs);
 	my_line_count = l_recv_doubs/5;
 
 	// create room for for the lines
