@@ -274,7 +274,7 @@ void gen_lines() {
 			d_my_lines = allocate(my_line_count+new_line_count);						//
 			memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
 			free(d_temp);																//
-			// free(d_new_lines);															//
+			// free(d_new_lines);														//
 			//////////////////////////////////////////////////////////////////////////////
 
 			// update my_line_count
@@ -397,13 +397,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Root scatters the points
-	distrib_points();
+	// distrib_points();
 
 	
 	START_TIMER(generate)
 
-	gen_lines();
-	distrib_lines();
+	// gen_lines();
+	// distrib_lines();
 
 	STOP_TIMER(generate)
 
@@ -423,7 +423,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	
 	START_TIMER(sort)
-	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), sizeof(line_t), compare);
+	// qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), sizeof(line_t), compare);
 	STOP_TIMER(sort)
 	
 	  //                                   //
