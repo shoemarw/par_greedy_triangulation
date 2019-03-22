@@ -333,7 +333,7 @@ if (my_rank==ROOT){
 		printf("Line:\n");
 		for (int j = 0; j < 5; ++j)
 		{
-			printf("%lf", d_recv_lines[i+j]);
+			printf("%lf  ", d_recv_lines[i+j]);
 		}
 		printf("\n");
 	}
