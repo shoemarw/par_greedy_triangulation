@@ -265,15 +265,16 @@ void gen_lines() {
 
 
 			// update my_point_count
-			my_point_count += point_recv_count;
+			*my_point_count += point_recv_count;
 
 			// merge d_my_lines with d_new_lines
 			double *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
 			free(d_my_lines);
 			free(d_new_lines);
-			d_my_lines = *temp_t;
-			free(temp_t); 
+			*d_my_lines = *temp_t;
+			free(temp_t);
+
 			// update my_line_count	
 			my_line_count += new_line_count;
 		} // end of receiver branch of if
