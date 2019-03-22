@@ -258,11 +258,11 @@ void gen_lines() {
 			// merge pt_my_points with pt_new_points
 			point_t *temp_p = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				   point_recv_count, sizeof(point_t));
-/*
 			free(pt_my_points);
 			free(pt_new_points);
 			pt_my_points = temp_p;
 			free(temp_p);
+/*
 
 			// update my_point_count
 			my_point_count += point_recv_count;
