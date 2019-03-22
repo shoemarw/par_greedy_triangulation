@@ -304,8 +304,8 @@ void distrib_lines() {
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 
-	MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
-			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	// MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
+			    // displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	long l_base;
 	int remainder;
