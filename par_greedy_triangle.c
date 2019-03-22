@@ -330,7 +330,7 @@ void distrib_lines() {
 if (my_rank==ROOT){
 	for (int i = 0; i < total_line_num; i+=5)
 	{
-		printf("Line:\n");
+		printf("Line: %d\n", (i/5));
 		for (int j = 0; j < 5; ++j)
 		{
 			printf("%lf  ", d_recv_lines[i+j]);
