@@ -112,14 +112,12 @@ void read_points(char *argv[]) {
 
 
 void distrib_points() {
-	int i_send_counts[nprocs];	// an array of how many points each process will recieve; significant only to root
-	int i_displs_p[nprocs];		// the displacements for the scatterv; significant only to root
+	int i_send_byte_counts[nprocs];	// an array of how bytes each process will recieve; significant only to root
+	int i_displs_p[nprocs];			// the displacements for the scatterv; significant only to root
 
 	if (my_rank==ROOT) {
 		// use interger division to determine the base amount for points each process will recieve 
 		long base_point_count = l_num_points/(long)nprocs;
-		printf("l_num_points %ld\n", l_num_points);
-		printf("base_point_count %ld\n", base_point_count);
 
 		// get the remainder to see how many leftover points there are
 		int remainder = l_num_points%nprocs;
@@ -129,35 +127,27 @@ void distrib_points() {
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will recieve.
 		for (int i = 0; i < nprocs; i++) {
-			i_send_counts[i] = base_point_count * sizeof(point_t);
+			i_send_byte_counts[i] = base_point_count * sizeof(point_t);
 			if (remainder > 0) {
-				i_send_counts[i] += 1 * sizeof(point_t);
+				i_send_byte_counts[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
-			printf("i_send_counts %d\n", i_send_counts[i]);
+			printf("i_send_byte_counts %d\n", i_send_byte_counts[i]);
 		} // end for
 
 		// build displacement array
 		i_displs_p[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			i_displs_p[i] = i_displs_p[i-1] + i_send_counts[i-1];
-		}		
-		// send each process how many points it should expect
-		MPI_Scatter(i_send_counts, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
-
-
-		pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
-		// send each process its points
-		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
-                 MPI_BYTE, ROOT, MPI_COMM_WORLD);
+			i_displs_p[i] = i_displs_p[i-1] + i_send_byte_counts[i-1];
+		}
 	}
-	else { // NOT root
-		MPI_Scatter(i_send_counts, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+	// send each process how many points it should expect
+	MPI_Scatter(i_send_byte_counts, 1, MPI_INT, &my_point_count, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-		pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
-		MPI_Scatterv(points, i_send_counts, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
-                 MPI_BYTE, ROOT, MPI_COMM_WORLD);
-	}
+	pt_my_points = (point_t*) allocate((int)(my_point_count*sizeof(point_t)));
+	// send each process its points
+	MPI_Scatterv(points, i_send_byte_counts, i_displs_p, MPI_BYTE, pt_my_points, my_point_count,
+             MPI_BYTE, ROOT, MPI_COMM_WORLD);
 }
 
 
@@ -298,7 +288,7 @@ void distrib_lines() {
 	long l_num_d_lines;
 	long l_base ;
 	int remainder;
-	int *i_send_counts;
+	int *i_send_byte_counts;
 	long l_recv_num;
 	int *i_displs;
 
@@ -306,13 +296,13 @@ void distrib_lines() {
 		l_num_d_lines = sizeof(d_recv_lines) / (sizeof(double) * 5);	// Number of lines (5 doubles)
 	 	l_base = l_num_d_lines/nprocs;		// Base number of lines to send (lines being 5 doub;es)
 	 	remainder = l_num_d_lines%nprocs;	// if there are any remaining lines after the base amount is spilt up
-	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
+	 	i_send_byte_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
 
-	 	// Calculate i_send_counts
+	 	// Calculate i_send_byte_counts
 	 	for (int i = 0; i < nprocs; i++) {
-	 		i_send_counts[i] = l_base*5;
+	 		i_send_byte_counts[i] = l_base*5;
 	 		if (remainder) {
-	 			i_send_counts[i] += 5;
+	 			i_send_byte_counts[i] += 5;
 	 			remainder--;	
 	 		}
 	 	}
@@ -321,15 +311,15 @@ void distrib_lines() {
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			i_displs[i] = i_displs[i-1] + i_send_counts[i-1];
+			i_displs[i] = i_displs[i-1] + i_send_byte_counts[i-1];
 		}	
 	}
 	//tell processes how many to expect
-	MPI_Scatter(i_send_counts, 1, MPI_LONG, &l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	MPI_Scatter(i_send_byte_counts, 1, MPI_LONG, &l_recv_num, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
 	d_my_lines = (double*) allocate(l_recv_num*sizeof(double)*5);
 	//sent lines
-	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, i_send_byte_counts, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate((l_recv_num/5)*sizeof(line_t));
 if (my_rank==ROOT) {
