@@ -255,10 +255,10 @@ void gen_lines() {
 					new_line_index +=5;
 				}
 			} // end out for
-/*
 			// merge pt_my_points with pt_new_points
 			point_t *temp_p = array_concat(pt_my_points, my_point_count, pt_new_points, 
 						 				   point_recv_count, sizeof(point_t));
+/*
 			free(pt_my_points);
 			free(pt_new_points);
 			pt_my_points = temp_p;
