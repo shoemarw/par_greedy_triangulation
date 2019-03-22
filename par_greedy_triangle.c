@@ -322,8 +322,6 @@ void distrib_lines() {
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
-	}
-/*
 	 	// Calculate l_send_count
 	 	for (int i = 0; i < nprocs; i++) {
 	 		l_send_count[i] = l_base*5;	// (*5) is to account for lines being five doubles
@@ -334,6 +332,7 @@ void distrib_lines() {
  			printf("l_send_count is %ld\n", l_send_count[i]);
 	 	}
 
+/*
 		// build displacement array
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
