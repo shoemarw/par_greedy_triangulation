@@ -327,6 +327,20 @@ void distrib_lines() {
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
+if (my_rank==ROOT){
+	for (int i = 0; i < total_line_num; i+=5)
+	{
+		printf("Line:\n");
+		for (int j = 0; j < 5; ++j)
+		{
+			printf("%ld", d_recv_lines[i+j]);
+		}
+		printf("\n");
+	}
+}
+
+
+
 	long l_base;
 	int remainder;
 	int *i_send_counts;
@@ -539,11 +553,6 @@ int main(int argc, char *argv[]) {
 	// Root scatters the points
 	distrib_points();
 
-if(my_rank==ROOT) {
-	for (int i = 0; i < my_point_count; i++) {
-		print_point(&pt_my_points[i]);
-	}
-}
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	gen_lines();
