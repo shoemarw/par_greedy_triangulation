@@ -309,7 +309,6 @@ void distrib_lines() {
 
 	MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-/*
 
 	long l_base;
 	int remainder;
@@ -319,7 +318,9 @@ void distrib_lines() {
 
 	if(my_rank==ROOT) {
 		my_line_count = total_line_num;
+	}
 
+/*
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
