@@ -326,7 +326,7 @@ void distrib_lines() {
 
 	ln_my_lines = (line_t *) allocate((l_recv_num/5)*sizeof(line_t));
 if (my_rank==ROOT) printf("hello from line 326\n");
-	double_array_to_struct(d_my_lines, ln_my_lines, (long)(l_recv_num/5));
+	double_array_to_struct(d_my_lines, ln_my_lines, sizeof(d_my_lines)/(sizeof(double) * 5));
 }
 
 
