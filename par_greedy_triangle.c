@@ -167,7 +167,6 @@ void gen_lines() {
 
 
 	long l_index = 0;
-/**
 
 	// Create lines in double format, i.e. a line is 5 doubles.
 	for (int i = 0; i < my_point_count; i++) {
@@ -186,6 +185,7 @@ void gen_lines() {
 			l_index +=5;
 		}
 	}
+/**
 	  //													  //
 	 // Start sending/receiving points to create more lines  //
 	//														//
