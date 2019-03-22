@@ -398,9 +398,9 @@ void triangulate() {
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
 			double my_min_line[5];
+/*
 			point_t p = *(ln_my_lines[0].p);
 			point_t q = *(ln_my_lines[0].q);
-/*
 			my_min_line[0] = p.x;
 			my_min_line[1] = p.y;
 			my_min_line[2] = q.x;
