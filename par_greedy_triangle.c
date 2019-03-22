@@ -436,17 +436,17 @@ void triangulate() {
 			// (While making sure to use the appropriate index!)
 			} else {
 				// Get the minimal line
-				min_line = (line_t*) allocate(sizeof(line_t));
-				point_t *p = (point_t*) allocate(sizeof(point_t));
-				point_t *q = (point_t*) allocate(sizeof(point_t));
-				p->x = recv_buf[min_line_index*4];
-				p->y = recv_buf[min_line_index*4 + 1];
-				q->x = recv_buf[min_line_index*4 + 2];
-				q->y = recv_buf[min_line_index*4 + 3];
-				min_line->p = p;
-				min_line->q = q;
-				free(p);
-				free(q);
+//				min_line = (line_t*) allocate(sizeof(line_t));
+//				point_t *p = (point_t*) allocate(sizeof(point_t));
+//				point_t *q = (point_t*) allocate(sizeof(point_t));
+//				p->x = recv_buf[min_line_index*4];
+//				p->y = recv_buf[min_line_index*4 + 1];
+//				q->x = recv_buf[min_line_index*4 + 2];
+//				q->y = recv_buf[min_line_index*4 + 3];
+//				min_line->p = p;
+//				min_line->q = q;
+//				free(p);
+//				free(q);
 				start = 0; // This processes' min was not used.
 			}
 			// Have process zero add min_line to the triangulation.
