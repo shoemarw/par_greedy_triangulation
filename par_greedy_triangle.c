@@ -548,7 +548,7 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank==ROOT) {
 		for(int i = 0; i < my_line_count; i++)
-			print_line(&ln_my_lines[i]);
+			// print_line(&ln_my_lines[i]);
 	}
 
 
