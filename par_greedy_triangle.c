@@ -52,7 +52,7 @@ line_t* lines;
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
 	long index = 0;
 if (my_rank==ROOT) printf("%ld\n", size);
-	for (long i = 0; i < size-1; i+=5) {
+	for (long i = 0; i < size; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
 		point_t *p1 = (point_t*) allocate(sizeof(point_t));
 		p0->x = arr[i+X0];
@@ -163,7 +163,7 @@ void gen_lines() {
 	// Calculate how many lines that will be created	
 	my_line_count = ((my_point_count-1)*(my_point_count-2))/2;
 	// Allocate room for the lines that will be created
-	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
+	d_my_lines = (double*) allocate(my_line_count+1 * sizeof(double) * 5);
 
 
 	long l_index = 0;
