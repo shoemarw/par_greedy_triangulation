@@ -258,7 +258,7 @@ void gen_lines() {
 
 
 			// merge d_my_lines with d_new_lines
-			double* temp_doubles = (double*) allocate((my_line_count+new_line_count)*sizeof(double*5));
+			double* temp_doubles = (double*) allocate((my_line_count+new_line_count)*sizeof(double)*5);
 			for (int i = 0; i < (my_line_count*5); i++) {
 				temp_doubles[i] = d_my_lines[i];
 			}
