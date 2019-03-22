@@ -266,8 +266,8 @@ void gen_lines() {
 			// update my_point_count
 			my_point_count += point_recv_count;
 
-			line_t *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
-										  new_line_count, sizeof(double)*5);
+			line_t *temp_t = array_concat(d_my_lines, my_line_count*5, d_new_lines, 
+										  new_line_count*5, sizeof(double));
 			free(d_my_lines);
 			// d_my_lines = temp_t;
 			// free(temp_t);
