@@ -58,10 +58,10 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 
 		line_t* l = (line_t*) allocate(sizeof(line_t));
 		// set the values of the line and store it.
-		l->p = p0;
-		l->q = p1;
+		l->p = &p0;
+		l->q = &p1;
 		l->len = arr[i+LEN];
-		lines[index] = *l;
+		new_arr[index] = *l;
 		index++;
 		free(l);
 	}
@@ -229,6 +229,8 @@ void gen_lines() {
 					new_line_index +=5;
 				}
 			}
+// combine new and current points
+
 			double* temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
 			int num_my_linr = sizeof(d_my_lines)/sizeof(line_t);
 			memcpy(&d_my_lines, &temp, num_my_linr);
@@ -363,7 +365,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	
 	START_TIMER(sort)
-//	qsort(lines, i_num_lines, sizeof(line_t), compare);
+	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), sizeof(line_t), compare);
 	STOP_TIMER(sort)
 	
 	  //                                   //
@@ -382,7 +384,7 @@ int main(int argc, char *argv[]) {
 	// lines in non-decreasing order, and greedily adding line segments to the
 	// triangulation.
 	if (my_rank==ROOT) {
-		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n Overhead: %.4f\n",
+		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f Overhead: %.4f\n",
 	        GET_TIMER(generate), GET_TIMER(sort), 
 	        GET_TIMER(triangulate), GET_TIMER(MPIoverhead));
 	}
