@@ -415,14 +415,14 @@ void distrib_lines() {
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 
-if(my_rank==ROOT) {
-	printf("after double_array_to_struct\n");
-	for (int i = 0; i < my_line_count; i++) {
-		printf("I am proc %d and this is line %d\n", my_rank, i);
-		print_line(&ln_my_lines[i]);
-	}
-}
-}
+// if(my_rank==ROOT) {
+// 	printf("after double_array_to_struct\n");
+// 	for (int i = 0; i < my_line_count; i++) {
+// 		printf("I am proc %d and this is line %d\n", my_rank, i);
+// 		print_line(&ln_my_lines[i]);
+// 	}
+// }
+// }
 
 
 /*
