@@ -309,7 +309,7 @@ void distrib_lines() {
     	printf("i_recv_counts[1] %d\n", i_recv_counts[1]);
     	printf("displs[0] %d\n", displs[0]);
     	printf("displs[1] %d\n", displs[1]);
-		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
+		d_recv_lines = (double*) allocate(total_line_num* sizeof(double));        
 	}
 printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
 printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
