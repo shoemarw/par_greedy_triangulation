@@ -46,7 +46,6 @@ long my_line_count = 0; // Count of how many lines a processes is responsible fo
 //TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
 long l_num_points;
 point_t* points;
-line_t* lines;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
@@ -205,7 +204,8 @@ void gen_lines() {
 
 			// send the points
 			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
-			
+
+			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
 		// If process is a receiver this iteration:
@@ -441,7 +441,8 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
-	// free(points);
+	if (my_rank == ROOT)
+		free(points);
 	// free(lines);
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
