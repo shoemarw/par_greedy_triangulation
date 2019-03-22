@@ -539,6 +539,10 @@ int main(int argc, char *argv[]) {
 	// Root scatters the points
 	distrib_points();
 
+	for (int i = 0; i < my_point_count; i++) {
+		print_point(&pt_my_points[i]);
+	}
+
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	gen_lines();
@@ -546,11 +550,11 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
-	if (my_rank==ROOT) {
-		for(int i = 0; i < my_line_count; i++) {
-			print_line(ln_my_lines[i]);
-		}
-	}
+	// if (my_rank==ROOT) {
+	// 	for(int i = 0; i < my_line_count; i++) {
+	// 		print_line(ln_my_lines[i]);
+	// 	}
+	// }
 
 
 
