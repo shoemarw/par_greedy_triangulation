@@ -344,21 +344,21 @@ void distrib_lines() {
 			i_displs[i] = i_displs[i-1] + l_send_count[i-1];
 		}	
 	}
-	// tell processes how many lines to expect in the scatterv
-	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
+	// // tell processes how many lines to expect in the scatterv
+	// MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
-	// calculate how many lines the process is responsible for
-	my_line_count = l_recv_doubs/5;
+	// // calculate how many lines the process is responsible for
+	// my_line_count = l_recv_doubs/5;
 
-	// create room for for the lines
-	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
+	// // create room for for the lines
+	// d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 
-	// scatter lines
+	// // scatter lines
 	// MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
+	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	// double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 }
 
 
