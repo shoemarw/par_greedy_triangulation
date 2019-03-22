@@ -381,7 +381,7 @@ void triangulate() {
 	// The triangulation will be stored as an array of lines. The triangulation
 	// is built on process zero iteratively as successive global minimal lines
 	// are found. Allocate enough space to potentially hold every line.
-	triang = (line_t*) allocate(num_line_count*sizeof(line_t));
+	triang = (line_t*) allocate(my_line_count*sizeof(line_t));
 
 	// my_unknown is each local processes' number of lines whose status is 
 	// unknown. So it counts the number of lines that may or may not belong
@@ -408,10 +408,10 @@ void triangulate() {
 			double* recv_buf = (double*) allocate(5*nprocs);
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
-				          recv_buf, 5, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Find the global minimal line.
 			int min_line_index = 0; // Will hold index of the global min line.
-			for (int i = 0; i < nprocs, i++) {
+			for (int i = 0; i < nprocs; i++) {
 				// Compare the lenth of the current smallest line to the
 				// i^th line's length. If the length is not positive ignore it
 				// because it was a special value sent from a process with no
@@ -461,7 +461,7 @@ void triangulate() {
 			int end = my_unknown;
 			int temp_size = 0;
 
-			for (int j = start; j < end, j++) {
+			for (int j = start; j < end; j++) {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
 				// shares endpoints with min_line
