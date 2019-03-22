@@ -407,8 +407,8 @@ void triangulate() {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
 			// Make sure each process has an array of each processes' min line.
-			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
-				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+//			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
+//				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Find the global minimal line.
 			int min_line_index = 0; // Will hold index of the global min line.
 			for (int i = 0; i < nprocs; i++) {
@@ -450,7 +450,6 @@ void triangulate() {
 				start = 0; // This processes' min was not used.
 			}
 			// Have process zero add min_line to the triangulation.
-			/*
 			if (my_rank == 0) {
 				triang[tlines] = *min_line;
 			}
@@ -486,8 +485,8 @@ void triangulate() {
 		} else {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
-			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
-				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+//			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
+//				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Check if all of the lines have distance of -1. If so then we are
 			// done!
 			int count = 0;
@@ -500,8 +499,7 @@ void triangulate() {
 				finished = true;
 			}
 			free(recv_buf); 
-		}
-			*/
+		} // end else
 	} // end while
 }
 
