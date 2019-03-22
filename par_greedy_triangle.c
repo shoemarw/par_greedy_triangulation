@@ -278,7 +278,7 @@ printf("%lf \n", d_new_lines[new_line_index + LEN]);
 				temp_doubles[i] = d_my_lines[i];
 			}
 			for(int i = 0; i < (new_line_count*5); i++) {
-				temp_doubles[i + my_line_count*5] = d_my_lines[i];
+				temp_doubles[i + my_line_count*5] = d_new_lines[i];
 			}
 			free(d_my_lines);
 			free(d_new_lines);
