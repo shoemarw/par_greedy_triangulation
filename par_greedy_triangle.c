@@ -338,6 +338,8 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	 			i_send_counts[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
+		printf("i_send_counts[0] %d\n", i_send_counts[0]);
+		printf("i_send_counts[1] %d\n", i_send_counts[1]);
 	 	}
 
 		// build displacement array
