@@ -203,7 +203,7 @@ void gen_lines() {
 			MPI_Send(&my_point_count, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
 
 			// send the points
-			MPI_Send(pt_my_points, l_size_cur_pt, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 			
 			break;  // done, nothing left for this process to do in this function
 		}
@@ -355,7 +355,7 @@ void distrib_lines() {
 	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 
 	// scatter lines
-	MPI_Scatterv(d_recv_lines, l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
