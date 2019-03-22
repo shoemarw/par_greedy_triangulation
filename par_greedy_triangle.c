@@ -422,7 +422,7 @@ void distrib_lines() {
 // 		print_line(&ln_my_lines[i]);
 // 	}
 // }
-// }
+}
 
 
 /*
