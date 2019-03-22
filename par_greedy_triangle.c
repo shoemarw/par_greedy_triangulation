@@ -298,13 +298,14 @@ void distrib_lines() {
 
 		// calculate how many total lines are being sent and the displs
         for (int i=1; i < nprocs; i++) {
+        	printf("i_recv_counts %d\n", i_recv_counts[i]);
            total_line_num += i_recv_counts[i];
            displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 printf("Hello from proc %d my line count is: %ld\n", my_rank, my_line_count);
-printf("Hello from proc %d d_my_lines[0]: %lf\n", my_rank, d_my_lines[4]);
+printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	// MPI_Gatherv(&d_my_lines, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    // displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
