@@ -257,34 +257,31 @@ void gen_lines() {
 				}
 			} // end out for
 
-			// bunch of ugly code to combine both arrays of points into pt_my_points /////
-			point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
-			memcpy(pt_my_points, pt_temp, my_point_count);								//
-			memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
-			pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
-			memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
-			free(pt_temp);																//
-			free(pt_new_points);														//
-			//////////////////////////////////////////////////////////////////////////////
+			// // bunch of ugly code to combine both arrays of points into pt_my_points /////
+			// point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
+			// memcpy(pt_my_points, pt_temp, my_point_count);								//
+			// memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
+			// pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
+			// memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
+			// free(pt_temp);																//
+			// free(pt_new_points);														//
+			// //////////////////////////////////////////////////////////////////////////////
 
-			// update my_point_count
-			my_point_count += point_recv_count;
+			// // update my_point_count
+			// my_point_count += point_recv_count;
 
-			// bunch of ugly code to combine both arrays of lines into d_my_lines ////////
-			double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
-			memcpy(&d_my_lines, &d_temp, my_line_count);								//
-			memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
-			d_my_lines = allocate(my_line_count+new_line_count);						//
-			memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
-			free(d_temp);																//
-			free(d_new_lines);														//
-			//////////////////////////////////////////////////////////////////////////////
+			// // bunch of ugly code to combine both arrays of lines into d_my_lines ////////
+			// double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
+			// memcpy(&d_my_lines, &d_temp, my_line_count);								//
+			// memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
+			// d_my_lines = allocate(my_line_count+new_line_count);						//
+			// memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
+			// free(d_temp);																//
+			// free(d_new_lines);															//
+			// //////////////////////////////////////////////////////////////////////////////
 
-			// update my_line_count
-			printf("my line count 283 %ld\n", my_line_count);
-			printf("new_line_count 284 %ld\n", new_line_count);			
+			// update my_line_count	
 			my_line_count += new_line_count;
-			printf("my line count 286 %ld\n", my_line_count);
 		} // end of receiver branch of if
 	}// end for
 }// end of gen_lines
