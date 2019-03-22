@@ -211,9 +211,12 @@ void gen_lines() {
 			MPI_Send(&my_point_count, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
 
 			// send the points
+			printf("%s\n", );
 			MPI_Send(pt_my_points, my_point_count, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
-
-			printf("Proc1 line\n");
+			
+printf("sent from proc0\n");
+printf("%lf\n", &pt_new_points[0].x);			
+printf("%lf\n", &pt_new_points[0].y);	
 			printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[4]);
 
 			free(pt_my_points);
