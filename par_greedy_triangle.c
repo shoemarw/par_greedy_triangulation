@@ -347,6 +347,7 @@ void distrib_lines() {
 	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
 	// calculate how many lines the process is responsible for
+	printf("l_recv_doubs is %ld\n", l_recv_doubs);
 	my_line_count = l_recv_doubs/5;
 
 	// create room for for the lines
