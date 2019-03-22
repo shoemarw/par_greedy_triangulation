@@ -161,9 +161,9 @@ void gen_lines() {
 	// 				  //
 
 	// Calculate how many lines that will be created	
-	int i_num_lines = ((my_point_count-1)*(my_point_count-2))/2;
+	my_line_count = ((my_point_count-1)*(my_point_count-2))/2;
 	// Allocate room for the lines that will be created
-	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
+	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
 
 
 	long l_index = 0;
@@ -283,7 +283,7 @@ void gen_lines() {
 			printf("my line count 283 %ld\n", my_line_count);
 			printf("new_line_count 284 %ld\n", new_line_count);			
 			my_line_count += new_line_count;
-			printf("my line count 286%ld\n", my_line_count);
+			printf("my line count 286 %ld\n", my_line_count);
 
 		} // end of receiver branch of if
 	}// end for
