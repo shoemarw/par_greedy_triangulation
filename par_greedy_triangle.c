@@ -232,7 +232,7 @@ void gen_lines() {
 
 			long l_size_my_points = sizeof(pt_my_points)/sizeof(point_t);
 			long l_size_new_points = sizeof(pt_new_points)/sizeof(point_t);
-			point_t *pt_temp = (point_t *) allocate(sixeof(pt_my_points) + sizeof(pt_new_points));
+			point_t *pt_temp = (point_t *) allocate(sizeof(pt_my_points) + sizeof(pt_new_points));
 			memcpy(pt_my_points, pt_temp, l_size_my_points);
 			memcpy(pt_new_points, &pt_temp[l_size_my_points],l_size_new_points);
 			free(pt_new_points);
