@@ -345,7 +345,8 @@ void distrib_lines() {
 	printf("345 Hello from %d\n", my_rank);
 	// scatter lines
 	MPI_Scatterv(d_recv_lines, (int *)l_send_count, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-
+	printf("348 Hello from %d\n", my_rank);
+	
 	printf("my_line_count %ld\n", my_line_count);
 	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
