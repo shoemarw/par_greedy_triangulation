@@ -309,8 +309,8 @@ printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
 	}
 
-	MPI_Gatherv(&my_line_count, my_line_count, MPI_BYTE, d_recv_lines, i_recv_counts, 
-			    displs, MPI_BYTE, ROOT, MPI_COMM_WORLD);
+	MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
+			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	long l_base;
 	int remainder;
@@ -319,6 +319,8 @@ printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
 	int *i_displs;
 
 	if(my_rank==ROOT) {
+		printf("%ld\n", d_recv_lines[0]);
+		printf("%ld\n", d_recv_lines[1]);
 		my_line_count = 0;
 		for (int i = 0; i < nprocs; i++) {
 			my_line_count += d_recv_lines[i];
