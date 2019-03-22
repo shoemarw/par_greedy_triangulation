@@ -62,6 +62,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		l->q = p1;
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
+		if (my_rank==ROOT) print_line(l);
 		index++;
 		free(l);
 	}
@@ -371,11 +372,11 @@ int main(int argc, char *argv[]) {
 	STOP_TIMER(generate)
 
 
-	if (my_rank==0){	
-		for (int i = 0; i < 10; i++) {
-			print_line(&ln_my_lines[i]);
-		}
-	}
+	// if (my_rank==0){	
+	// 	for (int i = 0; i < 10; i++) {
+	// 		print_line(&ln_my_lines[i]);
+	// 	}
+	// }
 
 
 
