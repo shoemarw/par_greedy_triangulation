@@ -336,8 +336,6 @@ void distrib_lines() {
 		for (int i = 1; i < nprocs; i++) {
 			i_displs[i] = i_displs[i-1] + i_send_count[i-1];
 		}
-		printf("i_send_count %d\n", i_send_count[0]);
-		printf("i_send_count %d\n", i_send_count[1]);
 	}
 	// tell processes how many lines to expect in the scatterv
 	MPI_Scatter(i_send_count, 1, MPI_INT, &l_recv_doubs, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
@@ -348,16 +346,12 @@ void distrib_lines() {
 
 	// create room for for the lines
 	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
-	printf("345 Hello from %d\n", my_rank);
 	// scatter lines
 	MPI_Scatterv(d_recv_lines, i_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-	printf("348 Hello from %d\n", my_rank);
+	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-	printf("my_line_count %ld\n", my_line_count);
-	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
-
-	// double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 }
 
 
