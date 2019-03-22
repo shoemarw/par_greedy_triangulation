@@ -373,7 +373,7 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank==0){	
 		for (int i = 0; i < 10; i++) {
-			print_line(*ln_my_lines[i]);
+			print_line(&ln_my_lines[i]);
 		}
 	}
 
