@@ -245,8 +245,8 @@ printf("%lf\n", pt_my_points[1].y);
 			MPI_Recv(pt_new_points, bytes_to_recv, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-printf("%lf\n", &pt_new_points[0].x);			
-printf("%lf\n", &pt_new_points[0].y);			
+printf("%lf\n", pt_new_points[0].x);			
+printf("%lf\n", pt_new_points[0].y);			
 // print_line(pt_new_points[0]);
 // print_line(pt_new_points[1]);
 
