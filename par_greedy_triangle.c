@@ -327,17 +327,17 @@ void distrib_lines() {
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
-if (my_rank==ROOT){
+// if (my_rank==ROOT){
 	for (int i = 0; i < total_line_num; i+=5)
 	{
-		printf("Line: %d\n", (i/5));
+		printf("Line: %d\n", (i/5)+1);
 		for (int j = 0; j < 5; ++j)
 		{
 			printf("%lf  ", d_recv_lines[i+j]);
 		}
 		printf("\n");
 	}
-}
+// }
 
 
 
