@@ -331,9 +331,7 @@ void distrib_lines() {
 	 		}
  			printf("l_send_count is %ld\n", l_send_count[i]);
 	 	}
-	 }
 
-/*
 		// build displacement array
 		i_displs = (int *) allocate(sizeof(int)*nprocs);
 		i_displs[0] = 0;
@@ -341,6 +339,7 @@ void distrib_lines() {
 			i_displs[i] = i_displs[i-1] + l_send_count[i-1];
 		}	
 	}
+/*
 	// tell processes how many lines to expect in the scatterv
 	MPI_Scatter(l_send_count, 1, MPI_LONG, &l_recv_doubs, 1, MPI_LONG, ROOT, MPI_COMM_WORLD);
 	
