@@ -325,7 +325,12 @@ void distrib_lines() {
 	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, &d_my_lines, l_recv_num, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate((l_recv_num/5)*sizeof(line_t));
-if (my_rank==ROOT) printf("hello from line 326\n");
+if (my_rank==ROOT) {
+printf("hello from line 326\n");
+printf("%d\n", sizeof(d_my_lines));
+printf("%d\n", sizeof(double));
+}
+
 	double_array_to_struct(d_my_lines, ln_my_lines, sizeof(d_my_lines)/(sizeof(double) * 5));
 }
 
