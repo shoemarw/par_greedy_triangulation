@@ -1,4 +1,6 @@
-default: wrappers.o greedy_triangle.o turtle.o generate_points.o par_greedy_triangle.o
+default: wrappers.o greedy_triangle.o turtle.o generate_points.o par_greedy_triangle.o link
+
+link:
 	gcc --std=c99 -o tri greedy_triangle.o wrappers.o turtle.o -lm
 	gcc --std=c99 -o gen generate_points.o wrappers.o turtle.o -lm
 	mpicc --std=c99 -o par_tri par_greedy_triangle.o wrappers.o turtle.o -lm
