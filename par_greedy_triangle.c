@@ -392,30 +392,31 @@ void triangulate() {
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
 	while (!finished) {
-		// If this process still has lines of unkown status it must
+		// If this process still has lines of unknown status it must
 		// work to resolve them.
 		if (my_unknown > 0) {
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
 			double my_min_line[5];
-			point_t p = (point_t) allocate(sizeof(point_t));
-			point_t q = (point_t) allocate(sizeof(point_t));
-			p = *(ln_my_lines[0].p);
-			q = *(ln_my_lines[0].q);
+printf("Hello from proc%d my ln_my_lines[0].p.x is\n", nprocs, ln_my_lines[0].p.x);
+			break;
 /*
+			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
+			point_t q = *(ln_my_lines[0].q);
+			
 			my_min_line[0] = p.x;
 			my_min_line[1] = p.y;
 			my_min_line[2] = q.x;
 			my_min_line[3] = q.y;
 			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);
+			double* recv_buf = (double*) allocate(5*nprocs);                    ///// Should be 5*nprocs*sizeof(double) ////
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Find the global minimal line.
 			int min_line_index = 0; // Will hold index of the global min line.
 			for (int i = 0; i < nprocs; i++) {
-				// Compare the lenth of the current smallest line to the
+				// Compare the length of the current smallest line to the
 				// i^th line's length. If the length is not positive ignore it
 				// because it was a special value sent from a process with no
 				// more lines of unknown status.
