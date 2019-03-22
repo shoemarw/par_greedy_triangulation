@@ -278,6 +278,7 @@ void gen_lines() {
 
 			// update my_line_count
 			my_line_count += new_line_count;
+			printf("%ld\n", my_line_count);
 
 		} // end of receiver branch of if
 	}// end for
