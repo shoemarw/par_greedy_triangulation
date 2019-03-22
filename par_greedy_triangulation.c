@@ -346,77 +346,10 @@ printf("%ld\n", sizeof(double));
 	double_array_to_struct(d_my_lines, ln_my_lines, sizeof(d_my_lines)/(sizeof(double) * 5));
 }
 
-
-
-
-////			  //
-/// 	Main 	 ///
-// 				////
-
-int main(int argc, char *argv[]) {
-
-	// Set up MPI stuff
-    MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);	
-	
-	// Make sure we get the expected input.
-	if (argc != 2) {
-		printf("Usage %s <filename>, argv[0] \n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-
-	// Create MPI derived data types needed to communicate points and lines.
-	// We time this to see how much overhead cost it adds in terms of time.
-	// utility struct for timing calls
-    struct timeval tv;
-	START_TIMER(MPIoverhead)
-
-	STOP_TIMER(MPIoverhead)
-
-	
-	// Root reads in the lines for given file
-	if (my_rank==ROOT) {
-		read_points(argv);
-	}
-
-	// Root scatters the points
-	distrib_points();
-
-	
-	START_TIMER(generate)
-
-	gen_lines();
-	distrib_lines();
-
-	STOP_TIMER(generate)
-
-
-	// if (my_rank==0){	
-	// 	for (int i = 0; i < 10; i++) {
-	// 		print_line(&ln_my_lines[i]);
-	// 	}
-	// }
-
-
-
-
-	
-	  //                                      //
-	 //  Sort the lines from small to large  //
-	//                                      //
-	
-	START_TIMER(sort)
-	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
-		                sizeof(line_t), compare);
-	STOP_TIMER(sort)
-	
-	  //                                   //
-     //  Greedily build the tringulation  //
-    //	                                 //
-	
-	START_TIMER(triangulate)
-
+/*
+ * Builds the Greedy Triangulation. 
+ */
+void triangulate() {
 	// The triangulation will be stored as an array of lines. The triangulation
 	// is built on process zero iteratively as successive global minimal lines
 	// are found. Allocate enough space to potentially hold every line.
@@ -540,12 +473,86 @@ int main(int argc, char *argv[]) {
 			free(recv_buf); 
 		}
 	}
+}
+
+
+
+
+////			  //
+/// 	Main 	 ///
+// 				////
+
+int main(int argc, char *argv[]) {
+
+	// Set up MPI stuff
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);	
+	
+	// Make sure we get the expected input.
+	if (argc != 2) {
+		printf("Usage %s <filename>, argv[0] \n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
+	// Create MPI derived data types needed to communicate points and lines.
+	// We time this to see how much overhead cost it adds in terms of time.
+	// utility struct for timing calls
+    struct timeval tv;
+	START_TIMER(MPIoverhead)
+
+	STOP_TIMER(MPIoverhead)
+
+	
+	// Root reads in the lines for given file
+	if (my_rank==ROOT) {
+		read_points(argv);
+	}
+
+	// Root scatters the points
+	distrib_points();
+
+	
+	START_TIMER(generate)
+
+	gen_lines();
+	distrib_lines();
+
+	STOP_TIMER(generate)
+
+
+	// if (my_rank==0){	
+	// 	for (int i = 0; i < 10; i++) {
+	// 		print_line(&ln_my_lines[i]);
+	// 	}
+	// }
+
+
+
+
+	
+	  //                                      //
+	 //  Sort the lines from small to large  //
+	//                                      //
+	
+	START_TIMER(sort)
+	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
+		                sizeof(line_t), compare);
+	STOP_TIMER(sort)
+	
+	  //                                   //
+     //  Greedily build the tringulation  //
+    //	                                 //
+	
+	START_TIMER(triangulate)
+	triangulate();
 	STOP_TIMER(triangulate)
 	
-	  //                                     //
-     //  Triangulation Done, Display Stats  //
-    //	                                   //
-	
+	   //                                        //
+      //  Triangulation Done, Display Stats     //
+     //	  Create image & Output File in proc0  //
+	//                                        //
+
 	// These stats are only for the portions of the code specific to the three
 	// phases of building the greedy triangulation. Generate all lines, sort the
 	// lines in non-decreasing order, and greedily adding line segments to the
@@ -554,11 +561,29 @@ int main(int argc, char *argv[]) {
 		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f Overhead: %.4f\n",
 	        GET_TIMER(generate), GET_TIMER(sort), 
 	        GET_TIMER(triangulate), GET_TIMER(MPIoverhead));
+
+# ifdef IMAGE	
+		generate_image(triang, tlines);
+# endif
+
+		// Store the triangulation in a file. Each line in the file corresponds to 
+		// a line in the triangulation. Each line consists of two tuples representing
+		// the end points of the line.
+		FILE* write_file = open_file("triangle_result.txt", "w");
+		
+		// The first line of the file specifies the number of lines in the file.
+		fprintf(write_file, "%ld\n", tlines);
+		
+		// Write triangulation to file for turtle processing
+		for (int i = 0; i < tlines; i++)
+		{
+		    point_t p = *(triang[i].p);
+		    point_t q = *(triang[i].q);
+		    fprintf(write_file, "(%lf, %lf) (%lf, %lf)\n", p.x, p.y, q.x, q.y);
+		}
+		
+		fclose(write_file);
 	}
-
-	// In process zero produce the image if IMAGE is defined
-
-	// In process zero write the triangulation to an output file
 	
 	// Clean up and exit
 	// free(points);
