@@ -579,9 +579,9 @@ int main(int argc, char *argv[]) {
 	// lines in non-decreasing order, and greedily adding line segments to the
 	// triangulation.
 	if (my_rank==ROOT) {
-		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f\n",
+		printf("Gent: %.4f  Sort: %.4f  Tria: %.4f \n",
 	        GET_TIMER(generate), GET_TIMER(sort), 
-	        GET_TIMER(triangulate);
+	        GET_TIMER(triangulate));
 
 # ifdef IMAGE	
 		generate_image(triang, tlines);
