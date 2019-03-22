@@ -284,11 +284,11 @@ void gen_lines() {
 			free(d_new_lines);
 			d_my_lines = temp_doubles;
 
-			//print the stuff in d_my_lines
-			for (int i = 0; i < (my_line_count+new_line_count); i++) { 
-//printf("Line p00p %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5*i],d_my_lines[1+5*i],
-				d_my_lines[2+5*i],d_my_lines[3+5*i],d_my_lines[4+5*i]);
-			}
+// //print the stuff in d_my_lines
+// for (int i = 0; i < (my_line_count+new_line_count); i++) { 
+// //printf("Line p00p %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5*i],d_my_lines[1+5*i],
+// d_my_lines[2+5*i],d_my_lines[3+5*i],d_my_lines[4+5*i]);
+// }
 
 			// merge pt_my_points with pt_new_points
 			point_t* temp_points = (point_t*) allocate((my_point_count+point_recv_count)*sizeof(point_t));
