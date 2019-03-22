@@ -257,7 +257,7 @@ void gen_lines() {
 		}
 	}// end for
 	if(my_rank==ROOT) {
-		printf("%ld\n", sifeof(d_my_lines));
+		printf("%ld\n", sizeof(d_my_lines));
 	}
 }
 
