@@ -167,6 +167,7 @@ void gen_lines() {
 
 
 	long l_index = 0;
+/**
 
 	// Create lines in double format, i.e. a line is 5 doubles.
 	for (int i = 0; i < my_point_count; i++) {
@@ -188,7 +189,6 @@ void gen_lines() {
 	  //													  //
 	 // Start sending/receiving points to create more lines  //
 	//														//
-/**
 	int point_recv_count; 	// Used to check how many objects will be sent in MPI_send
 	double* d_new_lines;
 	point_t* pt_new_points;
