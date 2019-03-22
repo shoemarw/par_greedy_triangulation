@@ -340,7 +340,7 @@ printf("Proc0 is expecting %d doubles from proc1\n", i_recv_counts[1]);
 printf("Proc0 is making room for %ld doubles\n", total_line_num);
 
 	}
-printf("I am prco %d and I am sending %d doubles\n", my_rank, my_line_count*5);
+printf("I am prco %d and I am sending %ld doubles\n", my_rank, my_line_count*5);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
