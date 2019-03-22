@@ -158,6 +158,7 @@ void gen_lines() {
 
 	// Calculate how many lines that will be created	
 	int i_num_lines = ((my_point_count-1)*(my_point_count-2))/2;
+printf("my_point_count %ld\n", my_point_count);
 printf("i_num_lines %d\n", i_num_lines);
 	// Allocate room for the lines that will be created
 	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
