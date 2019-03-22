@@ -483,6 +483,7 @@ void triangulate() {
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
 		} else {
+			/*
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
@@ -499,8 +500,9 @@ void triangulate() {
 				finished = true;
 			}
 			free(recv_buf); 
+			*/
 		}
-	}
+	} // end while
 }
 
 
@@ -571,7 +573,7 @@ int main(int argc, char *argv[]) {
     //	                                 //
 	
 	START_TIMER(triangulate)
-	// triangulate();
+	triangulate();
 	STOP_TIMER(triangulate)
 	
 	   //                                        //
