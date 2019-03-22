@@ -58,8 +58,8 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 
 		line_t* l = (line_t*) allocate(sizeof(line_t));
 		// set the values of the line and store it.
-		l->p = &p0;
-		l->q = &p1;
+		l->p = p0;
+		l->q = p1;
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
 		index++;
@@ -205,31 +205,41 @@ void gen_lines() {
 			MPI_Recv(&recv_buff, 1, MPI_LONG, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
 
-			// receive points into new_points
-			point_t* new_points = (point_t*) allocate(recv_buff);
-			MPI_Recv(new_points, recv_buff, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
+			// receive points into pt_new_points
+			point_t* pt_new_points = (point_t*) allocate(recv_buff);
+			MPI_Recv(pt_new_points, recv_buff, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 			int num_my_point = sizeof(pt_my_points)/sizeof(point_t);
-			int num_new_points = sizeof(new_points)/sizeof(point_t);
+			int num_pt_new_points = sizeof(pt_new_points)/sizeof(point_t);
 
-			double* d_new_lines = (double*) allocate(sizeof(double)*num_my_point*num_new_points*5);
+			double* d_new_lines = (double*) allocate(sizeof(double)*num_my_point*num_pt_new_points*5);
 
 			int new_line_index = 0;
 			for (int j = 0; j < num_my_point; j++){
-				for (int k = 0; k < num_new_points; ++k)
+				for (int k = 0; k < num_pt_new_points; ++k)
 				{
-					double length = distance(&pt_my_points[k], &new_points[j]);
+					double length = distance(&pt_my_points[k], &pt_new_points[j]);
 					d_my_lines[new_line_index + X0] = pt_my_points[j].x;
 					d_my_lines[new_line_index + Y0] = pt_my_points[j].y;
-					d_my_lines[new_line_index + X1] = new_points[k].x;
-					d_my_lines[new_line_index + Y1] = new_points[k].y;
+					d_my_lines[new_line_index + X1] = pt_new_points[k].x;
+					d_my_lines[new_line_index + Y1] = pt_new_points[k].y;
 					d_my_lines[new_line_index + LEN] = length;
 
 					new_line_index +=5;
 				}
 			}
-// combine new and current points
+
+			long l_size_my_points = sizeof(pt_my_points)/sizeof(point_t);
+			long l_size_new_points = sizeof(pt_new_points)/sizeof(point_t);
+			point_t *temp = (point_t *) allocate(pt_my_points + pt_new_points);
+			memcpy(pt_my_points, temp, l_size_my_points);
+			memcpy(pt_new_points, &temp[l_size_my_points],l_size_new_points);
+			free(pt_new_points);
+			free(pt_my_points);
+			pt_my_points = (point_t *) allocate(sizeof(temp));
+			memcpy(temp,pt_my_points,sizeof(pt_my_points)/sizeof(point_t));
+			free(temp);
 
 			double* temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
 			int num_my_linr = sizeof(d_my_lines)/sizeof(line_t);
