@@ -28,7 +28,7 @@ void print_line(line_t* line)
 
     print_point(line->p);
 	print_point(line->q);
-	printf("%lf \n", line.len);
+	printf("%lf \n", line->len);
 }
 
 /*
