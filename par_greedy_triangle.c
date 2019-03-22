@@ -270,7 +270,7 @@ void gen_lines() {
 										  new_line_count, sizeof(double)*5);
 			free(d_my_lines);
 			d_my_lines = temp_t;
-			free(temp_t)
+			free(temp_t);
 
 			// update my_line_count	
 			my_line_count += new_line_count;
