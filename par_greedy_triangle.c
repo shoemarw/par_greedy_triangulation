@@ -394,112 +394,113 @@ void triangulate() {
 	while (!finished) {
 		// If this process still has lines of unkown status it must
 		// work to resolve them.
-		if (my_unknown > 0) {
-			// Convert this processes' minimal (smallest) line to an array of
-			// five doubles for Allgather.
-			double my_min_line[5];
-			point_t p = *(ln_my_lines[0].p);
-			point_t q = *(ln_my_lines[0].q);
-			my_min_line[0] = p.x;
-			my_min_line[1] = p.y;
-			my_min_line[2] = q.x;
-			my_min_line[3] = q.y;
-			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);
-			// Make sure each process has an array of each processes' min line.
-//			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
-//				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-			// Find the global minimal line.
-			int min_line_index = 0; // Will hold index of the global min line.
-			for (int i = 0; i < nprocs; i++) {
-				// Compare the lenth of the current smallest line to the
-				// i^th line's length. If the length is not positive ignore it
-				// because it was a special value sent from a process with no
-				// more lines of unknown status.
-				if ((recv_buf[i*4] > 0) && 
-					(recv_buf[i*4] < recv_buf[min_line_index*4])) {
-					min_line_index = i;
-				}
-			}
-			// Will hold the minimal line.
-			line_t* min_line;
-			// Lets us know whether or not this processes min line was
-			// included in the triangulation or not.
-			int start;
-			// See if this process has the global min line, if so we must
-			// adjust its number of lines of unknown status and set min_line.
-			if (my_rank == min_line_index) {
-				my_unknown--;
-				min_line = &ln_my_lines[0];
-				start = 1; // This processes' min was used.
-			// Otherwise we must build the min_line from data in the recv_buf
-			// (While making sure to use the appropriate index!)
-			} else {
-				// Get the minimal line
-//				min_line = (line_t*) allocate(sizeof(line_t));
-//				point_t *p = (point_t*) allocate(sizeof(point_t));
-//				point_t *q = (point_t*) allocate(sizeof(point_t));
-//				p->x = recv_buf[min_line_index*4];
-//				p->y = recv_buf[min_line_index*4 + 1];
-//				q->x = recv_buf[min_line_index*4 + 2];
-//				q->y = recv_buf[min_line_index*4 + 3];
-//				min_line->p = p;
-//				min_line->q = q;
-//				free(p);
-//				free(q);
-				start = 0; // This processes' min was not used.
-			}
-			// Have process zero add min_line to the triangulation.
-			if (my_rank == 0) {
-				triang[tlines] = *min_line;
-			}
-			// Free the receive buffer
-			free(recv_buf);
-			// Allocate an array of lines to hold the lines that don't 
-			// intersect with the global minimum.
-			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
-			int end = my_unknown;
-			int temp_size = 0;
+		// if (my_unknown > 0) {
+		// 	// Convert this processes' minimal (smallest) line to an array of
+		// 	// five doubles for Allgather.
+		// 	double my_min_line[5];
+		// 	point_t p = *(ln_my_lines[0].p);
+		// 	point_t q = *(ln_my_lines[0].q);
+		// 	my_min_line[0] = p.x;
+		// 	my_min_line[1] = p.y;
+		// 	my_min_line[2] = q.x;
+		// 	my_min_line[3] = q.y;
+		// 	// Prepare an array to receive each processe's minimal line.
+		// 	double* recv_buf = (double*) allocate(5*nprocs);
+		// 	// Make sure each process has an array of each processes' min line.
+		// 	MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
+		// 		          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+		// 	// Find the global minimal line.
+		// 	int min_line_index = 0; // Will hold index of the global min line.
+		// 	for (int i = 0; i < nprocs; i++) {
+		// 		// Compare the lenth of the current smallest line to the
+		// 		// i^th line's length. If the length is not positive ignore it
+		// 		// because it was a special value sent from a process with no
+		// 		// more lines of unknown status.
+		// 		if ((recv_buf[i*4] > 0) && 
+		// 			(recv_buf[i*4] < recv_buf[min_line_index*4])) {
+		// 			min_line_index = i;
+		// 		}
+		// 	}
+		// 	// Will hold the minimal line.
+		// 	line_t* min_line;
+		// 	// Lets us know whether or not this processes min line was
+		// 	// included in the triangulation or not.
+		// 	int start;
+		// 	// See if this process has the global min line, if so we must
+		// 	// adjust its number of lines of unknown status and set min_line.
+		// 	if (my_rank == min_line_index) {
+		// 		my_unknown--;
+		// 		min_line = &ln_my_lines[0];
+		// 		start = 1; // This processes' min was used.
+		// 	// Otherwise we must build the min_line from data in the recv_buf
+		// 	// (While making sure to use the appropriate index!)
+		// 	} else {
+		// 		// Get the minimal line
+		// 		min_line = (line_t*) allocate(sizeof(line_t));
+		// 		point_t *p = (point_t*) allocate(sizeof(point_t));
+		// 		point_t *q = (point_t*) allocate(sizeof(point_t));
+		// 		p->x = recv_buf[min_line_index*4];
+		// 		p->y = recv_buf[min_line_index*4 + 1];
+		// 		q->x = recv_buf[min_line_index*4 + 2];
+		// 		q->y = recv_buf[min_line_index*4 + 3];
+		// 		min_line->p = p;
+		// 		min_line->q = q;
+		// 		free(p);
+		// 		free(q);
+		// 		start = 0; // This processes' min was not used.
+		// 	}
+		// 	// Have process zero add min_line to the triangulation.
+		// 	if (my_rank == 0) {
+		// 		triang[tlines] = *min_line;
+		// 	}
+		// 	// Free the receive buffer
+		// 	free(recv_buf);
+		// 	// Allocate an array of lines to hold the lines that don't 
+		// 	// intersect with the global minimum.
+		// 	line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
+		// 	int end = my_unknown;
+		// 	int temp_size = 0;
 
-			for (int j = start; j < end; j++) {
-				// Run the intersection test and only include lines which dont
-				// conflict with the global min (min_line) It is ok if a line
-				// shares endpoints with min_line
-				if (share_endpoint(min_line, &ln_my_lines[j]) ||
-					 !intersects(min_line, &ln_my_lines[j])) {
-					temp[temp_size] = ln_my_lines[j];
-					temp_size++;
-				} else {
-					my_unknown--;
-				}	
-			}
-			// Write all of the valid lines from temp to ln_my_lines to prepare
-			// for the next iteration.		
-			copy_array(temp, ln_my_lines, temp_size);
-			free(temp);
-		// If this process has no more lines of unknown status then it must still
-	    // participate in global communications to avoid deadlock. Have it send
-		// a special value to the other processes (which they will ignore). The 
-		// special value is a line whose endpoints are at the origin and it has a
-		// distance of -1.
-		} else {
-			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);
-//			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
-//				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-			// Check if all of the lines have distance of -1. If so then we are
-			// done!
-			int count = 0;
-			for (int i = 0; i < nprocs; i++) {
-				if (recv_buf[i*4] == -1) {
-					count++;
-				}
-			}
-			if (count == nprocs) {
-				finished = true;
-			}
-			free(recv_buf); 
-		} // end else
+		// 	for (int j = start; j < end; j++) {
+		// 		// Run the intersection test and only include lines which dont
+		// 		// conflict with the global min (min_line) It is ok if a line
+		// 		// shares endpoints with min_line
+		// 		if (share_endpoint(min_line, &ln_my_lines[j]) ||
+		// 			 !intersects(min_line, &ln_my_lines[j])) {
+		// 			temp[temp_size] = ln_my_lines[j];
+		// 			temp_size++;
+		// 		} else {
+		// 			my_unknown--;
+		// 		}	
+		// 	}
+		// 	// Write all of the valid lines from temp to ln_my_lines to prepare
+		// 	// for the next iteration.		
+		// 	copy_array(temp, ln_my_lines, temp_size);
+		// 	free(temp);
+		// // If this process has no more lines of unknown status then it must still
+	 //    // participate in global communications to avoid deadlock. Have it send
+		// // a special value to the other processes (which they will ignore). The 
+		// // special value is a line whose endpoints are at the origin and it has a
+		// // distance of -1.
+		// } // end if (my_unknown > 0)
+		// else {
+		// 	// Prepare an array to receive each processe's minimal line.
+		// 	double* recv_buf = (double*) allocate(5*nprocs);
+		// 	MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
+		// 		          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+		// 	// Check if all of the lines have distance of -1. If so then we are
+		// 	// done!
+		// 	int count = 0;
+		// 	for (int i = 0; i < nprocs; i++) {
+		// 		if (recv_buf[i*4] == -1) {
+		// 			count++;
+		// 		}
+		// 	}
+		// 	if (count == nprocs) {
+		// 		finished = true;
+		// 	}
+		// 	free(recv_buf); 
+		// } // end else
 	} // end while
 }
 
