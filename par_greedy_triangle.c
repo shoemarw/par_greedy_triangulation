@@ -237,9 +237,10 @@ void gen_lines() {
 			pt_new_points = (point_t*) allocate(bytes_to_recv);
 
 			// receive points into pt_new_points
-			MPI_Recv(&pt_new_points, bytes_to_recv, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
+			MPI_Recv(pt_new_points, bytes_to_recv, MPI_BYTE, i_recv_from, MPI_ANY_TAG, 
 					 MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
+print_line(&pt_new_points[0]);
+print_line(&pt_new_points[1]);
 
 			// calculate number of new lines to be created
 			long new_line_count = my_point_count*point_recv_count;
