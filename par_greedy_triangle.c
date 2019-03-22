@@ -268,7 +268,7 @@ void gen_lines() {
 
 			line_t *temp_t = array_concat(d_my_lines, my_line_count, d_new_lines, 
 										  new_line_count, sizeof(double)*5);
-			// free(d_my_lines);
+			free(d_my_lines);
 			// d_my_lines = temp_t;
 			// free(temp_t);
 
