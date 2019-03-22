@@ -12,19 +12,6 @@
 #include "greedy_triangle.h"
 
 
-
-void *array_concat(const void *arr1, size_t arr1_len,
-                   const void *arr2, size_t arr2_len, size_t data_size) {
-
-    char *ret_arr = allocate(data_size * (arr1_len + arr2_len));
-    memcpy(ret_arr, arr1, arr1_len*data_size);
-    memcpy(ret_arr + arr1_len*data_size, arr2, arr2_len*data_size);
-    return ret_arr;
-}
-
-
-
-
 /*
  * Prints a point.
  */
