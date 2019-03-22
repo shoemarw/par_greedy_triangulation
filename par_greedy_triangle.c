@@ -40,7 +40,7 @@ line_t*  ln_my_lines;  	// a processes' portion of lines.
 double* d_my_lines;		// a processes' portion of lines while in double format.
 
 
-long my_point_count = 0;	// Count of how many points a processes is responsible for
+long my_point_count;	// Count of how many points a processes is responsible for
 long my_line_count = 0; // Count of how many lines a processes is responsible for
 
 //TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
@@ -157,10 +157,10 @@ void gen_lines() {
 	// 				  //
 
 	// Calculate how many lines that will be created	
-	my_line_count = ((my_point_count-1)*(my_point_count-2))/2;
+	int i_num_lines = ((my_point_count-1)*(my_point_count-2))/2;
 
 	// Allocate room for the lines that will be created
-	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
+	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
 
 
 	long l_index = 0;
@@ -230,8 +230,6 @@ void gen_lines() {
 
 			// calculate number of new lines to be created
 			long new_line_count = my_point_count*point_recv_count;
-// printf("new line count %ld\n", new_line_count);
-// printf("my line count %ld\n", my_line_count);
 
 			// create array to store lines about to be created
 			d_new_lines = (double*) allocate(sizeof(double)*new_line_count*5);
