@@ -68,3 +68,5 @@ FILE* open_file(char* filename, char* operation);
 void error(char* message);
 
 void generate_image(line_t lines[], int number_lines);
+
+void *array_concat(const void *arr1, size_t arr1_len, const void *arr2, size_t arr2_len, size_t data_size);
