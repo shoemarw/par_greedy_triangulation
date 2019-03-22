@@ -163,7 +163,7 @@ void gen_lines() {
 	// Calculate how many lines that will be created	
 	my_line_count = ((my_point_count-1)*(my_point_count-2))/2;
 	// Allocate room for the lines that will be created
-	d_my_lines = (double*) allocate(my_line_count+1 * sizeof(double) * 5);
+	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
 
 
 	long l_index = 0;
@@ -176,10 +176,10 @@ void gen_lines() {
 		for (int j = i+1; j < my_point_count; j++) {
 			double length = distance(&pt_my_points[i], &pt_my_points[j]);
 			d_my_lines[l_index + X0] = pt_my_points[i].x;
-			d_my_lines[l_index + Y0] = pt_my_points[i].y;
-			d_my_lines[l_index + X1] = pt_my_points[j].x;
-			d_my_lines[l_index + Y1] = pt_my_points[j].y;
-			d_my_lines[l_index + LEN] = length;	
+			// d_my_lines[l_index + Y0] = pt_my_points[i].y;
+			// d_my_lines[l_index + X1] = pt_my_points[j].x;
+			// d_my_lines[l_index + Y1] = pt_my_points[j].y;
+			// d_my_lines[l_index + LEN] = length;	
 
 			// Increment index to next line
 			l_index +=5;
