@@ -240,50 +240,50 @@ void gen_lines() {
 			// create long to keep tract of d_new_lines index through for loop
 			long new_line_index = 0;
 
-			// create new lines by taking one of the process's current lines and making lines from that point
-			// to all of the newly received points. This is done in a double for loop.
-			for (int j = 0; j < my_point_count; j++){
-				for (int k = 0; k < point_recv_count; ++k)
-				{
-					double length = distance(&pt_my_points[k], &pt_new_points[j]);
-					d_my_lines[new_line_index + X0] = pt_my_points[j].x;
-					d_my_lines[new_line_index + Y0] = pt_my_points[j].y;
-					d_my_lines[new_line_index + X1] = pt_new_points[k].x;
-					d_my_lines[new_line_index + Y1] = pt_new_points[k].y;
-					d_my_lines[new_line_index + LEN] = length;
+			// // create new lines by taking one of the process's current lines and making lines from that point
+			// // to all of the newly received points. This is done in a double for loop.
+			// for (int j = 0; j < my_point_count; j++){
+			// 	for (int k = 0; k < point_recv_count; ++k)
+			// 	{
+			// 		double length = distance(&pt_my_points[k], &pt_new_points[j]);
+			// 		d_my_lines[new_line_index + X0] = pt_my_points[j].x;
+			// 		d_my_lines[new_line_index + Y0] = pt_my_points[j].y;
+			// 		d_my_lines[new_line_index + X1] = pt_new_points[k].x;
+			// 		d_my_lines[new_line_index + Y1] = pt_new_points[k].y;
+			// 		d_my_lines[new_line_index + LEN] = length;
 
-					new_line_index +=5;
-				}
-			} // end out for
+			// 		new_line_index +=5;
+			// 	}
+			// } // end out for
 
-			// bunch of ugly code to combine both arrays of points into pt_my_points /////
-			point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
-			memcpy(pt_my_points, pt_temp, my_point_count);								//
-			memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
-			pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
-			memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
-			free(pt_temp);																//
-			// free(pt_new_points);														//
-			//////////////////////////////////////////////////////////////////////////////
+			// // bunch of ugly code to combine both arrays of points into pt_my_points /////
+			// point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
+			// memcpy(pt_my_points, pt_temp, my_point_count);								//
+			// memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
+			// pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
+			// memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
+			// free(pt_temp);																//
+			// // free(pt_new_points);														//
+			// //////////////////////////////////////////////////////////////////////////////
 
-			// update my_point_count
-			my_point_count += point_recv_count;
+			// // update my_point_count
+			// my_point_count += point_recv_count;
 
-			// bunch of ugly code to combine both arrays of lines into d_my_lines ////////
-			double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
-			memcpy(&d_my_lines, &d_temp, my_line_count);								//
-			memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
-			d_my_lines = allocate(my_line_count+new_line_count);						//
-			memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
-			free(d_temp);																//
-			// free(d_new_lines);														//
-			//////////////////////////////////////////////////////////////////////////////
+			// // bunch of ugly code to combine both arrays of lines into d_my_lines ////////
+			// double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
+			// memcpy(&d_my_lines, &d_temp, my_line_count);								//
+			// memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
+			// d_my_lines = allocate(my_line_count+new_line_count);						//
+			// memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
+			// free(d_temp);																//
+			// // free(d_new_lines);														//
+			// //////////////////////////////////////////////////////////////////////////////
 
-			// update my_line_count
-			printf("my line count 283 %ld\n", my_line_count);
-			printf("new_line_count 284 %ld\n", new_line_count);			
-			my_line_count += new_line_count;
-			printf("my line count 286 %ld\n", my_line_count);
+			// // update my_line_count
+			// printf("my line count 283 %ld\n", my_line_count);
+			// printf("new_line_count 284 %ld\n", new_line_count);			
+			// my_line_count += new_line_count;
+			// printf("my line count 286 %ld\n", my_line_count);
 
 		} // end of receiver branch of if
 	}// end for
