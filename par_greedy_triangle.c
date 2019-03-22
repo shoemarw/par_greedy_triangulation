@@ -256,8 +256,8 @@ void gen_lines() {
 			point_t *pt_temp = (point_t *) allocate(my_point_count + point_recv_count);	//
 			memcpy(pt_my_points, pt_temp, my_point_count);								//
 			memcpy(pt_new_points, &pt_temp[my_point_count], point_recv_count);			//
-			free(pt_new_points);														//
-			free(pt_my_points);															//
+			// free(pt_new_points);														//
+			// free(pt_my_points);															//
 			pt_my_points = (point_t *) allocate(my_point_count + point_recv_count);		//
 			memcpy(pt_temp,pt_my_points, (my_point_count + point_recv_count));			//
 			free(pt_temp);																//
@@ -270,11 +270,11 @@ void gen_lines() {
 			double* d_temp = (double*) allocate(my_line_count+new_line_count);			//
 			memcpy(&d_my_lines, &d_temp, my_line_count);								//
 			memcpy(&d_new_lines, &d_temp[my_line_count], my_line_count);				//
-			free(d_my_lines);															//
+			// free(d_my_lines);															//
 			d_my_lines = allocate(my_line_count+new_line_count);						//
 			memcpy(d_temp, d_my_lines, (my_line_count+new_line_count));					//
 			free(d_temp);																//
-			free(d_new_lines);															//
+			// free(d_new_lines);															//
 			//////////////////////////////////////////////////////////////////////////////
 
 			// update my_line_count
