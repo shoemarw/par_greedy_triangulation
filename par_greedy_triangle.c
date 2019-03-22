@@ -72,6 +72,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		l->q = p1;
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
+		print_line(&new_arr[index]);
 		index++;
 		free(l);
 	}
@@ -411,7 +412,7 @@ void distrib_lines() {
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-	double_array_to_struct(&d_my_lines, ln_my_lines, my_line_count);
+	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 
 if(my_rank==ROOT) {
 	printf("after double_array_to_struct\n");
