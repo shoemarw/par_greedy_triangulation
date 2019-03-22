@@ -319,11 +319,9 @@ printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-		printf("d_recv_lines[0] %ld\n", d_recv_lines[0]);
-		printf("d_recv_lines[1] %ld\n", d_recv_lines[1]);
 		my_line_count = 0;
 		for (int i = 0; i < nprocs; i++) {
-			my_line_count += d_recv_lines[i];
+			my_line_count += i_recv_counts[i];
 		}
 
 
