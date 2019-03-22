@@ -325,8 +325,8 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	if(my_rank==ROOT) {
 		free(i_recv_counts);
-		printf("line 328 line count %ld\n", my_line_count);
 		my_line_count = total_line_num;
+		printf("line 329 line count %ld\n", my_line_count);
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	printf("l_base %ld\n", l_base);
