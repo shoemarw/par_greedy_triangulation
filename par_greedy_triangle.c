@@ -232,24 +232,24 @@ void gen_lines() {
 
 			long l_size_my_points = sizeof(pt_my_points)/sizeof(point_t);
 			long l_size_new_points = sizeof(pt_new_points)/sizeof(point_t);
-			point_t *temp = (point_t *) allocate(pt_my_points + pt_new_points);
-			memcpy(pt_my_points, temp, l_size_my_points);
-			memcpy(pt_new_points, &temp[l_size_my_points],l_size_new_points);
+			point_t *pt_temp = (point_t *) allocate(sixeof(pt_my_points) + sizeof(pt_new_points));
+			memcpy(pt_my_points, pt_temp, l_size_my_points);
+			memcpy(pt_new_points, &pt_temp[l_size_my_points],l_size_new_points);
 			free(pt_new_points);
 			free(pt_my_points);
-			pt_my_points = (point_t *) allocate(sizeof(temp));
-			memcpy(temp,pt_my_points,sizeof(pt_my_points)/sizeof(point_t));
-			free(temp);
+			pt_my_points = (point_t *) allocate(sizeof(pt_temp));
+			memcpy(pt_temp,pt_my_points,sizeof(pt_my_points)/sizeof(point_t));
+			free(pt_temp);
 
-			double* temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
+			double* d_temp = (double*) allocate(sizeof(d_my_lines)+sizeof(d_new_lines));
 			int num_my_linr = sizeof(d_my_lines)/sizeof(line_t);
-			memcpy(&d_my_lines, &temp, num_my_linr);
-			memcpy(&d_new_lines, &temp[num_my_linr], sizeof(d_new_lines)/sizeof(line_t));
+			memcpy(&d_my_lines, &d_temp, num_my_linr);
+			memcpy(&d_new_lines, &d_temp[num_my_linr], sizeof(d_new_lines)/sizeof(line_t));
 
 			free(d_my_lines);
-			d_my_lines = allocate(sizeof(temp));
-			memcpy(temp, d_my_lines, sizeof(temp)/sizeof(line_t));
-			free(temp);
+			d_my_lines = allocate(sizeof(d_temp));
+			memcpy(d_temp, d_my_lines, sizeof(d_temp)/sizeof(line_t));
+			free(d_temp);
 			free(d_new_lines);
 		}
 	}// end for
