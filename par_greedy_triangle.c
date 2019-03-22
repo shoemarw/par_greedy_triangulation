@@ -188,7 +188,7 @@ void gen_lines() {
 	  //													  //
 	 // Start sending/receiving points to create more lines  //
 	//														//
-
+/**
 	int point_recv_count; 	// Used to check how many objects will be sent in MPI_send
 	double* d_new_lines;
 	point_t* pt_new_points;
@@ -198,7 +198,7 @@ void gen_lines() {
 	// in a binomial tree structure.
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		// If process is a sender this iteration:
-/**		if (my_rank&iteration_square) {
+		if (my_rank&iteration_square) {
 
 			// calculate the process number of whom to send to
 			int i_send_to = (my_rank-iteration_square+nprocs)%nprocs;
@@ -286,8 +286,8 @@ void gen_lines() {
 			my_line_count += new_line_count;
 			printf("my line count 286 %ld\n", my_line_count);
 		} // end of receiver branch of if
-*/
 	}// end for
+*/
 }// end of gen_lines
 
 
