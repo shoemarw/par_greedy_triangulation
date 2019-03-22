@@ -342,7 +342,7 @@ printf("Proc0 is making room for %ld doubles\n", total_line_num);
 	}
 printf("I am prco %d and I am sending %ld doubles\n", my_rank, my_line_count*5);
 printf("I am prco %d and I am sending:\n", my_rank);
-printf("Line %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0],d_my_lines[1],d_my_lines[2],d_my_lines[3],d_my_lines[4]);
+printf("Line %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5],d_my_lines[1+5],d_my_lines[2+5],d_my_lines[3+5],d_my_lines[4+5]);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
