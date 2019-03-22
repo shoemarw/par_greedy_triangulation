@@ -62,6 +62,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		l->q = p1;
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
+if (my_rank==ROOT) printf("hello from line 65\n");
 if (my_rank==ROOT) print_line(l);
 		index++;
 		free(l);
