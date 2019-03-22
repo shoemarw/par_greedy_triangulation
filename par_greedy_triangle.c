@@ -26,6 +26,7 @@
 
 #define TAG  1		// Used for MPI_sends/revc
 #define ROOT 0		// Used for MPI calls and if statements
+#define IMAGE
 
 #define X0  0	// first point's x 			| These are used when lines are stored in arrays of 
 #define Y0  1	// first point's y 			| doubles rather than structs.
