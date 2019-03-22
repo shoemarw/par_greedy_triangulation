@@ -467,7 +467,7 @@ void triangulate() {
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, ln_my_lines[j]) ||
 					 !intersects(min_line, ln_my_lines[j])) {
-					temp[temp_size] = ln_my_lines[j]
+					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
 					my_unknown--;
@@ -486,7 +486,7 @@ void triangulate() {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
-				          recv_buf, 5, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Check if all of the lines have distance of -1. If so then we are
 			// done!
 			int count = 0;
