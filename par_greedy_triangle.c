@@ -192,6 +192,7 @@ void gen_lines() {
 	// In this for loop we calculated all the remaining lines - which means we'll
 	// need to send/receive points from other processes. This is implemented
 	// in a binomial tree structure.
+	/*
 	for (int iteration_square = 1; iteration_square < nprocs; iteration_square *= 2) {
 		// If process is a sender this iteration:
 		if (my_rank&iteration_square) {
@@ -277,6 +278,7 @@ void gen_lines() {
 			my_line_count += new_line_count;
 		} // end of receiver branch of if
 	}// end for
+	*/
 }// end of gen_lines
 
 
