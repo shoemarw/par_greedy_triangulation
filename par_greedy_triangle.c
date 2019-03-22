@@ -356,7 +356,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	// create room for for the lines
 	d_my_lines = (double*) allocate(l_recv_doubs*sizeof(double));
 	// scatter lines
-	// MPI_Scatterv(d_recv_lines, i_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(&d_recv_lines, i_send_count, i_displs, MPI_DOUBLE, d_my_lines, l_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	// ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
