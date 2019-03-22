@@ -571,7 +571,7 @@ int main(int argc, char *argv[]) {
     //	                                 //
 	
 	START_TIMER(triangulate)
-	triangulate();
+	// triangulate();
 	STOP_TIMER(triangulate)
 	
 	   //                                        //
