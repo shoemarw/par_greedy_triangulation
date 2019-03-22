@@ -333,6 +333,7 @@ void distrib_lines() {
 	 		if (remainder) {
 	 			l_send_count[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
+	 			printf("l_send_count is %ld\n", l_send_count[i]);
 	 		}
 	 	}
 
