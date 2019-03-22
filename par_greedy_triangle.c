@@ -295,18 +295,16 @@ void distrib_lines() {
 	// send the number of lines a process will be sending on the gatherv
 	MPI_Gather(&my_line_count, 1, MPI_INT, i_recv_counts, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
-printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
-
 	if (my_rank==ROOT) {
 		displs[0] = 0;
-		long total_line_num = i_recv_counts[0];
+		my_line_count = i_recv_counts[0];
 
 		// calculate how many total lines are being sent and the displs
         for (int i=1; i < nprocs; i++) {
-           total_line_num += i_recv_counts[i];
+           my_line_count += i_recv_counts[i];
            displs[i] = displs[i-1] + i_recv_counts[i-1];
         }
-		d_recv_lines = (double*) allocate(total_line_num* sizeof(double)*5);        
+		d_recv_lines = (double*) allocate(my_line_count* sizeof(double)*5);        
 	}
 
 	MPI_Gatherv(&my_line_count, my_line_count, MPI_DOUBLE, d_recv_lines, i_recv_counts, 
@@ -319,11 +317,6 @@ printf("I am %d and my_line_count is %ld\n", my_rank, my_line_count);
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-		my_line_count = 0;
-		for (int i = 0; i < nprocs; i++) {
-			my_line_count += i_recv_counts[i];
-		}
-
 
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
