@@ -262,10 +262,10 @@ void gen_lines() {
 					d_new_lines[new_line_index + Y1] = pt_new_points[k].y;
 					d_new_lines[new_line_index + LEN] = length;
 printf("Proc0 'new' lines: ");
-printf("%lf", d_new_lines[new_line_index + X0]);
-printf("%lf", d_new_lines[new_line_index + Y0]);
-printf("%lf", d_new_lines[new_line_index + X1]);
-printf("%lf", d_new_lines[new_line_index + Y1]);
+printf("%lf  ", d_new_lines[new_line_index + X0]);
+printf("%lf  ", d_new_lines[new_line_index + Y0]);
+printf("%lf  ", d_new_lines[new_line_index + X1]);
+printf("%lf  ", d_new_lines[new_line_index + Y1]);
 printf("%lf \n", d_new_lines[new_line_index + LEN]);
 
 					new_line_index +=5;
