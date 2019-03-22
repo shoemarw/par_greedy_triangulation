@@ -163,7 +163,7 @@ void gen_lines() {
 	l_num_points = sizeof(pt_my_points)/sizeof(point_t);
 	int i_num_lines = ((l_num_points-1)*(l_num_points-2))/2;
 	d_my_lines = (double*) allocate(i_num_lines * sizeof(double) * 5);
-if(my_rank==ROOT) {printf("166 %ld\n", i_num_lines * sizeof(double) * 5);}
+if(my_rank==ROOT) {printf("166 %ld\n", sizeof(*d_my_lines));}
 	const int X0 = 0;
 	const int Y0 = 1;
 	const int X1 = 2;
