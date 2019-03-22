@@ -430,7 +430,7 @@ void triangulate() {
 			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
 				my_unknown--;
-				min_line = ln_my_lines[0];
+				min_line = &ln_my_lines[0];
 				start = 1; // This processes' min was used.
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
@@ -451,7 +451,7 @@ void triangulate() {
 			}
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == 0) {
-				triang[tlines] = min_line;
+				triang[tlines] = *min_line;
 			}
 			// Free the receive buffer
 			free(recv_buf);
@@ -465,7 +465,7 @@ void triangulate() {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
 				// shares endpoints with min_line
-				if (share_endpoint(min_line, ln_my_lines[j]) ||
+				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
