@@ -316,7 +316,7 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-/*
+
 	long l_base;
 	int remainder;
 	int *i_send_count;
@@ -361,7 +361,6 @@ printf("Hello from proc %d d_my_lines[4]: %lf\n", my_rank, d_my_lines[4]);
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
-	*/
 }
 
 
