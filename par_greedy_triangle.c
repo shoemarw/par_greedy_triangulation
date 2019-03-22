@@ -24,14 +24,14 @@
 // image created will only be useful for a point set of less than 1000.
 //#define IMAGE
 
-#define TAG = 1;		// Used for MPI_sends/revc
-#define ROOT = 0;		// Used for MPI calls and if statements
+#define TAG  1;		// Used for MPI_sends/revc
+#define ROOT 0;		// Used for MPI calls and if statements
 
-#define X0 = 0;		// first point's x 			| These are used when lines are stored in arrays of 
-#define Y0 = 1;		// first point's y 			| doubles rather than structs.
-#define X1 = 2;		// second point's x 		| They are used as displacements, for example 
-#define Y1 = 3;		// second point's y 		| line_array[i + Y0] would be the i-th line's 
-#define LEN = 4;	// distance the points 		| y-coordinate for first point in the line.
+#define X0  0;	// first point's x 			| These are used when lines are stored in arrays of 
+#define Y0  1;	// first point's y 			| doubles rather than structs.
+#define X1  2;	// second point's x 		| They are used as displacements, for example 
+#define Y1  3;	// second point's y 		| line_array[i + Y0] would be the i-th line's 
+#define LEN 4;	// distance the points 		| y-coordinate for first point in the line.
 
 int nprocs;         	// number of processes
 int my_rank;        	// rank of a particular process
