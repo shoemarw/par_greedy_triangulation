@@ -280,7 +280,7 @@ void gen_lines() {
 
 void distrib_lines() {
 	int displs[nprocs];				// Used by root only
-	double* d_recv_lines = 0; 		// Used by root only
+	double* d_recv_lines;	 		// Used by root only
 	int* i_recv_counts;				// Used by root only
 
 	if (my_rank == 0) {
