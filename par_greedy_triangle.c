@@ -570,8 +570,8 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	
 	START_TIMER(sort)
-	// qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
-	// 	                sizeof(line_t), compare);
+	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), 
+		                sizeof(line_t), compare);
 	STOP_TIMER(sort)
 	
 	  //                                   //
@@ -579,7 +579,7 @@ int main(int argc, char *argv[]) {
     //	                                 //
 	
 	START_TIMER(triangulate)
-	// triangulate();
+	triangulate();
 	STOP_TIMER(triangulate)
 	
 	   //                                        //
