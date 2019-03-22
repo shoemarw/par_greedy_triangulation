@@ -216,10 +216,9 @@ printf("%lf\n", pt_my_points[0].y);
 printf("%lf\n", pt_my_points[1].x);			
 printf("%lf\n", pt_my_points[1].y);
 
-printf("I am sending &ld bytes\n", );
 
 			// send the points
-			MPI_Send(pt_my_points, my_point_count*sizeof(point_t, MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
 			printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[4]);
 
