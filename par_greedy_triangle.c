@@ -317,16 +317,16 @@ void distrib_lines() {
 	long l_recv_doubs;
 	int *i_displs;
 
-	if(my_rank==ROOT) {
-		my_line_count = 0;
-		for (int i = 0; i < nprocs; i++) {
-			my_line_count += d_recv_lines[i];
-		}
+	// if(my_rank==ROOT) {
+	// 	my_line_count = 0;
+	// 	for (int i = 0; i < nprocs; i++) {
+	// 		my_line_count += d_recv_lines[i];
+	// 	}
 
 
-	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
-	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
-	 	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
+	//  	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
+	//  	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
+	//  	l_send_count = (long*) allocate(sizeof(long) * nprocs); // Amount of lines (5 doubles) to send to each process 
 
 	//  	// Calculate l_send_count
 	//  	for (int i = 0; i < nprocs; i++) {
