@@ -640,7 +640,7 @@ int main(int argc, char *argv[]) {
 	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
-
+printf("Proc %d\n", my_rank);
 for (int i = 0; i < my_line_count; ++i) {
 	print_line(&ln_my_lines[i]);
 }
