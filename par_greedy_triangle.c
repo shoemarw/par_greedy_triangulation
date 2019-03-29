@@ -402,7 +402,7 @@ void triangulate() {
 	tlines = 0; // Set the number of lines currently in the triangulation to 0.
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
-printf("Proc %d starting lines:\n", );
+printf("Proc %d starting lines:\n", my_rank);
 for (int i = 0; i < my_line_count; ++i)
 {
 print_line(&ln_my_lines[i]);
