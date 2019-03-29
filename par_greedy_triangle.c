@@ -497,7 +497,7 @@ void triangulate() {
 		// distance of -1.
 
 		} // end if (my_unknown > 0)
-/*
+
 		else {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
@@ -516,7 +516,7 @@ void triangulate() {
 			}
 			free(recv_buf); 
 		} // end else
-*/
+
 	} // end while
 }
 
