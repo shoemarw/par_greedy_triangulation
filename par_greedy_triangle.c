@@ -550,8 +550,8 @@ print_line(&ln_my_lines[j]);
 				p->y = recv_buf[min_line_index*5 + Y0];
 				q->x = recv_buf[min_line_index*5 + X1];
 				q->y = recv_buf[min_line_index*5 + Y1];
-				// min_line->p = p;
-				// min_line->q = q;
+				min_line->p = p;
+				min_line->q = q;
 				// min_line->len = recv_buf[min_line_index*5 + LEN];
 				// // free(p);																		// FREE THESE
 				// // free(q);																		// FREE THESE
