@@ -391,7 +391,9 @@ void triangulate() {
 	// The triangulation will be stored as an array of lines. The triangulation
 	// is built on process zero iteratively as successive global minimal lines
 	// are found. Allocate enough space to potentially hold every line.
-	triang = (line_t*) allocate(my_line_count*sizeof(line_t));
+	if(my_rank == ROOT) {
+		triang = (line_t*) allocate(my_line_count*nproc*sizeof(line_t));
+	}
 
 	// my_unknown is each local processes' number of lines whose status is 
 	// unknown. So it counts the number of lines that may or may not belong
@@ -472,7 +474,7 @@ void triangulate() {
 			}
 
 			// Have process zero add min_line to the triangulation.
-			if (my_rank == 0) {
+			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
 			}
@@ -627,10 +629,11 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
-	if (my_rank == ROOT)
+	if (my_rank == ROOT) {
 		free(points);
+		free(triang);
+	}
 
-	free(triang);
 	MPI_Finalize();
 	return (EXIT_SUCCESS);
 }
