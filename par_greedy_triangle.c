@@ -421,8 +421,6 @@ void triangulate() {
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-printf("Line 424\n");
-/*
 			// Find the global minimal line.
 			int min_line_index = 0; // Will hold index of the global min line.
 			for (int i = 0; i < nprocs; i++) {
@@ -435,6 +433,7 @@ printf("Line 424\n");
 					min_line_index = i;
 				}
 			}
+/*
 			// Will hold the minimal line.
 			line_t* min_line;
 			// Lets us know whether or not this processes min line was
@@ -507,7 +506,6 @@ printf("Line 424\n");
 			double* recv_buf = (double*) allocate(5*nprocs);
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-printf("Line 509\n");
 			// Check if all of the lines have distance of -1. If so then we are
 			// done!
 			int count = 0;
