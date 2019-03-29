@@ -417,7 +417,7 @@ void triangulate() {
 			my_min_line[3] = q.y;
 			my_min_line[4] = ln_my_lines[0].len;
 			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);                    ///// Should be 5*nprocs*sizeof(double) ////
+			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
