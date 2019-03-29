@@ -677,7 +677,7 @@ int main(int argc, char *argv[]) {
 		FILE* write_file = open_file("triangle_result.txt", "w");
 		
 		// The first line of the file specifies the number of lines in the file.
-		fprintf(write_file, "%ld\n", tlines-1);
+		fprintf(write_file, "%ld\n", (tlines-1));
 		
 		// Write triangulation to file.
 		for (int i = 0; i < tlines-1; i++)
