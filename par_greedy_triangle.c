@@ -170,7 +170,6 @@ void gen_lines() {
 
 	// Calculate how many lines that will be created
 	my_line_count = ((my_point_count)*(my_point_count-1))/2;
-printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_count, my_point_count);
 	// Allocate room for the lines that will be created
 	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
 
@@ -418,7 +417,6 @@ void triangulate() {
 			my_min_line[X1] = q.x;
 			my_min_line[Y1] = q.y;
 			my_min_line[LEN] = ln_my_lines[0].len;
-printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
