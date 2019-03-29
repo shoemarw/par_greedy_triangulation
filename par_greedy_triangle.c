@@ -510,12 +510,8 @@ print_line(&ln_my_lines[j]);
 			}
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.
-			if (my_rank == min_line_index) {
-				copy_array(temp, &ln_my_lines[1], temp_size);
-			}
-			else {
-				copy_array(temp, ln_my_lines, temp_size);
-			}
+			copy_array(temp, ln_my_lines, temp_size);
+
 printf("Proc %d Lines remaining\n", my_rank);
 for (int i = 0; i < temp_size; ++i)
 {
