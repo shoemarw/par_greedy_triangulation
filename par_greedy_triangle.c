@@ -314,8 +314,9 @@ printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5
 			my_line_count += new_line_count;
 
 for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and line count is %ld\n", my_rank, my_line_count);
 printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
 }
 
 		} // end of receiver branch of if
