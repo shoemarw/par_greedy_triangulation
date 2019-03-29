@@ -218,11 +218,6 @@ printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_cou
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
-for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and line count is %ld\n", my_rank, my_line_count);
-printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
-}
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
@@ -313,12 +308,6 @@ printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5
 			// update my_line_count	
 			my_line_count += new_line_count;
 
-for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and line count is %ld\n", my_rank, my_line_count);
-printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
-}
-
 		} // end of receiver branch of if
 	}// end for
 }// end of gen_lines
@@ -351,29 +340,11 @@ void distrib_lines() {
         }
 		d_recv_lines = (double*) allocate(total_line_num* sizeof(double));
 
-// printf("Proc0 is expecting %d doubles from proc0\n", i_recv_counts[0]);
-// printf("Proc0 is expecting %d doubles from proc1\n", i_recv_counts[1]);
-// printf("Proc0 is making room for %ld doubles\n", total_line_num);
 
 	}
-// printf("I am prco %d and I am sending %ld doubles\n", my_rank, my_line_count*5);
-// printf("I am prco %d and I am sending:\n", my_rank);
-// printf("Line %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5],d_my_lines[1+5],d_my_lines[2+5],d_my_lines[3+5],d_my_lines[4+5]);
 
 	MPI_Gatherv(d_my_lines, (my_line_count*5), MPI_DOUBLE, d_recv_lines, i_recv_counts, 
 			    displs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
-
-// if (my_rank==ROOT){
-// 	for (int i = 0; i < total_line_num; i+=5)
-// 	{
-// 		printf("Line: %d\n", (i/5)+1);
-// 		for (int j = 0; j < 5; ++j)
-// 		{
-// 			printf("%lf  ", d_recv_lines[i+j]);
-// 		}
-// 		printf("\n");
-// 	}
-// }
 
 
 
@@ -420,6 +391,11 @@ void distrib_lines() {
 	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
+
+for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and this is line %d\n", my_rank, i);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
+}
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 
