@@ -502,7 +502,7 @@ void triangulate() {
 		// distance of -1.
 		} // end if (my_unknown > 0)
 		else {
-
+			printf("Poop on line 505\n");
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
