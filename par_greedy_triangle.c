@@ -217,8 +217,10 @@ void gen_lines() {
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
-//printf("%lf %lf %lf %lf %lf\n", d_my_lines[0], d_my_lines[1], d_my_lines[2], d_my_lines[3], d_my_lines[4]);
-
+for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and this is line %d\n", my_rank, i);
+printf("(%lf,%lf-%ld,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
+}
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
@@ -288,6 +290,10 @@ void gen_lines() {
 			free(d_new_lines);
 			d_my_lines = temp_doubles;
 
+for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and this is line %d\n", my_rank, i);
+printf("(%lf,%lf-%ld,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
+}
 // //print the stuff in d_my_lines
 // for (int i = 0; i < (my_line_count+new_line_count); i++) { 
 // //printf("Line p00p %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5*i],d_my_lines[1+5*i],
@@ -594,11 +600,6 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	gen_lines();
-
-for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and this is line %d\n", my_rank, i);
-print_line(&ln_my_lines[i]);
-}
 
 	distrib_lines();
 	MPI_Barrier(MPI_COMM_WORLD);
