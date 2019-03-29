@@ -168,8 +168,9 @@ void gen_lines() {
 	 // Generate lines //
 	// 				  //
 
-	// Calculate how many lines that will be created	
+	// Calculate how many lines that will be created
 	my_line_count = ((my_point_count)*(my_point_count-1))/2;
+printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_count, my_point_count);
 	// Allocate room for the lines that will be created
 	d_my_lines = (double*) allocate(my_line_count * sizeof(double) * 5);
 
