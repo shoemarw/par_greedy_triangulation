@@ -219,7 +219,7 @@ void gen_lines() {
 
 for (int i = 0; i < my_line_count; i++) {
 printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%ld,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
 }
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
@@ -292,7 +292,7 @@ printf("(%lf,%lf-%ld,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d
 
 for (int i = 0; i < my_line_count; i++) {
 printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%ld,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
 }
 // //print the stuff in d_my_lines
 // for (int i = 0; i < (my_line_count+new_line_count); i++) { 
