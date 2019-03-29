@@ -489,7 +489,7 @@ void triangulate() {
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.		
 			copy_array(temp, ln_my_lines, temp_size);
-			free(temp);
+//			free(temp);
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
 		// a special value to the other processes (which they will ignore). The 
