@@ -522,8 +522,7 @@ print_line(&ln_my_lines[j]);
 
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
-			if (my_rank == ROOT)
-			{		
+			if (my_rank == ROOT) {		
 				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
 					// Compare the length of the current smallest line to the
@@ -558,7 +557,7 @@ print_line(&ln_my_lines[j]);
 
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
-				// tlines++;
+				tlines++;
 			}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
