@@ -557,7 +557,7 @@ print_line(&ln_my_lines[j]);
 				// free(q);																		// FREE THESE
 
 				// // Add line to triagulation
-				// triang[tlines] = *min_line;
+				triang[tlines] = *min_line;
 				// tlines++;
 			}
 
