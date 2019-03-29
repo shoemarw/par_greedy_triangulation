@@ -263,12 +263,6 @@ printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_cou
 					d_new_lines[new_line_index + X1] = pt_new_points[k].x;
 					d_new_lines[new_line_index + Y1] = pt_new_points[k].y;
 					d_new_lines[new_line_index + LEN] = length;
-// printf("Proc0 'new' lines: ");
-// printf("%lf  ", d_new_lines[new_line_index + X0]);
-// printf("%lf  ", d_new_lines[new_line_index + Y0]);
-// printf("%lf  ", d_new_lines[new_line_index + X1]);
-// printf("%lf  ", d_new_lines[new_line_index + Y1]);
-// printf("%lf \n", d_new_lines[new_line_index + LEN]);
 
 					new_line_index +=5;
 				}
@@ -286,12 +280,6 @@ printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_cou
 			free(d_my_lines);
 			free(d_new_lines);
 			d_my_lines = temp_doubles;
-
-// //print the stuff in d_my_lines
-// for (int i = 0; i < (my_line_count+new_line_count); i++) { 
-// //printf("Line p00p %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5*i],d_my_lines[1+5*i],
-// d_my_lines[2+5*i],d_my_lines[3+5*i],d_my_lines[4+5*i]);
-// }
 
 			// merge pt_my_points with pt_new_points
 			point_t* temp_points = (point_t*) allocate((my_point_count+point_recv_count)*sizeof(point_t));
@@ -392,20 +380,13 @@ void distrib_lines() {
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
-for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
-}
-
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 
-// if(my_rank==ROOT) {
-// 	printf("after double_array_to_struct\n");
-// 	for (int i = 0; i < my_line_count; i++) {
-// 		printf("I am proc %d and this is line %d\n", my_rank, i);
-// 		print_line(&ln_my_lines[i]);
-// 	}
-// }
+for (int i = 0; i < my_line_count; ++i)
+{
+	printf("Proc %d\n", my_rank);
+	print_line(&ln_my_lines[i]);
+}
 }
 
 
