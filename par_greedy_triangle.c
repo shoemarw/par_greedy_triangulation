@@ -552,9 +552,9 @@ print_line(&ln_my_lines[j]);
 				q->y = recv_buf[min_line_index*5 + Y1];
 				min_line->p = p;
 				min_line->q = q;
-				// min_line->len = recv_buf[min_line_index*5 + LEN];
-				// // free(p);																		// FREE THESE
-				// // free(q);																		// FREE THESE
+				min_line->len = recv_buf[min_line_index*5 + LEN];
+				// free(p);																		// FREE THESE
+				// free(q);																		// FREE THESE
 
 				// // Add line to triagulation
 				// triang[tlines] = *min_line;
