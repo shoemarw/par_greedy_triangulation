@@ -381,12 +381,6 @@ void distrib_lines() {
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
-
-for (int i = 0; i < my_line_count; ++i)
-{
-	printf("Proc %d\n", my_rank);
-	print_line(&ln_my_lines[i]);
-}
 }
 
 
@@ -562,13 +556,11 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
-// if(my_rank==ROOT) {
-// 	printf("Before sort\n");
-// 	for (int i = 0; i < my_line_count; i++) {
-// 		printf("I am proc %d and this is line %d\n", my_rank, i);
-// 		print_line(&ln_my_lines[i]);
-// 	}
-// }
+for (int i = 0; i < my_line_count; ++i)
+{
+	printf("Proc %d\n", my_rank);
+	print_line(&ln_my_lines[i]);
+}
 	  //                                      //
 	 //  Sort the lines from small to large  //
 	//                                      //
