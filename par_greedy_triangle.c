@@ -116,7 +116,7 @@ void read_points(char *argv[]) {
 
 
 void distrib_points() {
-	int i_send_count[nprocs];	// an array of how bytes each process will receive; significant only to root
+	int i_send_count_bytes[nprocs];	// an array of how bytes each process will receive; significant only to root
 	int i_displs_p[nprocs];			// the displacements for the scatterv; significant only to root
 
 	if (my_rank==ROOT) {
@@ -129,9 +129,9 @@ void distrib_points() {
 		// fill the array with the base number, then if there are remainders left add one to the 
 		// count of how many points the process will receive.
 		for (int i = 0; i < nprocs; i++) {
-			i_send_count[i] = base_point_count * sizeof(point_t);
+			i_send_count_bytes[i] = base_point_count * sizeof(point_t);
 			if (remainder > 0) {
-				i_send_count[i] += 1 * sizeof(point_t);
+				i_send_count_bytes[i] += 1 * sizeof(point_t);
 				remainder--;
 			} // end if
 		} // end for
@@ -139,12 +139,12 @@ void distrib_points() {
 		// build displacement array
 		i_displs_p[0] = 0;
 		for (int i = 1; i < nprocs; i++) {
-			i_displs_p[i] = i_displs_p[i-1] + i_send_count[i-1];
+			i_displs_p[i] = i_displs_p[i-1] + i_send_count_bytes[i-1];
 		}
 	}
 	// send each process how many points it should expect
 	long bytes_to_expect;
-	MPI_Scatter(i_send_count, 1, MPI_INT, &bytes_to_expect, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
+	MPI_Scatter(i_send_count_bytes, 1, MPI_INT, &bytes_to_expect, 1, MPI_INT, ROOT, MPI_COMM_WORLD);
 
 	// calculate points a process is responsible for
 	my_point_count = bytes_to_expect/sizeof(point_t);
@@ -153,8 +153,12 @@ void distrib_points() {
 	pt_my_points = (point_t*) allocate((int)(bytes_to_expect));
 
 	// send each process its points
-	MPI_Scatterv(points, i_send_count, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,
+	MPI_Scatterv(points, i_send_count_bytes, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,
              MPI_BYTE, ROOT, MPI_COMM_WORLD);
+for(int i = 0; i < ; i++my_point_count){
+printf("Proc %d (%lf,%lf)\n", my_rank, pt_my_points[i].x, pt_my_points[i].y);
+}
+
 }
 
 
