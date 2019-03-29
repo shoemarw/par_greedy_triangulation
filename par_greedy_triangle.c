@@ -487,7 +487,7 @@ print_line(min_line);
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
 			int end = my_unknown;
-			int temp_size = 0;
+			int temp_size = 1;
 			for (int j = start; j < end; j++) {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
