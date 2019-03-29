@@ -542,14 +542,14 @@ print_line(&ln_my_lines[j]);
 				// Will hold the minimal line.
 				line_t* min_line;
 		
-				// // Get the minimal line
-				// min_line = (line_t*) allocate(sizeof(line_t));
-				// point_t *p = (point_t*) allocate(sizeof(point_t));
-				// point_t *q = (point_t*) allocate(sizeof(point_t));
-				// p->x = recv_buf[min_line_index*5 + X0];
-				// p->y = recv_buf[min_line_index*5 + Y0];
-				// q->x = recv_buf[min_line_index*5 + X1];
-				// q->y = recv_buf[min_line_index*5 + Y1];
+				// Get the minimal line
+				min_line = (line_t*) allocate(sizeof(line_t));
+				point_t *p = (point_t*) allocate(sizeof(point_t));
+				point_t *q = (point_t*) allocate(sizeof(point_t));
+				p->x = recv_buf[min_line_index*5 + X0];
+				p->y = recv_buf[min_line_index*5 + Y0];
+				q->x = recv_buf[min_line_index*5 + X1];
+				q->y = recv_buf[min_line_index*5 + Y1];
 				// min_line->p = p;
 				// min_line->q = q;
 				// min_line->len = recv_buf[min_line_index*5 + LEN];
