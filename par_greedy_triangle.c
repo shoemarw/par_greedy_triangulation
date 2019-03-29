@@ -462,7 +462,7 @@ void triangulate() {
 */
 				start = 0; // This processes' min was not used.
 			}
-/*
+
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == 0) {
 				triang[tlines] = *min_line;
@@ -495,7 +495,7 @@ void triangulate() {
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
-*/
+
 		} // end if (my_unknown > 0)
 /*
 		else {
