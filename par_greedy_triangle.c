@@ -650,7 +650,7 @@ for (int i = 0; i < my_line_count; ++i) {
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
-	triangulate();
+	// triangulate();
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
