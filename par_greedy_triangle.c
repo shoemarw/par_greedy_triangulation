@@ -557,7 +557,7 @@ print_line(&ln_my_lines[j]);
 
 				// // Add line to triagulation
 				// triang[tlines] = *min_line;
-				// tlines = tlines + 1;
+				tlines = tlines + 1;
 				printf("tline %ld \n", tlines);
 			}
 
