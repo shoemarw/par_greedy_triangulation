@@ -392,7 +392,7 @@ void triangulate() {
 	// is built on process zero iteratively as successive global minimal lines
 	// are found. Allocate enough space to potentially hold every line.
 	if(my_rank == ROOT) {
-		triang = (line_t*) allocate(my_line_count*nproc*sizeof(line_t));
+		triang = (line_t*) allocate(my_line_count*nprocs*sizeof(line_t));
 	}
 
 	// my_unknown is each local processes' number of lines whose status is 
