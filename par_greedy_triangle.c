@@ -447,15 +447,11 @@ printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0],
 
 			// Will hold the minimal line.
 			line_t* min_line;
-			// Lets us know whether or not this processes min line was
-			// included in the triangulation or not.
-			int start;
 			// See if this process has the global min line, if so we must
 			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
 				my_unknown--;
 				min_line = &ln_my_lines[0];
-				start = 1; // This processes' min was used.
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
@@ -475,8 +471,6 @@ printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0],
 				min_line->len = recv_buf[min_line_index*5 + LEN];
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
-
-				start = 0; // This processes' min was not used.
 			}
 
 			// Have process zero add min_line to the triangulation.
@@ -492,8 +486,10 @@ print_line(min_line);
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
 			int end = my_unknown;
+			int start = 0;
 			if (my_rank == min_line_index) {
 				end = my_unknown+1;
+				start = 1;
 			}
 			int temp_size = 0;
 			for (int j = start; j < end; j++) {
