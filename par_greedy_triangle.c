@@ -468,7 +468,7 @@ void triangulate() {
 				triang[tlines] = *min_line;
 			}
 			// Free the receive buffer
-			free(recv_buf);
+//			free(recv_buf);
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
