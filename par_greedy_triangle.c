@@ -433,7 +433,6 @@ void triangulate() {
 					min_line_index = i;
 				}
 			}
-/*
 			// Will hold the minimal line.
 			line_t* min_line;
 			// Lets us know whether or not this processes min line was
@@ -448,6 +447,7 @@ void triangulate() {
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
+/*
 			else {
 				// Get the minimal line
 				min_line = (line_t*) allocate(sizeof(line_t));
