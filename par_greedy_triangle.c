@@ -504,12 +504,12 @@ print_line(&ln_my_lines[j]);
 			}
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.
-			if (my_rank == min_line_index) {
-				copy_array(temp, &ln_my_lines[1], temp_size);
-			}
-			else {
-				copy_array(temp, ln_my_lines, temp_size);
-			}
+			// if (my_rank == min_line_index) {
+			// 	copy_array(temp, &ln_my_lines[1], temp_size);
+			// }
+			// else {
+			// 	copy_array(temp, ln_my_lines, temp_size);
+			// }
 printf("Lines remaining\n");
 for (int i = 0; i < temp_size; ++i)
 {
@@ -689,8 +689,6 @@ int main(int argc, char *argv[]) {
 		fclose(write_file);
 	}
 	
-printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
 	// Clean up and exit
 	if (my_rank == ROOT) {
 		// free(points);
