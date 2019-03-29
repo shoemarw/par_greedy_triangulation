@@ -505,6 +505,7 @@ print_line(&ln_my_lines[j]);
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.		
 			copy_array(temp, ln_my_lines, temp_size);
+																			// print out my lines here to check that thye are not being dropped
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
@@ -517,6 +518,50 @@ print_line(&ln_my_lines[j]);
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			// If ROOT, then make the minimal line into a line struct and 
+			// store it in the triagulation.
+			if(my_rank = ROOT)
+			{		
+				int min_line_index = 0; // Will hold index of the global min line.
+				for (int i = 0; i < nprocs; i++) {
+					// Compare the length of the current smallest line to the
+					// i^th line's length. If the length is not positive ignore it
+					// because it was a special value sent from a process with no
+					// more lines of unknown status.
+					if ((recv_buf[i*5+LEN] > 0) && 
+						(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
+						min_line_index = i;
+					}
+					else if ((recv_buf[min_line_index+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
+						min_line_index = i;
+					}
+				}
+
+				// Will hold the minimal line.
+				line_t* min_line;
+		
+				// Get the minimal line
+				min_line = (line_t*) allocate(sizeof(line_t));
+				point_t *p = (point_t*) allocate(sizeof(point_t));
+				point_t *q = (point_t*) allocate(sizeof(point_t));
+				p->x = recv_buf[min_line_index*5 + X0];
+				p->y = recv_buf[min_line_index*5 + Y0];
+				q->x = recv_buf[min_line_index*5 + X1];
+				q->y = recv_buf[min_line_index*5 + Y1];
+				min_line->p = p;
+				min_line->q = q;
+				min_line->len = recv_buf[min_line_index*5 + LEN];
+				// free(p);																		// FREE THESE
+				// free(q);																		// FREE THESE
+
+				// Add line to triagulation
+				triang[tlines] = *min_line;
+				tlines++;
+			}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// Check if all of the lines have distance of -1. If so then we are
 			// done!
 			int count = 0;
