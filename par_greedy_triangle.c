@@ -508,7 +508,7 @@ print_line(&ln_my_lines[j]);
 printf("Lines remaining\n");
 for (int i = 0; i < temp_size; ++i)
 {
-print_line(ln_my_lines[i]);
+print_line(&ln_my_lines[i]);
 }
 																			// print out my lines here to check that thye are not being dropped
 			free(temp);
