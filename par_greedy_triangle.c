@@ -558,7 +558,7 @@ int main(int argc, char *argv[]) {
 
 for (int i = 0; i < my_line_count; ++i)
 {
-	printf("Proc %d\n", my_rank);
+	printf("Proc %d pre-sort\n", my_rank);
 	print_line(&ln_my_lines[i]);
 }
 	  //                                      //
@@ -566,11 +566,16 @@ for (int i = 0; i < my_line_count; ++i)
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	qsort(ln_my_lines, (sizeof(ln_my_lines)/sizeof(line_t)), sizeof(line_t), compare);
+	qsort(ln_my_lines, (my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 	
 
+for (int i = 0; i < my_line_count; ++i)
+{
+	printf("Proc %d post-sort\n", my_rank);
+	print_line(&ln_my_lines[i]);
+}
 
 	
 	  //                                   //
