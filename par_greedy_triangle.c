@@ -594,6 +594,12 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	gen_lines();
+
+for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and this is line %d\n", my_rank, i);
+print_line(&ln_my_lines[i]);
+}
+
 	distrib_lines();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
@@ -615,10 +621,7 @@ int main(int argc, char *argv[]) {
 	STOP_TIMER(sort)
 	
 
-for (int i = 0; i < my_line_count; i++) {
-	printf("Proc %d and this is line %d\n", my_rank, i);
-	print_line(&ln_my_lines[i]);
-}
+
 	
 	  //                                   //
      //  Greedily build the tringulation  //
