@@ -221,7 +221,7 @@ printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_cou
 for (int i = 0; i < my_line_count; i++) {
 printf("Proc %d and line count is %ld\n", my_rank, my_line_count);
 printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*5], d_my_lines[i*5+1], d_my_lines[i*5+2], d_my_lines[i*5+3]);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i*4], d_my_lines[i*4+1], d_my_lines[i*4+2], d_my_lines[i*4+3]);
 }
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
