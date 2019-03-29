@@ -292,10 +292,6 @@ printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d
 			free(d_new_lines);
 			d_my_lines = temp_doubles;
 
-for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and this is line %d\n", my_rank, i);
-printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
-}
 // //print the stuff in d_my_lines
 // for (int i = 0; i < (my_line_count+new_line_count); i++) { 
 // //printf("Line p00p %lf  %lf  %lf  %lf  %lf  \n", d_my_lines[0+5*i],d_my_lines[1+5*i],
@@ -317,8 +313,9 @@ printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d
 			// update my_line_count	
 			my_line_count += new_line_count;
 
-for(int i = 0; i < my_line_count; i++) {
-
+for (int i = 0; i < my_line_count; i++) {
+printf("Proc %d and this is line %d\n", my_rank, i);
+printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
 }
 
 		} // end of receiver branch of if
