@@ -449,7 +449,7 @@ void triangulate() {
 			// (While making sure to use the appropriate index!)
 			}
 
-/*
+
 			else {
 				// Get the minimal line
 				min_line = (line_t*) allocate(sizeof(line_t));
@@ -500,7 +500,6 @@ void triangulate() {
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
-*/
 		} // end if (my_unknown > 0)
 		else {
 
