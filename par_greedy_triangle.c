@@ -443,10 +443,10 @@ void triangulate() {
 			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
 				my_unknown--;
-			// 	min_line = &ln_my_lines[0];
-			// 	start = 1; // This processes' min was used.
-			// // Otherwise we must build the min_line from data in the recv_buf
-			// // (While making sure to use the appropriate index!)
+				min_line = &ln_my_lines[0];
+				start = 1; // This processes' min was used.
+			// Otherwise we must build the min_line from data in the recv_buf
+			// (While making sure to use the appropriate index!)
 			}
 
 /*
