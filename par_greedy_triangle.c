@@ -505,7 +505,7 @@ void triangulate() {
 		else {
 
 			// Prepare an array to receive each processe's minimal line.
-			double* recv_buf = (double*) allocate(5*nprocs);
+			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Check if all of the lines have distance of -1. If so then we are
