@@ -689,6 +689,8 @@ int main(int argc, char *argv[]) {
 		fclose(write_file);
 	}
 	
+printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
 	// Clean up and exit
 	if (my_rank == ROOT) {
 		// free(points);
