@@ -566,7 +566,7 @@ for (int i = 0; i < my_line_count; ++i)
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	qsort(ln_my_lines, (my_line_count, sizeof(line_t), compare);
+	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 	
