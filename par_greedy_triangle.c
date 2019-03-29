@@ -514,7 +514,7 @@ void triangulate() {
 			if (count == nprocs) {
 				finished = true;
 			}
-			free(recv_buf); 
+//			free(recv_buf); 
 		} // end else
 
 	} // end while
