@@ -474,6 +474,7 @@ void triangulate() {
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == 0) {
 				triang[tlines] = *min_line;
+				tlines++;
 			}
 			// Free the receive buffer
 			free(recv_buf);
@@ -614,7 +615,7 @@ int main(int argc, char *argv[]) {
 		// The first line of the file specifies the number of lines in the file.
 		fprintf(write_file, "%ld\n", tlines);
 		
-		// Write triangulation to file for turtle processing
+		// Write triangulation to file.
 		for (int i = 0; i < tlines; i++)
 		{
 		    point_t p = *(triang[i].p);
