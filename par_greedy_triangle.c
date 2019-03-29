@@ -614,11 +614,10 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 	
-if(my_rank==ROOT) {
-	for (int i = 0; i < my_line_count; i++) {
-		printf("I am proc %d and this is line %d\n", my_rank, i);
-		print_line(&ln_my_lines[i]);
-	}
+
+for (int i = 0; i < my_line_count; i++) {
+	printf("Proc %d and this is line %d\n", my_rank, i);
+	print_line(&ln_my_lines[i]);
 }
 	
 	  //                                   //
