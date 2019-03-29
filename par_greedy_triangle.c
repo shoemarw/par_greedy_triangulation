@@ -468,10 +468,8 @@ printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_lin
 				min_line->p = p;
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
-print_line(min_line);
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
-print_line(min_line);
 
 				start = 0; // This processes' min was not used.
 			}
@@ -572,7 +570,7 @@ print_line(&ln_my_lines[j]);
 			if (count == nprocs) {
 				finished = true;
 			}
-			free(recv_buf); 
+			// free(recv_buf); 
 
 		} // end else
 
@@ -679,8 +677,8 @@ int main(int argc, char *argv[]) {
 	
 	// Clean up and exit
 	if (my_rank == ROOT) {
-		free(points);
-		free(triang);
+		// free(points);
+		// free(triang);
 	}
 
 	MPI_Finalize();
