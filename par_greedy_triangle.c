@@ -37,7 +37,7 @@
 line_t* triang; // Will store the triangulation. Should only be used by proc 0.
 long tlines;    // Will keep track of how many lines are in the triangulation at
                 // any given time.
-bool finished;  // Will be true when the triangulation is complete.
+bool finished = false;  // Will be true when the triangulation is complete.
 double IMPOSSIBLE_LINE[5] = {0, 0, 0, 0, -1}; // Processes send this during 
 
 
@@ -502,7 +502,7 @@ void triangulate() {
 		// distance of -1.
 		} // end if (my_unknown > 0)
 		else {
-			printf("Poop on line 505\n");
+printf("Poop on line 505\n");
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
