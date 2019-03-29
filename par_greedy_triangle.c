@@ -419,6 +419,7 @@ void triangulate() {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
+/*
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Find the global minimal line.
@@ -457,10 +458,10 @@ void triangulate() {
 				q->y = recv_buf[min_line_index*4 + 3];
 				min_line->p = p;
 				min_line->q = q;
-/*
+
 				free(p);
 				free(q);
-*/
+
 				start = 0; // This processes' min was not used.
 			}
 
@@ -469,7 +470,7 @@ void triangulate() {
 				triang[tlines] = *min_line;
 			}
 			// Free the receive buffer
-//			free(recv_buf);
+			free(recv_buf);
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
@@ -490,16 +491,16 @@ void triangulate() {
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.		
 			copy_array(temp, ln_my_lines, temp_size);
-//			free(temp);
+			free(temp);
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
-
+*/
 		} // end if (my_unknown > 0)
-
 		else {
+/*
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
@@ -515,7 +516,8 @@ void triangulate() {
 			if (count == nprocs) {
 				finished = true;
 			}
-//			free(recv_buf); 
+			free(recv_buf); 
+*/
 		} // end else
 
 	} // end while
