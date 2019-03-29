@@ -467,7 +467,7 @@ printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_lin
 				q->y = recv_buf[min_line_index*5 + Y1];
 				min_line->p = p;
 				min_line->q = q;
-				min_line.len = recv_buf[min_line_index*5 + LEN];
+				min_line->len = recv_buf[min_line_index*5 + LEN];
 print_line(min_line);
 				free(p);
 				free(q);
