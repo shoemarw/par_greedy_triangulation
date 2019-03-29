@@ -498,7 +498,7 @@ print_line(min_line);
 					temp_size++;
 				} else {
 printf("Proc %d is trwoing out: ", my_rank);
-print_line(ln_my_lines[j]);
+print_line(&ln_my_lines[j]);
 					my_unknown--;
 				}	
 			}
