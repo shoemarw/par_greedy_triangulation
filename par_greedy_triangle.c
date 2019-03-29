@@ -415,6 +415,7 @@ void triangulate() {
 			my_min_line[1] = p.y;
 			my_min_line[2] = q.x;
 			my_min_line[3] = q.y;
+			my_min_line[4] = ln_my_lines[0].len;
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs);                    ///// Should be 5*nprocs*sizeof(double) ////
 			// Make sure each process has an array of each processes' min line.
