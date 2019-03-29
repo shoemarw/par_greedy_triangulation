@@ -627,10 +627,8 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	gen_lines();
-printf("Finished gen_lines()\n");
 
 	distrib_lines();
-printf("Finished distrib_lines()\n");
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
@@ -640,11 +638,12 @@ printf("Finished distrib_lines()\n");
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
 	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
-printf("Finished qsort()\n");
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 
-	
+for (int i = 0; i < my_line_count; ++i) {
+	print_line(&ln_my_lines[i])
+}
 	  //                                   //
      //  Greedily build the tringulation  //
     //	                                 //
