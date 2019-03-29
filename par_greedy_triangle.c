@@ -402,6 +402,12 @@ void triangulate() {
 	tlines = 0; // Set the number of lines currently in the triangulation to 0.
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
+printf("Proc %d starting lines:\n", );
+for (int i = 0; i < my_line_count; ++i)
+{
+print_line(&ln_my_lines[i]);
+}
+
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
@@ -417,6 +423,7 @@ void triangulate() {
 			my_min_line[X1] = q.x;
 			my_min_line[Y1] = q.y;
 			my_min_line[LEN] = ln_my_lines[0].len;
+printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
