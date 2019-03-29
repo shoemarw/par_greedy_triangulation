@@ -491,11 +491,9 @@ print_line(min_line);
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
+			int end = my_unknown;
 			if (my_rank == min_line_index) {
-				int end = my_unknown+1;
-			}
-			else {
-				int end = my_unknown;
+				end = my_unknown+1;
 			}
 			int temp_size = 0;
 			for (int j = start; j < end; j++) {
