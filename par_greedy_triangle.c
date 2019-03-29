@@ -155,7 +155,7 @@ void distrib_points() {
 	// send each process its points
 	MPI_Scatterv(points, i_send_count_bytes, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,
              MPI_BYTE, ROOT, MPI_COMM_WORLD);
-for(int i = 0; i < ; i++my_point_count){
+for(int i = 0; i < my_point_count; i++){
 printf("Proc %d (%lf,%lf)\n", my_rank, pt_my_points[i].x, pt_my_points[i].y);
 }
 
