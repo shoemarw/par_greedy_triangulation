@@ -219,7 +219,7 @@ printf("Proc %d, my_line_count %ld, my_point_count %ld \n", my_rank, my_line_cou
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
 for (int i = 0; i < my_line_count; i++) {
-printf("Proc %d and line count is %d\n", my_rank, my_line_count);
+printf("Proc %d and line count is %ld\n", my_rank, my_line_count);
 printf("Proc %d and this is line %d\n", my_rank, i);
 printf("(%lf,%lf-%lf,%lf)\n", d_my_lines[i], d_my_lines[i+1], d_my_lines[i+2], d_my_lines[i+3]);
 }
