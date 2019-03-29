@@ -156,7 +156,7 @@ void distrib_points() {
 	MPI_Scatterv(points, i_send_count_bytes, i_displs_p, MPI_BYTE, pt_my_points, bytes_to_expect,
              MPI_BYTE, ROOT, MPI_COMM_WORLD);
 for(int i = 0; i < my_point_count; i++){
-printf("Proc %d (%lf,%lf)\n", my_rank, pt_my_points[i].x, pt_my_points[i].y);
+// printf("Proc %d (%lf,%lf)\n", my_rank, pt_my_points[i].x, pt_my_points[i].y);
 }
 
 }
@@ -402,11 +402,11 @@ void triangulate() {
 	tlines = 0; // Set the number of lines currently in the triangulation to 0.
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
-printf("Proc %d starting lines:\n", my_rank);
-for (int i = 0; i < my_line_count; ++i)
-{
-print_line(&ln_my_lines[i]);
-}
+// printf("Proc %d starting lines:\n", my_rank);
+// for (int i = 0; i < my_line_count; ++i)
+// {
+// print_line(&ln_my_lines[i]);
+// }
 
 	while (!finished) {
 		// If this process still has lines of unknown status it must
@@ -423,7 +423,7 @@ print_line(&ln_my_lines[i]);
 			my_min_line[X1] = q.x;
 			my_min_line[Y1] = q.y;
 			my_min_line[LEN] = ln_my_lines[0].len;
-printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
+// printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
@@ -475,8 +475,8 @@ printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0],
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
-printf("Proc %d Adding line: \n", my_rank);
-print_line(min_line);
+// printf("Proc %d Adding line: \n", my_rank);
+// print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
@@ -498,13 +498,13 @@ print_line(min_line);
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
-printf("Proc %d is keeping\n", my_rank);
-print_line(&ln_my_lines[j]);
+// printf("Proc %d is keeping\n", my_rank);
+// print_line(&ln_my_lines[j]);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
-printf("Proc %d is throwing out: ", my_rank);
-print_line(&ln_my_lines[j]);
+// printf("Proc %d is throwing out: ", my_rank);
+// print_line(&ln_my_lines[j]);
 					my_unknown--;
 				}	
 			}
@@ -512,11 +512,11 @@ print_line(&ln_my_lines[j]);
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
 
-printf("Proc %d Lines remaining\n", my_rank);
-for (int i = 0; i < temp_size; ++i)
-{
-print_line(&ln_my_lines[i]);
-}
+// printf("Proc %d Lines remaining\n", my_rank);
+// for (int i = 0; i < temp_size; ++i)
+// {
+// print_line(&ln_my_lines[i]);
+// }
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
@@ -567,8 +567,8 @@ print_line(&ln_my_lines[i]);
 				// free(q);																		// FREE THESE
 
 				// // Add line to triagulation
-printf("Adding line: \n");
-print_line(min_line);
+// printf("Adding line: \n");
+// print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
