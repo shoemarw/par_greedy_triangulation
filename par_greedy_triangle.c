@@ -476,6 +476,8 @@ printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_lin
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
+printf("Adding line: \n");
+print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
@@ -554,6 +556,8 @@ print_line(&ln_my_lines[j]);
 				// free(q);																		// FREE THESE
 
 				// // Add line to triagulation
+printf("Adding line: \n");
+print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
