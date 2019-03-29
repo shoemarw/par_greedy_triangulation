@@ -487,13 +487,15 @@ print_line(min_line);
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
 			int end = my_unknown;
-			int temp_size = 1;
+			int temp_size = 0;
 			for (int j = start; j < end; j++) {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
+printf("Proc %d is keeping\n", my_rank);
+print_line(&ln_my_lines[j]);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
