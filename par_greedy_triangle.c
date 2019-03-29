@@ -460,6 +460,7 @@ void triangulate() {
 				free(q);
 				start = 0; // This processes' min was not used.
 			}
+/*
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == 0) {
 				triang[tlines] = *min_line;
@@ -471,7 +472,6 @@ void triangulate() {
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
 			int end = my_unknown;
 			int temp_size = 0;
-/*
 			for (int j = start; j < end; j++) {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
