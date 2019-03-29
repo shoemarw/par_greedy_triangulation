@@ -453,7 +453,7 @@ printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0],
 			// See if this process has the global min line, if so we must
 			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
-				my_unknown--;
+				// my_unknown--;
 				min_line = &ln_my_lines[0];
 				start = 1; // This processes' min was used.
 			// Otherwise we must build the min_line from data in the recv_buf
