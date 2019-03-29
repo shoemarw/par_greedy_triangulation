@@ -411,11 +411,11 @@ void triangulate() {
 			point_t p = *(ln_my_lines[0].p);   /// Make sure there is a line in ln_my_lines
 			point_t q = *(ln_my_lines[0].q);
 			
-			my_min_line[0] = p.x;
-			my_min_line[1] = p.y;
-			my_min_line[2] = q.x;
-			my_min_line[3] = q.y;
-			my_min_line[4] = ln_my_lines[0].len;
+			my_min_line[X0] = p.x;
+			my_min_line[Y0] = p.y;
+			my_min_line[X1] = q.x;
+			my_min_line[Y1] = q.y;
+			my_min_line[LEN] = ln_my_lines[0].len;
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
@@ -428,11 +428,11 @@ void triangulate() {
 				// i^th line's length. If the length is not positive ignore it
 				// because it was a special value sent from a process with no
 				// more lines of unknown status.
-				if ((recv_buf[i*4] > 0) && 
-					(recv_buf[i*4] < recv_buf[min_line_index*4])) {
+				if ((recv_buf[i*5+LEN] > 0) && 
+					(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
 					min_line_index = i;
 				}
-				else if ((recv_buf[min_line_index*4] < 0) && (recv_buf[i*4]>0)) {
+				else if ((recv_buf[min_line_index+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
 					min_line_index = i;
 				}
 			}
@@ -458,10 +458,10 @@ void triangulate() {
 				min_line = (line_t*) allocate(sizeof(line_t));
 				point_t *p = (point_t*) allocate(sizeof(point_t));
 				point_t *q = (point_t*) allocate(sizeof(point_t));
-				p->x = recv_buf[min_line_index*4];
-				p->y = recv_buf[min_line_index*4 + 1];
-				q->x = recv_buf[min_line_index*4 + 2];
-				q->y = recv_buf[min_line_index*4 + 3];
+				p->x = recv_buf[min_line_index*5 + X0];
+				p->y = recv_buf[min_line_index*5 + Y0];
+				q->x = recv_buf[min_line_index*5 + X1];
+				q->y = recv_buf[min_line_index*5 + Y1];
 				min_line->p = p;
 				min_line->q = q;
 
@@ -505,7 +505,6 @@ void triangulate() {
 		// distance of -1.
 		} // end if (my_unknown > 0)
 		else {
-printf("Poop on line 505\n");
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
@@ -514,7 +513,7 @@ printf("Poop on line 505\n");
 			// done!
 			int count = 0;
 			for (int i = 0; i < nprocs; i++) {
-				if (recv_buf[i*4] == -1) {
+				if (recv_buf[i*5 + LEN] == -1) {
 					count++;
 				}
 			}
