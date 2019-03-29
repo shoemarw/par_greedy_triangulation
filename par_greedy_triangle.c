@@ -419,7 +419,6 @@ void triangulate() {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
-/*
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 			// Find the global minimal line.
@@ -434,6 +433,7 @@ void triangulate() {
 					min_line_index = i;
 				}
 			}
+/*
 			// Will hold the minimal line.
 			line_t* min_line;
 			// Lets us know whether or not this processes min line was
