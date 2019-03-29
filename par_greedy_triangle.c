@@ -680,7 +680,7 @@ int main(int argc, char *argv[]) {
 		fprintf(write_file, "%ld\n", tlines);
 		
 		// Write triangulation to file.
-		for (int i = 0; i < tlines; i++)
+		for (int i = 0; i < tlines-1; i++)
 		{
 		    point_t p = *(triang[i].p);
 		    point_t q = *(triang[i].q);
