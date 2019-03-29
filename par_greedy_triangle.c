@@ -505,6 +505,7 @@ print_line(&ln_my_lines[j]);
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.		
 			copy_array(temp, ln_my_lines, temp_size);
+			my_line_count = temp_size;
 																			// print out my lines here to check that thye are not being dropped
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
