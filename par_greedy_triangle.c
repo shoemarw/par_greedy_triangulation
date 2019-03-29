@@ -469,8 +469,8 @@ printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_lin
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
 print_line(min_line);
-				// free(p);
-				// free(q);
+				// free(p);																		// FREE THESE
+				// free(q);																		// FREE THESE
 print_line(min_line);
 
 				start = 0; // This processes' min was not used.
@@ -497,6 +497,8 @@ print_line(min_line);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
+printf("Proc %d is trwoing out: ", my_rank);
+print_line(ln_my_lines[j]);
 					my_unknown--;
 				}	
 			}
