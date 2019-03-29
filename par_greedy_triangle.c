@@ -471,7 +471,7 @@ void triangulate() {
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
 			int end = my_unknown;
 			int temp_size = 0;
-
+/*
 			for (int j = start; j < end; j++) {
 				// Run the intersection test and only include lines which dont
 				// conflict with the global min (min_line) It is ok if a line
@@ -493,6 +493,7 @@ void triangulate() {
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
+*/
 		} // end if (my_unknown > 0)
 /*
 		else {
