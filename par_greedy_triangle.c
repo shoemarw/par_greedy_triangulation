@@ -432,6 +432,9 @@ void triangulate() {
 					(recv_buf[i*4] < recv_buf[min_line_index*4])) {
 					min_line_index = i;
 				}
+				else if ((recv_buf[min_line_index*4] < 0) && (recv_buf[i*4]>0)) {
+					min_line_index = i;
+				}
 			}
 
 			// Will hold the minimal line.
