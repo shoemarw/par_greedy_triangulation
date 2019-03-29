@@ -476,7 +476,7 @@ printf("Proc %d, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_lin
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
-printf("Adding line: \n");
+printf("Proc %d Adding line: \n", my_rank);
 print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
@@ -510,7 +510,7 @@ print_line(&ln_my_lines[j]);
 			// else {
 			// 	copy_array(temp, ln_my_lines, temp_size);
 			// }
-printf("Lines remaining\n");
+printf("Proc %d Lines remaining\n", my_rank);
 for (int i = 0; i < temp_size; ++i)
 {
 print_line(&ln_my_lines[i]);
