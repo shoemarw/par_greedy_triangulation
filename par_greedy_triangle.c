@@ -229,7 +229,7 @@ void gen_lines() {
 			// receive the number of points about to get sent
 			MPI_Recv(&point_recv_count, 1, MPI_INT, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
-printf("I am proc %d and I will be getting %d points\n", my_rank, point_recv_count);
+// printf("I am proc %d and I will be getting %d points\n", my_rank, point_recv_count);
 			// calculate how many points that will be received 
 			long bytes_to_recv = point_recv_count*sizeof(point_t);
 
@@ -299,10 +299,10 @@ printf("I am proc %d and I will be getting %d points\n", my_rank, point_recv_cou
 
 		} // end of receiver branch of if
 	}// end for
-printf("Proc %d lines made:\n", my_rank);
-for (int i = 0; i < my_line_count; ++i){
-printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lines[i*5+X1], d_my_lines[i*5+Y1]);
-}
+// printf("Proc %d lines made:\n", my_rank);
+// for (int i = 0; i < my_line_count; ++i){
+// printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lines[i*5+X1], d_my_lines[i*5+Y1]);
+// }
 }// end of gen_lines
 
 
@@ -408,7 +408,7 @@ void triangulate() {
 	tlines = 0; // Set the number of lines currently in the triangulation to 0.
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
-printf("Proc %d starting lines:\n", my_rank);
+// printf("Proc %d starting lines:\n", my_rank);
 for (int i = 0; i < my_line_count; ++i)
 {
 print_line(&ln_my_lines[i]);
@@ -429,7 +429,7 @@ print_line(&ln_my_lines[i]);
 			my_min_line[X1] = q.x;
 			my_min_line[Y1] = q.y;
 			my_min_line[LEN] = ln_my_lines[0].len;
-printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
+// printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0], my_min_line[1], my_min_line[2], my_min_line[3] ,my_min_line[4]);
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
@@ -481,8 +481,8 @@ printf("Proc %d is sending, (%lf,%lf),(%lf,%lf) %lf\n", my_rank, my_min_line[0],
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
-printf("Proc %d Adding line: \n", my_rank);
-print_line(min_line);
+// printf("Proc %d Adding line: \n", my_rank);
+// print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
@@ -504,12 +504,12 @@ print_line(min_line);
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
-printf("Proc %d is keeping\n", my_rank);
+// printf("Proc %d is keeping\n", my_rank);
 print_line(&ln_my_lines[j]);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
-printf("Proc %d is throwing out: ", my_rank);
+// printf("Proc %d is throwing out: ", my_rank);
 print_line(&ln_my_lines[j]);
 					my_unknown--;
 				}	
@@ -518,7 +518,7 @@ print_line(&ln_my_lines[j]);
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
 
-printf("Proc %d Lines remaining\n", my_rank);
+// printf("Proc %d Lines remaining\n", my_rank);
 for (int i = 0; i < temp_size; ++i)
 {
 print_line(&ln_my_lines[i]);
@@ -646,10 +646,10 @@ int main(int argc, char *argv[]) {
 	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
-printf("Proc %d\n", my_rank);
-for (int i = 0; i < my_line_count; ++i) {
-	print_line(&ln_my_lines[i]);
-}
+// printf("Proc %d\n", my_rank);
+// for (int i = 0; i < my_line_count; ++i) {
+// print_line(&ln_my_lines[i]);
+// }
 	  //                                   //
      //  Greedily build the tringulation  //
     //	                                 //
