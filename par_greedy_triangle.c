@@ -505,12 +505,12 @@ print_line(&ln_my_lines[i]);
 				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
 // printf("Proc %d is keeping\n", my_rank);
-print_line(&ln_my_lines[j]);
+// print_line(&ln_my_lines[j]);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
 // printf("Proc %d is throwing out: ", my_rank);
-print_line(&ln_my_lines[j]);
+// print_line(&ln_my_lines[j]);
 					my_unknown--;
 				}	
 			}
@@ -519,10 +519,10 @@ print_line(&ln_my_lines[j]);
 			copy_array(temp, ln_my_lines, temp_size);
 
 // printf("Proc %d Lines remaining\n", my_rank);
-for (int i = 0; i < temp_size; ++i)
-{
-print_line(&ln_my_lines[i]);
-}
+// for (int i = 0; i < temp_size; ++i)
+// {
+// print_line(&ln_my_lines[i]);
+// }
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
