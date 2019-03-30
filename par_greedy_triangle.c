@@ -217,11 +217,6 @@ void gen_lines() {
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
-printf("Proc %d lines made:\n", my_rank);
-for (int i = 0; i < my_line_count; ++i){
-printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lines[i*5+X1], d_my_lines[i*5+Y1]);
-}
-
 			free(pt_my_points);
 			break;  // done, nothing left for this process to do in this function
 		}
