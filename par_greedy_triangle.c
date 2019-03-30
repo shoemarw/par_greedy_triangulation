@@ -409,10 +409,10 @@ void triangulate() {
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
 // printf("Proc %d starting lines:\n", my_rank);
-for (int i = 0; i < my_line_count; ++i)
-{
-print_line(&ln_my_lines[i]);
-}
+// for (int i = 0; i < my_line_count; ++i)
+// {
+// print_line(&ln_my_lines[i]);
+// }
 
 	while (!finished) {
 		// If this process still has lines of unknown status it must
