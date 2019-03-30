@@ -294,6 +294,9 @@ printf("I am proc %d and I will be getting %d points\n", my_rank, point_recv_cou
 			// update my_line_count	
 			my_line_count += new_line_count;
 
+			// update my point count
+			my_point_count += point_recv_count;
+
 		} // end of receiver branch of if
 	}// end for
 printf("Proc %d lines made:\n", my_rank);
