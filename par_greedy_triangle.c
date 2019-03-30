@@ -212,7 +212,7 @@ void gen_lines() {
 			int i_send_to = (my_rank-iteration_square+nprocs)%nprocs;
 
 			// send the number of points the receiver should expect
-			MPI_Send(&my_point_count, 1, MPI_LONG, i_send_to, TAG, MPI_COMM_WORLD);
+			MPI_Send(&my_point_count, 1, MPI_INT, i_send_to, TAG, MPI_COMM_WORLD);
 
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
@@ -221,16 +221,15 @@ void gen_lines() {
 			break;  // done, nothing left for this process to do in this function
 		}
 		// If process is a receiver this iteration:
-
 		else {
 
 			// calculate the process number of whom to receive from
 			int i_recv_from = my_rank+iteration_square; // The process number to receive from
 			
 			// receive the number of points about to get sent
-			MPI_Recv(&point_recv_count, 1, MPI_LONG, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
+			MPI_Recv(&point_recv_count, 1, MPI_INT, i_recv_from, MPI_ANY_TAG, MPI_COMM_WORLD, 
 					 MPI_STATUS_IGNORE);
-
+printf("I am proc %d and I will be getting %d points\n", my_rank, point_recv_count);
 			// calculate how many points that will be received 
 			long bytes_to_recv = point_recv_count*sizeof(point_t);
 
