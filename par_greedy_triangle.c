@@ -217,7 +217,7 @@ void gen_lines() {
 			// send the points
 			MPI_Send(pt_my_points, my_point_count*sizeof(point_t), MPI_BYTE, i_send_to, TAG, MPI_COMM_WORLD);
 
-printf("Proc %d\n", my_rank);
+printf("Proc %d lines made:\n", my_rank);
 for (int i = 0; i < my_line_count; ++i){
 printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lines[i*5+X1], d_my_lines[i*5+Y1]);
 }
@@ -302,7 +302,7 @@ printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lin
 
 		} // end of receiver branch of if
 	}// end for
-printf("Proc %d\n", my_rank);
+printf("Proc %d lines made:\n", my_rank);
 for (int i = 0; i < my_line_count; ++i){
 printf("(%lf, %lf)(%lf,%lf)\n", d_my_lines[i*5+X0], d_my_lines[i*5+Y0], d_my_lines[i*5+X1], d_my_lines[i*5+Y1]);
 }
