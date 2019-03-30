@@ -116,10 +116,10 @@ int main(int argc, char *argv[]) {
 	qsort(lines, num_lines, sizeof(line_t), compare);
 	STOP_TIMER(sort)
 
-	for (int i = 0; i < num_lines; i++) {
-		printf("this is line %d\n", i);
-		print_line(&lines[i]);
-	}
+	// for (int i = 0; i < num_lines; i++) {
+	// 	printf("this is line %d\n", i);
+	// 	print_line(&lines[i]);
+	// }
 		
       //                                   //
      //  Greedily build the tringulation  //
