@@ -11,6 +11,7 @@
 #include <sys/time.h> 
 #include "greedy_triangle.h"
 #include <mpi.h>
+#include <unistd.h> //REMOVE THIS ONCE SLEEP IS NO LONGER NEEDED////////////////////////////
 
 // Timer marcros written by Professor Lam, borrowed from PA2
 #define START_TIMER(NAME) gettimeofday(&tv, NULL); \
@@ -418,6 +419,7 @@ void triangulate() {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
 		if (my_unknown > 0) {
+			sleep(.7);
 			printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
@@ -505,12 +507,12 @@ void triangulate() {
 				// shares endpoints with min_line
 				if (share_endpoint(min_line, &ln_my_lines[j]) ||
 					 !intersects(min_line, &ln_my_lines[j])) {
-// printf("Proc %d is keeping\n", my_rank);
+//printf("Proc %d is keeping\n", my_rank);
 // print_line(&ln_my_lines[j]);
 					temp[temp_size] = ln_my_lines[j];
 					temp_size++;
 				} else {
-// printf("Proc %d is throwing out: ", my_rank);
+//printf("Proc %d is throwing out: ", my_rank);
 // print_line(&ln_my_lines[j]);
 					my_unknown--;
 				}	
