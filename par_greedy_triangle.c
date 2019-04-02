@@ -418,6 +418,7 @@ void triangulate() {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
 		if (my_unknown > 0) {
+			printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
 			double my_min_line[5];
@@ -443,10 +444,10 @@ void triangulate() {
 				// because it was a special value sent from a process with no
 				// more lines of unknown status.
 				if ((recv_buf[i*5+LEN] > 0) && 
-					(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
+					(recv_buf[i*5+LEN] < recv_buf[min_line_index*5+LEN])) {
 					min_line_index = i;
 				}
-				else if ((recv_buf[min_line_index+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
+				else if ((recv_buf[min_line_index*5+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
 					min_line_index = i;
 				}
 			}
@@ -613,7 +614,7 @@ int main(int argc, char *argv[]) {
 	
 	// Make sure we get the expected input.
 	if (argc != 2) {
-		printf("Usage %s <filename>, argv[0] \n", argv[0]);
+		printf("Usage %s <input filename>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
@@ -650,6 +651,7 @@ int main(int argc, char *argv[]) {
 // for (int i = 0; i < my_line_count; ++i) {
 // print_line(&ln_my_lines[i]);
 // }
+
 	  //                                   //
      //  Greedily build the tringulation  //
     //	                                 //
@@ -657,7 +659,7 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
 	triangulate();
-
+printf("triangulation complete\n");
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	

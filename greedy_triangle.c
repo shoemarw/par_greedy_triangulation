@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 	
 	// Make sure we get the expected input.
 	if (argc != 2) {
-		printf("Usage %s <filename>, argv[0] \n", argv[0]);
+		printf("Usage %s <input filename> \n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	

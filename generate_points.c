@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	
 	// Make sure we get the expected input.
 	if (argc != 3) {
-		printf("Usage %s <filename>, argv[0] <number of points>	<seed>\n",
+		printf("Usage %s, <number of points>	<seed>\n",
 				argv[0]);
 		exit(EXIT_FAILURE);
 	}
