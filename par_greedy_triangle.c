@@ -542,7 +542,11 @@ print_line(min_line);
 
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
-			if (my_rank == ROOT) {		
+			if (my_rank == ROOT) {
+for(int i = 0; i < nprocs; i++) {
+printf("(%ld, %ld) (%ld, %ld) %ld \n", recv_buf[i*5+X0],recv_buf[i*5+Y0],recv_buf[i*5+X1],recv_buf[i*5+Y1],recv_buf[i*5+LEN]);					
+}
+			//		
 				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
 					// Compare the length of the current smallest line to the
@@ -553,13 +557,15 @@ print_line(min_line);
 						(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
 						min_line_index = i;
 					}
-					else if (recv_buf[min_line_index+LEN] < 0) {
+					else if ((recv_buf[min_line_index*5+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
 						min_line_index = i;
 					}
 				}
+				//
 
 				// Will hold the minimal line.
 				line_t* min_line;
+
 		
 				// Get the minimal line
 				min_line = (line_t*) allocate(sizeof(line_t));
