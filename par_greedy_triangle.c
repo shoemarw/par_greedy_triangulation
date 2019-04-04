@@ -426,7 +426,7 @@ void triangulate() {
   //  		nanosleep(&tim , &tim2);	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
 
 		if (my_unknown > 0) {
-			printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
+//printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
 			double my_min_line[5];
@@ -492,8 +492,8 @@ void triangulate() {
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
-printf("Proc %d Adding line: \n", my_rank);
-print_line(min_line);
+// printf("Proc %d Adding line: \n", my_rank);
+// print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
@@ -590,8 +590,8 @@ print_line(min_line);
 				// free(q);																		// FREE THESE
 
 				// // Add line to triagulation
-printf("Adding line: \n");
-print_line(min_line);
+// printf("Adding line: \n");
+// print_line(min_line);
 				triang[tlines] = *min_line;
 				tlines++;
 			}
