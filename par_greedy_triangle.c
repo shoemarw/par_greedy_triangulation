@@ -418,8 +418,8 @@ void triangulate() {
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
+		sleep(.7);
 		if (my_unknown > 0) {
-			sleep(.7);
 			printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
@@ -553,7 +553,7 @@ print_line(min_line);
 						(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
 						min_line_index = i;
 					}
-					else if ((recv_buf[min_line_index+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
+					else if (recv_buf[min_line_index+LEN] < 0) {
 						min_line_index = i;
 					}
 				}
