@@ -12,6 +12,8 @@
 #include "greedy_triangle.h"
 #include <mpi.h>
 #include <unistd.h> //REMOVE THIS ONCE SLEEP IS NO LONGER NEEDED////////////////////////////
+#include <stdio.h>	//REMOVE THIS ONCE SLEEP IS NO LONGER NEEDED////////////////////////////
+#include <time.h>	//REMOVE THIS ONCE SLEEP IS NO LONGER NEEDED////////////////////////////
 
 // Timer marcros written by Professor Lam, borrowed from PA2
 #define START_TIMER(NAME) gettimeofday(&tv, NULL); \
