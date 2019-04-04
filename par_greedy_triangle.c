@@ -544,7 +544,7 @@ print_line(min_line);
 			// store it in the triagulation.
 			if (my_rank == ROOT) {
 for(int i = 0; i < nprocs; i++) {
-printf("(%ld, %ld) (%ld, %ld) %ld \n", recv_buf[i*5+X0],recv_buf[i*5+Y0],recv_buf[i*5+X1],recv_buf[i*5+Y1],recv_buf[i*5+LEN]);					
+printf("(%lf, %lf) (%lf, %lf) %lf \n", recv_buf[i*5+X0],recv_buf[i*5+Y0],recv_buf[i*5+X1],recv_buf[i*5+Y1],recv_buf[i*5+LEN]);					
 }
 			//		
 				int min_line_index = 0; // Will hold index of the global min line.
