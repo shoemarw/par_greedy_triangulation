@@ -420,10 +420,10 @@ void triangulate() {
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
-		struct timespec tim, tim2; 	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
-  		tim.tv_sec = 0;				//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
-   		tim.tv_nsec = 500000000L;	//	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
-   		nanosleep(&tim , &tim2);	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+		// struct timespec tim, tim2; 	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+  // 		tim.tv_sec = 0;				//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+  //  		tim.tv_nsec = 200000000L;	//	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+  //  		nanosleep(&tim , &tim2);	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
 
 		if (my_unknown > 0) {
 			printf("process %d. my_unknown = %ld\n", my_rank,  my_unknown);
@@ -444,21 +444,23 @@ void triangulate() {
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
+
 			// Find the global minimal line.
 			int min_line_index = 0; // Will hold index of the global min line.
 			for (int i = 0; i < nprocs; i++) {
-				// Compare the length of the current smallest line to the
-				// i^th line's length. If the length is not positive ignore it
-				// because it was a special value sent from a process with no
-				// more lines of unknown status.
-				if ((recv_buf[i*5+LEN] > 0) && 
-					(recv_buf[i*5+LEN] < recv_buf[min_line_index*5+LEN])) {
-					min_line_index = i;
-				}
-				else if ((recv_buf[min_line_index*5+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
-					min_line_index = i;
-				}
-			}
+				if (recv_buf[i*5+LEN] != -1) {	// If not an impossible line		
+					// Compare the length of the current smallest line to the
+					// i^th line's length. If the length is not positive ignore it
+					// because it was a special value sent from a process with no
+					// more lines of unknown status.
+					if ((recv_buf[i*5+LEN] < recv_buf[min_line_index*5+LEN])) {
+						min_line_index = i;
+					}
+					else if (recv_buf[min_line_index*5+LEN] == -1) {
+						min_line_index = i;
+					}
+				} // end if not impossible
+			} // end for
 
 			// Will hold the minimal line.
 			line_t* min_line;
@@ -549,25 +551,25 @@ print_line(min_line);
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
 			if (my_rank == ROOT) {
-for(int i = 0; i < nprocs; i++) {
-printf("(%lf, %lf) (%lf, %lf) %lf \n", recv_buf[i*5+X0],recv_buf[i*5+Y0],recv_buf[i*5+X1],recv_buf[i*5+Y1],recv_buf[i*5+LEN]);					
-}
-			//		
+// for(int i = 0; i < nprocs; i++) {
+// printf("(%lf, %lf) (%lf, %lf) %lf \n", recv_buf[i*5+X0],recv_buf[i*5+Y0],recv_buf[i*5+X1],recv_buf[i*5+Y1],recv_buf[i*5+LEN]);					
+// }
+				// Find the global minimal line.
 				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
-					// Compare the length of the current smallest line to the
-					// i^th line's length. If the length is not positive ignore it
-					// because it was a special value sent from a process with no
-					// more lines of unknown status.
-					if ((recv_buf[i*5+LEN] > 0) && 
-						(recv_buf[i*5+LEN] < recv_buf[min_line_index+LEN])) {
-						min_line_index = i;
-					}
-					else if ((recv_buf[min_line_index*5+LEN] < 0) && (recv_buf[i*5+LEN]>0)) {
-						min_line_index = i;
-					}
-				}
-				//
+					if (recv_buf[i*5+LEN] != -1) {	// If not an impossible line		
+						// Compare the length of the current smallest line to the
+						// i^th line's length. If the length is not positive ignore it
+						// because it was a special value sent from a process with no
+						// more lines of unknown status.
+						if ((recv_buf[i*5+LEN] < recv_buf[min_line_index*5+LEN])) {
+							min_line_index = i;
+						}
+						else if (recv_buf[min_line_index*5+LEN] == -1) {
+							min_line_index = i;
+						}
+					} // end if not impossible
+				} // end for
 
 				// Will hold the minimal line.
 				line_t* min_line;
