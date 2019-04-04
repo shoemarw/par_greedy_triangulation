@@ -422,7 +422,7 @@ void triangulate() {
 		// work to resolve them.
 		struct timespec tim, tim2; 	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
   		tim.tv_sec = 0;				//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
-   		tim.tv_nsec = 500000;		//	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
+   		tim.tv_nsec = 500000000L;	//	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
    		nanosleep(&tim , &tim2);	//  //  //  //  //  //  //  //  //  //  //  //  //  //  //
 
 		if (my_unknown > 0) {
