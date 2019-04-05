@@ -1,0 +1,83 @@
+== 1 processes 707 points ==
+Gent: 0.0463  Sort: 0.0532  Tria: 11.4694 
+== 1 processes 1000 points ==
+Gent: 0.0915  Sort: 0.1102  Tria: 43.7788 
+== 1 processes 1414 points ==
+Gent: 0.1808  Sort: 0.2277  Tria: 154.3430 
+== 1 processes 2000 points ==
+Gent: 0.3588  Sort: 0.4727  Tria: 545.7206 
+== 1 processes 2828 points ==
+Gent: 0.7180  Sort: 0.9771  Tria: 1920.1291 
+
+
+== 2 processes 707 points ==
+Gent: 0.0321  Sort: 0.0258  Tria: 5.8571 
+== 2 processes 1000 points ==
+Gent: 0.0611  Sort: 0.0540  Tria: 20.7062 
+== 2 processes 1414 points ==
+Gent: 0.1212  Sort: 0.1112  Tria: 80.5468  
+== 2 processes 2000 points ==
+Gent: 0.2369  Sort: 0.2305  Tria: 262.7461 
+== 2 processes 2828 points ==
+Gent: 0.4693  Sort: 0.4776  Tria: 953.1818 
+
+
+== 4 processes 707 points ==
+Gent: 0.0346  Sort: 0.0200  Tria: 3.5034
+== 4 processes 1000 points ==
+Gent: 0.0672  Sort: 0.0415  Tria: 12.0277 
+== 4 processes 1414 points ==
+Gent: 0.1307  Sort: 0.0859  Tria: 45.0991  
+== 4 processes 2000 points ==
+Gent: 0.2082  Sort: 0.1258  Tria: 158.1348 
+== 4 processes 2828 points ==
+Gent: 0.3711  Sort: 0.2583  Tria: 558.7288 
+
+
+== 8 processes 707 points ==
+Gent: 0.0248  Sort: 0.0105  Tria: 2.1227 
+== 8 processes 1000 points ==
+Gent: 0.0506  Sort: 0.0230  Tria: 6.9862 
+== 8 processes 1414 points ==
+Gent: 0.0930  Sort: 0.0483  Tria: 30.0754 
+== 8 processes 2000 points ==
+Gent: 0.1601  Sort: 0.0712  Tria: 100.5580 
+== 8 processes 2828 points ==
+Gent: 0.3846  Sort: 0.2023  Tria: 353.4043 
+
+
+== 16 processes 707 points ==
+Gent: 0.0824  Sort: 0.0053  Tria: 1.2410 
+== 16 processes 1000 points ==
+Gent: 0.1673  Sort: 0.0109  Tria: 4.0370 
+== 16 processes 1414 points ==
+Gent: 0.3227  Sort: 0.0229  Tria: 12.2894 
+== 16 processes 2000 points ==
+Gent: 0.6383  Sort: 0.0478  Tria: 55.4964 
+== 16 processes 2828 points ==
+Gent: 1.2753  Sort: 0.0996  Tria: 193.0423 
+
+
+== 32 processes 707 points ==
+Gent: 0.1071  Sort: 0.0026  Tria: 1.0573 
+== 32 processes 1000 points ==
+Gent: 0.2096  Sort: 0.0053  Tria: 2.4521 
+== 32 processes 1414 points ==
+Gent: 0.4182  Sort: 0.0110  Tria: 7.5517  
+== 32 processes 2000 points ==
+Gent: 0.8388  Sort: 0.0230  Tria: 23.2809 
+== 32 processes 2828 points ==
+Gent: 1.6668  Sort: 0.0481  Tria: 95.5162 
+
+
+== 64 processes 707 points ==
+Gent: 0.1232  Sort: 0.0014  Tria: 1.2641 
+== 64 processes 1000 points ==
+Gent: 0.2314  Sort: 0.0026  Tria: 2.3528 
+== 64 processes 1414 points ==
+Gent: 0.4646  Sort: 0.0054  Tria: 5.1955 
+== 64 processes 2000 points ==
+Gent: 0.9499  Sort: 0.0112  Tria: 14.4662 
+== 64 processes 2828 points ==
+Gent: 1.8390  Sort: 0.0231  Tria: 47.2552 
+
