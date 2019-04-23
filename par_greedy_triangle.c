@@ -87,7 +87,7 @@ void read_points(char *argv[]) {
 	// it to allocate storage for the points.
 	fscanf(fin, "%ld\n", &l_num_points);
 	points = (point_t*) allocate(l_num_points * sizeof(point_t));
-	
+printf("l_num_points %ld\n", l_num_points);
 	// Read in and store the point s.
 	double x, y;     // The Cartesian coordinates of a point.
 	long i = 0;      // Index for storing points.
@@ -156,7 +156,7 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-		printf("my_line_count%ld\n", my_line_count);
+printf("my_line_count%ld\n", my_line_count);
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
