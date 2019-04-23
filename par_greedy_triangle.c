@@ -122,8 +122,9 @@ void gen_lines() {
 	// Compute the number of lines, note that the below formula
 	// will always resolve as an int because one of l_num_points or
 	// l_num_points-1 will be divisible by 2.
-	int my_line_count = ((l_num_points)*(l_num_points-1))/2;
+	my_line_count = ((l_num_points)*(l_num_points-1))/2;
 printf("l_num_points %ld\n", l_num_points);
+printf("my_line_count %ld\n", my_line_count);
 	d_all_lines = (double*) allocate(sizeof(double)*my_line_count*5);	
 
 	long index = 0;
