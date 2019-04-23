@@ -124,7 +124,7 @@ void gen_lines() {
 	// l_num_points-1 will be divisible by 2.
 	int my_line_count = ((l_num_points)*(l_num_points-1))/2;
 
-	d_all_lines = (double*) allocate(sizeof(double)*num_lines*5);	
+	d_all_lines = (double*) allocate(sizeof(double)*my_line_count*5);	
 
 	long index = 0;
 	for (int i = 0; i < l_num_points; i++) {
