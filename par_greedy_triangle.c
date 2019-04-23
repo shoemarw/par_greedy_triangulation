@@ -112,7 +112,7 @@ void read_points(char *argv[]) {
 
 }
 
-gen_lines() {
+void gen_lines() {
 	  //                      //
 	 //  Generate all lines  //
 	//                      //
@@ -120,18 +120,18 @@ gen_lines() {
 	// Make all possible line segments between the points
 	// and compute the length of each line.
 	// Compute the number of lines, note that the below formula
-	// will always resolve as an int because one of num_points or
-	// num_points-1 will be divisible by 2.
-	int num_lines = ((num_points)*(num_points-1))/2;
+	// will always resolve as an int because one of l_num_points or
+	// l_num_points-1 will be divisible by 2.
+	int my_line_count = ((l_num_points)*(l_num_points-1))/2;
 
 	d_all_lines = (double*) allocate(sizeof(double)*num_lines*5);	
 
 	long index = 0;
-	for (int i = 0; i < num_points; i++) {
+	for (int i = 0; i < l_num_points; i++) {
 		// Compute the distance between point i and every point
 		// from i+1 onward. Then 'make' and store the corresponding
 		// line.
-		for (int j = i+1; j < num_points; j++) {
+		for (int j = i+1; j < l_num_points; j++) {
 
 			double length = distance(&points[i], &points[j]);
 
@@ -156,8 +156,6 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-		my_line_count = total_line_num/5;
-
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
@@ -188,7 +186,7 @@ void distrib_lines() {
 	d_my_lines = (double*) allocate(i_recv_doubs*sizeof(double));
 
 	// scatter lines
-	MPI_Scatterv(d_recv_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_all_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
@@ -418,12 +416,11 @@ int main(int argc, char *argv[]) {
 		read_points(argv);
 	}
 
-	// Root scatters the points
-	distrib_points();
-
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
-	gen_lines();
+	if (my_rank == ROOT) {
+		gen_lines();
+	}
 
 	distrib_lines();
 	MPI_Barrier(MPI_COMM_WORLD);
