@@ -166,6 +166,7 @@ void distrib_lines() {
 	 			i_send_counts[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
+printf("%d\n", i_send_counts[i]);
 	 	}
 
 
