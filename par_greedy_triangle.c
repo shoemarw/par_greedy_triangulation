@@ -156,6 +156,7 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
+		printf("my_line_count%ld\n", my_line_count);
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
