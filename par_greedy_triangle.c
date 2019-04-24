@@ -404,6 +404,7 @@ void triangulate() {
 
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
+				free(min_line);
 				tlines++;
 			}
 printf("%d: %lf\n", my_rank, recv_buf[9]);
