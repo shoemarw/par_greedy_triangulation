@@ -386,7 +386,6 @@ void triangulate() {
 
 				// Will hold the minimal line.
 				line_t* min_line;
-	/*
 
 		
 				// Get the minimal line
@@ -406,7 +405,6 @@ void triangulate() {
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
-	*/
 			}
 
 	/*
