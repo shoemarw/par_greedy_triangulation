@@ -52,19 +52,20 @@ long my_line_count = 0; // Count of how many lines a processes is responsible fo
 //TEMPORARILY MAKING THESE GLOBAL, THIS MAY NEED TO BE CHANGED
 long l_num_points;
 point_t* points;
+point_t* points_to_free;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
-	points = (point_t*) allocate(sizeof(point_t)*2*size);
+	points_to_free = (point_t*) allocate(sizeof(point_t)*2*size);
 	int points_index = 0;
 
 	long index = 0;
 	for (long i = 0; i < size*5; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
-		points[points_index] = *p0;
+		points_to_free[points_index] = *p0;
 		points_index++;		
 		point_t *p1 = (point_t*) allocate(sizeof(point_t));
-		points[points_index] = *p1;
+		points_to_free[points_index] = *p1;
 		points_index++;	
 
 		p0->x = arr[i+X0];
@@ -504,7 +505,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
-	free(points);
+	free(points_to_free);
 	free(ln_my_lines);
 
 	if (my_rank == ROOT) {
