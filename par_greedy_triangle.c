@@ -70,11 +70,11 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 
 		// store point in array to free later
 		points_to_free[points_index] = *p0;
-		points_index++;
 
 		// Put first point into struct
-		l->p = p0;
+		l->p = &points_to_free[points_index];
 		free(p0);
+		points_index++;
 
 
 		// Convert second point
@@ -84,11 +84,11 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 
 		// store point in array to free later
 		points_to_free[points_index] = *p1;
-		points_index++;	
 
 		// Put second point into struct
-		l->q = p1;
+		l->q = &points_to_free[points_index];
 		free(p1);
+		points_index++;	
 
 
 		// Put length into struct
