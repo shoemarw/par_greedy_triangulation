@@ -80,10 +80,10 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		l->len = arr[i+LEN];
 		new_arr[index] = *l;
 		index++;
+		free(p);
+		free(q);
 		free(l);
 	}
-
-	free(points_to_free);
 }
 
 void read_points(char *argv[]) {
