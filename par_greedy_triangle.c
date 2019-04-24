@@ -362,12 +362,12 @@ void triangulate() {
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
-	/*
 
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
 			if (my_rank == ROOT) {
 
+	/*
 				// Find the global minimal line.
 				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
@@ -406,9 +406,9 @@ void triangulate() {
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
+	*/
 			}
 
-	*/
 	/*
 			// Check if all of the lines have distance of -1. If so then we are done!
 			int count = 0;
