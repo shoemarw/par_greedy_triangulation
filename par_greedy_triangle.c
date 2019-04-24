@@ -415,11 +415,11 @@ void triangulate() {
 					count++;
 				}
 			}
-	*/
 			if (count == nprocs) {
 				finished = true;
 			}
 			// free(recv_buf); 
+	*/
 
 		} // end else
 
