@@ -506,7 +506,6 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank == ROOT) {
 		free(triang);
-		free(points);
 	}
 
 	MPI_Finalize();
