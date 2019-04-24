@@ -359,13 +359,13 @@ void triangulate() {
 		// distance of -1.
 		else {
 			// Prepare an array to receive each processe's minimal line.
+	/*
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
-	/*
 			if (my_rank == ROOT) {
 
 				// Find the global minimal line.
