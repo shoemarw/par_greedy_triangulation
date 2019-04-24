@@ -438,7 +438,7 @@ int main(int argc, char *argv[]) {
 		gen_lines();
 	}
 
-	distrib_lines();
+	// distrib_lines();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
