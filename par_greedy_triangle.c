@@ -200,9 +200,11 @@ void distrib_lines() {
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
 
-	free(i_displs);
-	free(i_send_counts);
-	free(d_all_lines);
+	if(my_rank = ROOT) {
+		free(i_displs);
+		free(i_send_counts);
+		free(d_all_lines);
+	}
 }
 
 
