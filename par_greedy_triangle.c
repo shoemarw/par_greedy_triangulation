@@ -498,7 +498,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
-	free(points);
+	// free(points);
 	// free(ln_my_lines);
 
 	if (my_rank == ROOT) {
