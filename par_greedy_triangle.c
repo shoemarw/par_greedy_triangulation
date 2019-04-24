@@ -246,6 +246,7 @@ void triangulate() {
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
 
+	/*
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
@@ -422,6 +423,7 @@ void triangulate() {
 		} // end else
 
 	} // end while
+	*/
 }
 
 
@@ -478,7 +480,7 @@ int main(int argc, char *argv[]) {
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
-	// triangulate();
+	triangulate();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	
