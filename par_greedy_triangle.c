@@ -367,7 +367,6 @@ void triangulate() {
 			// store it in the triagulation.
 			if (my_rank == ROOT) {
 
-	/*
 				// Find the global minimal line.
 				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
@@ -387,6 +386,7 @@ void triangulate() {
 
 				// Will hold the minimal line.
 				line_t* min_line;
+	/*
 
 		
 				// Get the minimal line
