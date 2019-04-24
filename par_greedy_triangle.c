@@ -319,12 +319,6 @@ void triangulate() {
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
 
-			// Have everyone but the root deallocate space associated with min_line
-			// if (my_rank != ROOT) {
-			// 	free(min_line->p);
-			// 	free(min_line->q);
-			// 	free(min_line);
-			// }
 
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
@@ -396,6 +390,13 @@ void triangulate() {
 			// free(recv_buf); 
 
 		} // end else
+
+		// Have everyone but the root deallocate space associated with min_line
+		if (my_rank != ROOT) {
+			free(min_line->p);
+			free(min_line->q);
+			free(min_line);
+		}
 
 	} // end while
 }
