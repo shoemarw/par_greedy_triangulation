@@ -61,27 +61,41 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 
 	long index = 0;
 	for (long i = 0; i < size*5; i+=5) {
+		line_t* l = (line_t*) allocate(sizeof(line_t));
+		
+		// Convert first point
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
-		points_to_free[points_index] = p0;
-		points_index++;		
-		point_t *p1 = (point_t*) allocate(sizeof(point_t));
-		points_to_free[points_index] = p1;
-		points_index++;	
-
 		p0->x = arr[i+X0];
 		p0->y = arr[i+Y0];
+
+		// store point in array to free later
+		points_to_free[points_index] = *p0;
+		points_index++;
+
+		// Put first point into struct
+		l->p = points_to_free[points_index];
+
+		// Convert second point
+		point_t *p1 = (point_t*) allocate(sizeof(point_t));
 		p1->x = arr[i+X1];
 		p1->y = arr[i+Y1];
 
-		line_t* l = (line_t*) allocate(sizeof(line_t));
-		// set the values of the line and store it.
-		l->p = p0;
-		l->q = p1;
+		// store point in array to free later
+		points_to_free[points_index] = *p1;
+		points_index++;	
+
+		// Put first point into struct
+		l->q = points_to_free[points_index];
+
+
+		// Put length into struct
 		l->len = arr[i+LEN];
+		
 		new_arr[index] = *l;
 		index++;
-		// free(p0);
-		// free(p1);
+		
+		free(p0);
+		free(p1);
 		free(l);
 	}
 }
