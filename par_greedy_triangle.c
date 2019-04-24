@@ -338,7 +338,6 @@ void triangulate() {
 					my_unknown--;
 				}	
 			}
-	/*
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
@@ -352,6 +351,7 @@ void triangulate() {
 			// 	free(min_line);
 			// }
 		} // end if (my_unknown > 0)
+	/*
 
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
@@ -420,8 +420,8 @@ void triangulate() {
 			}
 			// free(recv_buf); 
 
-	*/
 		} // end else
+	*/
 
 	} // end while
 }
