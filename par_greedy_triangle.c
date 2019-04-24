@@ -308,7 +308,6 @@ void triangulate() {
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
 			}
-	/*
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
@@ -317,6 +316,7 @@ void triangulate() {
 			}
 			// Free the receive buffer
 			free(recv_buf);
+	/*
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
