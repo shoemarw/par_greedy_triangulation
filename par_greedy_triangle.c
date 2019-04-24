@@ -463,7 +463,7 @@ int main(int argc, char *argv[]) {
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
-	// triangulate();
+	triangulate();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	
