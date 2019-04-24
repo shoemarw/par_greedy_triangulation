@@ -73,7 +73,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		points_index++;
 
 		// Put first point into struct
-		l->p = *p0;
+		l->p = p0;
 		// free(p0);
 
 
@@ -87,7 +87,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		points_index++;	
 
 		// Put second point into struct
-		l->q = *p1;
+		l->q = p1;
 		// free(p1);
 
 
