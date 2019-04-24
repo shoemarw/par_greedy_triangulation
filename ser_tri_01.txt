@@ -1,0 +1,11 @@
+ya-hoooo!
+== Serial version 707 points ==
+Gent: 0.0113  Sort: 0.0527  Tria: 8.6674
+== Serial version 1000 points ==
+Gent: 0.0218  Sort: 0.1087  Tria: 26.4939
+== Serial version 1414 points ==
+Gent: 0.0429  Sort: 0.2254  Tria: 93.6832
+== Serial version 2000 points ==
+Gent: 0.0843  Sort: 0.4675  Tria: 345.3899
+== Serial version 2828 points ==
+Gent: 0.1673  Sort: 0.9667  Tria: 1187.1696
