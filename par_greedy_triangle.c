@@ -316,7 +316,6 @@ void triangulate() {
 			}
 			// Free the receive buffer
 			free(recv_buf);
-	/*
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
@@ -339,6 +338,7 @@ void triangulate() {
 					my_unknown--;
 				}	
 			}
+	/*
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
