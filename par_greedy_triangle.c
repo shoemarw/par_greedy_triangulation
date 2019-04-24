@@ -523,10 +523,10 @@ int main(int argc, char *argv[]) {
 	
 	// Clean up and exit
 	// free(points_to_free);
-	free(ln_my_lines);
+	// free(ln_my_lines);
 
 	if (my_rank == ROOT) {
-		free(triang);
+		// free(triang);
 	}
 
 	MPI_Finalize();
