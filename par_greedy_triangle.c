@@ -321,12 +321,19 @@ void triangulate() {
 
 
 			free(temp);
+			// Have everyone but the root deallocate space associated with min_line
+			if (my_rank != ROOT) {
+				free(min_line->p);
+				free(min_line->q);
+				free(min_line);
+			}
+		} // end if (my_unknown > 0)
+		
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
 		// a special value to the other processes (which they will ignore). The 
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
-		} // end if (my_unknown > 0)
 		else {
 			// Prepare an array to receive each processe's minimal line.
 			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
@@ -390,13 +397,6 @@ void triangulate() {
 			// free(recv_buf); 
 
 		} // end else
-
-		// Have everyone but the root deallocate space associated with min_line
-		if (my_rank != ROOT) {
-			free(min_line->p);
-			free(min_line->q);
-			free(min_line);
-		}
 
 	} // end while
 }
