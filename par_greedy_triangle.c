@@ -319,6 +319,7 @@ void triangulate() {
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
 
+			// Have everyone but the root deallocate space associated with min_line
 			if (my_rank != ROOT) {
 				free(min_line->p);
 				free(min_line->q);
@@ -392,7 +393,7 @@ void triangulate() {
 			if (count == nprocs) {
 				finished = true;
 			}
-			// free(recv_buf); 
+			free(recv_buf); 
 
 		} // end else
 
