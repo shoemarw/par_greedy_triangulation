@@ -294,7 +294,6 @@ void triangulate() {
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
-	/*
 			else {
 				// Get the minimal line
 				point_t *p = (point_t*) allocate(sizeof(point_t));
@@ -309,6 +308,7 @@ void triangulate() {
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
 			}
+	/*
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
