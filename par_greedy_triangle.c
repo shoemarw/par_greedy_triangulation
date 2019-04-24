@@ -426,16 +426,16 @@ int main(int argc, char *argv[]) {
 	
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
-		// read_points(argv);
+		read_points(argv);
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	if (my_rank == ROOT) {
-		// gen_lines();
+		gen_lines();
 	}
 
-	// distrib_lines();
+	distrib_lines();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(generate)
 
@@ -444,7 +444,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
+	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 
@@ -454,7 +454,7 @@ int main(int argc, char *argv[]) {
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
-	// triangulate();
+	triangulate();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	
@@ -498,8 +498,8 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
-	// free(points);
-	// free(ln_my_lines);
+	free(points);
+	free(ln_my_lines);
 
 	if (my_rank == ROOT) {
 		free(triang);
