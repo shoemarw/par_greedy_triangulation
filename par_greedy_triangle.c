@@ -435,7 +435,7 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	if (my_rank == ROOT) {
-		// gen_lines();
+		gen_lines();
 	}
 
 	distrib_lines();
