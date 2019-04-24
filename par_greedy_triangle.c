@@ -432,7 +432,7 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(generate)
 	if (my_rank == ROOT) {
-		gen_lines();
+		// gen_lines();
 	}
 
 	distrib_lines();
@@ -444,7 +444,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
+	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 
@@ -454,7 +454,7 @@ int main(int argc, char *argv[]) {
 	
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(triangulate)
-	triangulate();
+	// triangulate();
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(triangulate)
 	
