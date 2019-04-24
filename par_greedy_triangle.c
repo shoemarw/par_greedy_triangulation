@@ -246,7 +246,6 @@ void triangulate() {
 	// Keep participating in global communications until all processes have
 	// resolved the status of their local set of lines.
 
-	/*
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
@@ -295,6 +294,7 @@ void triangulate() {
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
+	/*
 			else {
 				// Get the minimal line
 				point_t *p = (point_t*) allocate(sizeof(point_t));
@@ -420,10 +420,10 @@ void triangulate() {
 			}
 			// free(recv_buf); 
 
+	*/
 		} // end else
 
 	} // end while
-	*/
 }
 
 
