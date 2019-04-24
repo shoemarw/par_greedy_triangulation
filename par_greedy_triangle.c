@@ -407,19 +407,19 @@ void triangulate() {
 				tlines++;
 			}
 
-	/*
 			// Check if all of the lines have distance of -1. If so then we are done!
 			int count = 0;
+	/*
 			for (int i = 0; i < nprocs; i++) {
 				if (recv_buf[i*5 + LEN] == -1) {
 					count++;
 				}
 			}
+	*/
 			if (count == nprocs) {
 				finished = true;
 			}
 			// free(recv_buf); 
-	*/
 
 		} // end else
 
