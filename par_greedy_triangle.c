@@ -351,7 +351,6 @@ void triangulate() {
 			// 	free(min_line);
 			// }
 		} // end if (my_unknown > 0)
-	/*
 
 		// If this process has no more lines of unknown status then it must still
 	    // participate in global communications to avoid deadlock. Have it send
@@ -366,6 +365,7 @@ void triangulate() {
 
 			// If ROOT, then make the minimal line into a line struct and 
 			// store it in the triagulation.
+	/*
 			if (my_rank == ROOT) {
 
 				// Find the global minimal line.
@@ -419,9 +419,9 @@ void triangulate() {
 				finished = true;
 			}
 			// free(recv_buf); 
+	*/
 
 		} // end else
-	*/
 
 	} // end while
 }
