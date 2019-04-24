@@ -199,6 +199,9 @@ void distrib_lines() {
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
 	double_array_to_struct(d_my_lines, ln_my_lines, my_line_count);
+
+	free(i_displs);
+	free(i_send_counts);
 }
 
 
@@ -503,6 +506,7 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank == ROOT) {
 		free(triang);
+		free(points);
 	}
 
 	MPI_Finalize();
