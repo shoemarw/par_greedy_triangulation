@@ -73,7 +73,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		points_index++;
 
 		// Put first point into struct
-		l->p = &points_to_free[points_index];
+		l->p = *p0;
 		// free(p0);
 
 
@@ -87,7 +87,7 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		points_index++;	
 
 		// Put second point into struct
-		l->q = &points_to_free[points_index];
+		l->q = *p1;
 		// free(p1);
 
 
@@ -249,9 +249,6 @@ void triangulate() {
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
-
-		// Prepare an array to receive each processe's minimal line.
-		double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 		if (my_unknown > 0) {
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
@@ -264,7 +261,8 @@ void triangulate() {
 			my_min_line[X1] = q.x;
 			my_min_line[Y1] = q.y;
 			my_min_line[LEN] = ln_my_lines[0].len;
-
+			// Prepare an array to receive each processe's minimal line.
+			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double)); 
 			// Make sure each process has an array of each processes' min line.
 			MPI_Allgather(my_min_line, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
@@ -360,6 +358,8 @@ void triangulate() {
 		// special value is a line whose endpoints are at the origin and it has a
 		// distance of -1.
 		else {
+			// Prepare an array to receive each processe's minimal line.
+			double* recv_buf = (double*) allocate(5*nprocs*sizeof(double));
 			MPI_Allgather(IMPOSSIBLE_LINE, 5, MPI_DOUBLE, 
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 
