@@ -321,11 +321,11 @@ void triangulate() {
 
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
-			if (my_rank != ROOT) {
-				// free(min_line->p);
-				// free(min_line->q);
-				free(min_line);
-			}
+			// if (my_rank != ROOT) {
+			// 	free(min_line->p);
+			// 	free(min_line->q);
+			// 	free(min_line);
+			// }
 		} // end if (my_unknown > 0)
 
 		// If this process has no more lines of unknown status then it must still
@@ -429,34 +429,34 @@ int main(int argc, char *argv[]) {
 		read_points(argv);
 	}
 
-	MPI_Barrier(MPI_COMM_WORLD);
-	START_TIMER(generate)
-	if (my_rank == ROOT) {
-		gen_lines();
-	}
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// START_TIMER(generate)
+	// if (my_rank == ROOT) {
+	// 	gen_lines();
+	// }
 
-	distrib_lines();
-	MPI_Barrier(MPI_COMM_WORLD);
-	STOP_TIMER(generate)
+	// distrib_lines();
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// STOP_TIMER(generate)
 
-	  //                                      //
-	 //  Sort the lines from small to large  //
-	//                                      //
-	MPI_Barrier(MPI_COMM_WORLD);
-	START_TIMER(sort)
-	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
-	MPI_Barrier(MPI_COMM_WORLD);
-	STOP_TIMER(sort)
+	//   //                                      //
+	//  //  Sort the lines from small to large  //
+	// //                                      //
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// START_TIMER(sort)
+	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// STOP_TIMER(sort)
 
-	  //                                   //
-     //  Greedily build the tringulation  //
-    //	                                 //
+	//   //                                   //
+ //     //  Greedily build the tringulation  //
+ //    //	                                 //
 	
-	MPI_Barrier(MPI_COMM_WORLD);
-	START_TIMER(triangulate)
-	triangulate();
-	MPI_Barrier(MPI_COMM_WORLD);
-	STOP_TIMER(triangulate)
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// START_TIMER(triangulate)
+	// triangulate();
+	// MPI_Barrier(MPI_COMM_WORLD);
+	// STOP_TIMER(triangulate)
 	
 	   //                                        //
       //  Triangulation Done, Display Stats     //
@@ -499,7 +499,7 @@ int main(int argc, char *argv[]) {
 	
 	// Clean up and exit
 	free(points);
-	free(ln_my_lines);
+	// free(ln_my_lines);
 
 	if (my_rank == ROOT) {
 		free(triang);
