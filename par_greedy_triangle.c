@@ -202,6 +202,7 @@ void distrib_lines() {
 
 	free(i_displs);
 	free(i_send_counts);
+	free(d_all_lines);
 }
 
 
@@ -447,7 +448,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
+	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 
