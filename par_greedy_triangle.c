@@ -55,10 +55,18 @@ point_t* points;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
+	points = (point_t*) allocate(sizeof(point_t)*2*size)
+	int points_index = 0;
+
 	long index = 0;
 	for (long i = 0; i < size*5; i+=5) {
 		point_t *p0 = (point_t*) allocate(sizeof(point_t));
+		points[points_index] = *p0;
+		points_index++;		
 		point_t *p1 = (point_t*) allocate(sizeof(point_t));
+		points[points_index] = *p1;
+		points_index++;	
+
 		p0->x = arr[i+X0];
 		p0->y = arr[i+Y0];
 		p1->x = arr[i+X1];
@@ -123,8 +131,6 @@ void gen_lines() {
 	// will always resolve as an int because one of l_num_points or
 	// l_num_points-1 will be divisible by 2.
 	my_line_count = ((l_num_points)*(l_num_points-1))/2;
-printf("l_num_points %ld\n", l_num_points);
-printf("my_line_count %ld\n", my_line_count);
 	d_all_lines = (double*) allocate(sizeof(double)*my_line_count*5);	
 
 	long index = 0;
@@ -159,7 +165,6 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-printf("my_line_count %ld\n", my_line_count);
 	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
 	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
 	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
@@ -170,7 +175,6 @@ printf("my_line_count %ld\n", my_line_count);
 	 			i_send_counts[i] += 5; 	// +5 because each line is really 5 doubles at this point
 	 			remainder--;	
 	 		}
-printf("%d\n", i_send_counts[i]);
 	 	}
 
 
@@ -488,9 +492,9 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// Clean up and exit
+	free(points);
 	if (my_rank == ROOT) {
-		// free(points);
-		// free(triang);
+		free(triang);
 	}
 
 	MPI_Finalize();
