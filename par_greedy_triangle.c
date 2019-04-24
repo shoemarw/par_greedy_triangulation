@@ -426,37 +426,37 @@ int main(int argc, char *argv[]) {
 	
 	// Root reads in the lines for given file
 	if (my_rank==ROOT) {
-		read_points(argv);
+		// read_points(argv);
 	}
 
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// START_TIMER(generate)
-	// if (my_rank == ROOT) {
-	// 	gen_lines();
-	// }
+	MPI_Barrier(MPI_COMM_WORLD);
+	START_TIMER(generate)
+	if (my_rank == ROOT) {
+		// gen_lines();
+	}
 
 	// distrib_lines();
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// STOP_TIMER(generate)
+	MPI_Barrier(MPI_COMM_WORLD);
+	STOP_TIMER(generate)
 
-	//   //                                      //
-	//  //  Sort the lines from small to large  //
-	// //                                      //
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// START_TIMER(sort)
+	  //                                      //
+	 //  Sort the lines from small to large  //
+	//                                      //
+	MPI_Barrier(MPI_COMM_WORLD);
+	START_TIMER(sort)
 	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// STOP_TIMER(sort)
+	MPI_Barrier(MPI_COMM_WORLD);
+	STOP_TIMER(sort)
 
-	//   //                                   //
- //     //  Greedily build the tringulation  //
- //    //	                                 //
+	  //                                   //
+     //  Greedily build the tringulation  //
+    //	                                 //
 	
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// START_TIMER(triangulate)
+	MPI_Barrier(MPI_COMM_WORLD);
+	START_TIMER(triangulate)
 	// triangulate();
-	// MPI_Barrier(MPI_COMM_WORLD);
-	// STOP_TIMER(triangulate)
+	MPI_Barrier(MPI_COMM_WORLD);
+	STOP_TIMER(triangulate)
 	
 	   //                                        //
       //  Triangulation Done, Display Stats     //
