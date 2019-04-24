@@ -73,12 +73,12 @@ void double_array_to_struct(double* arr, line_t* new_arr, long size){
 		points_index++;
 
 		// Put first point into struct
-		l->p = *points_to_free[points_index];
+		l->p = &points_to_free[points_index];
 		free(p0);
 
 
 		// Convert second point
-		point_t &p1 = (point_t*) allocate(sizeof(point_t));
+		point_t *p1 = (point_t*) allocate(sizeof(point_t));
 		p1->x = arr[i+X1];
 		p1->y = arr[i+Y1];
 
