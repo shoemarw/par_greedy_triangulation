@@ -55,7 +55,7 @@ point_t* points;
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
-	points = (point_t*) allocate(sizeof(point_t)*2*size)
+	points = (point_t*) allocate(sizeof(point_t)*2*size);
 	int points_index = 0;
 
 	long index = 0;
