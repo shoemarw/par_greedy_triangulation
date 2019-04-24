@@ -514,8 +514,8 @@ int main(int argc, char *argv[]) {
 		    point_t p = *(triang[i].p);
 		    point_t q = *(triang[i].q);
 		    fprintf(write_file, "(%lf, %lf) (%lf, %lf)\n", p.x, p.y, q.x, q.y);
-		    free(triang[i].p);
-		    free(triang[i].q);
+		    // free(triang[i].p);
+		    // free(triang[i].q);
 		}
 		
 		fclose(write_file);
