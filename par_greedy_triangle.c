@@ -147,7 +147,7 @@ printf("my_line_count %ld\n", my_line_count);
 	}
 
 	for (int i = 0; i < l_num_points; i++) {
-		free(points[i])
+		free(*points[i])
 	}
 	free(points)
 }
