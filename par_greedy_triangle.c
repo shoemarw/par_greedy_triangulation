@@ -320,8 +320,8 @@ void triangulate() {
 			copy_array(temp, ln_my_lines, temp_size);
 
 			if (my_rank != ROOT) {
-				free(min_line.p);
-				free(min_line.q);
+				free(min_line->p);
+				free(min_line->q);
 				free(min_line);
 			}
 
