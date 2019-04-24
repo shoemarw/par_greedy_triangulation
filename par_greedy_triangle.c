@@ -453,7 +453,7 @@ int main(int argc, char *argv[]) {
 	//                                      //
 	MPI_Barrier(MPI_COMM_WORLD);
 	START_TIMER(sort)
-	// qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
+	qsort(ln_my_lines, my_line_count, sizeof(line_t), compare);
 	MPI_Barrier(MPI_COMM_WORLD);
 	STOP_TIMER(sort)
 
