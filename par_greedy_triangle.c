@@ -95,7 +95,6 @@ void read_points(char *argv[]) {
 	// it to allocate storage for the points.
 	fscanf(fin, "%ld\n", &l_num_points);
 	points = (point_t*) allocate(l_num_points * sizeof(point_t));
-printf("l_num_points %ld\n", l_num_points);
 	// Read in and store the point s.
 	double x, y;     // The Cartesian coordinates of a point.
 	long i = 0;      // Index for storing points.
@@ -271,8 +270,6 @@ void triangulate() {
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
-
-
 			else {
 				// Get the minimal line
 				min_line = (line_t*) allocate(sizeof(line_t));
@@ -321,6 +318,12 @@ void triangulate() {
 			// Write all of the valid lines from temp to ln_my_lines to prepare
 			// for the next iteration.
 			copy_array(temp, ln_my_lines, temp_size);
+
+			if (my_rank != ROOT) {
+				free(min_line.p);
+				free(min_line.q);
+				free(min_line);
+			}
 
 			free(temp);
 		// If this process has no more lines of unknown status then it must still
