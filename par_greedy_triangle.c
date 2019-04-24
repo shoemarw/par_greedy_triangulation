@@ -406,7 +406,7 @@ void triangulate() {
 				triang[tlines] = *min_line;
 				tlines++;
 			}
-printf("%d: %ld\n", my_rank, recv_buf[0]);
+printf("%d: %lf\n", my_rank, recv_buf[0]);
 			// Check if all of the lines have distance of -1. If so then we are done!
 			int count = 0;
 			for (int i = 0; i < nprocs; i++) {
