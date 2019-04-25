@@ -301,24 +301,27 @@ void triangulate() {
 			line_t* min_line = (line_t*) allocate(sizeof(line_t)); // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
 			
 			// See if this process has the global min line, if so we must
-			// adjust its number of lines of unknown status.
+			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
 				my_unknown--;
+			// Otherwise we must build the min_line from data in the recv_buf
+			// (While making sure to use the appropriate index!)
 			}
-			// Get the minimal line
-			*p = (point_t*) allocate(sizeof(point_t));
-			*q = (point_t*) allocate(sizeof(point_t));
-			p->x = recv_buf[min_line_index*5 + X0];
-			p->y = recv_buf[min_line_index*5 + Y0];
-			q->x = recv_buf[min_line_index*5 + X1];
-			q->y = recv_buf[min_line_index*5 + Y1];
+			else {
+				// Get the minimal line
+				point_t *p = (point_t*) allocate(sizeof(point_t));
+				point_t *q = (point_t*) allocate(sizeof(point_t));
+				p->x = recv_buf[min_line_index*5 + X0];
+				p->y = recv_buf[min_line_index*5 + Y0];
+				q->x = recv_buf[min_line_index*5 + X1];
+				q->y = recv_buf[min_line_index*5 + Y1];
 
-			min_line->p = p;
-			min_line->q = q;
-			min_line->len = recv_buf[min_line_index*5 + LEN];
-			// free(p);																		// FREE THESE
-			// free(q);																		// FREE THESE
-
+				min_line->p = p;
+				min_line->q = q;
+				min_line->len = recv_buf[min_line_index*5 + LEN];
+				// free(p);																		// FREE THESE
+				// free(q);																		// FREE THESE
+			}
 
 			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
@@ -356,7 +359,7 @@ void triangulate() {
 
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
-			if (my_rank != ROOT) {
+			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
 				free(min_line->p);
 				free(min_line->q);
 				free(min_line);
