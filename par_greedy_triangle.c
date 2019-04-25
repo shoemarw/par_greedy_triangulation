@@ -431,13 +431,13 @@ void triangulate() {
 			}
 			free(recv_buf); 
 
+			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
+				// free(min_line->p);
+				// free(min_line->q);
+				free(min_line);
+			}
 		} // end else
 
-		if ((my_rank != ROOT) && (my_rank != min_line_index)) {
-			// free(min_line->p);
-			// free(min_line->q);
-			free(min_line);
-		}
 
 	} // end while
 }
