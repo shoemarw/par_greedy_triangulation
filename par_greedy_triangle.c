@@ -401,13 +401,11 @@ void triangulate() {
 				min_line->len = recv_buf[min_line_index*5 + LEN];
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
-
+// add to a triagulation point array to free
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
-				free(min_line);
 				tlines++;
 			}
-printf("%d: %lf\n", my_rank, recv_buf[9]);
 			// Check if all of the lines have distance of -1. If so then we are done!
 			int count = 0;
 			for (int i = 0; i < nprocs; i++) {
@@ -524,7 +522,7 @@ int main(int argc, char *argv[]) {
 	
 	// Clean up and exit
 	// free(points_to_free);
-	// free(ln_my_lines);
+	free(ln_my_lines);
 
 	if (my_rank == ROOT) {
 		// free(triang);
