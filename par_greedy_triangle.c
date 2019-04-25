@@ -357,8 +357,8 @@ void triangulate() {
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
 			if (my_rank != ROOT) {
-				free(min_line->p);
-				free(min_line->q);
+				// free(min_line->p);
+				// free(min_line->q);
 				free(min_line);
 			}
 		} // end if (my_unknown > 0)
