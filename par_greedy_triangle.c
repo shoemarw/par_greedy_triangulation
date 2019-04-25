@@ -403,18 +403,26 @@ void triangulate() {
 
 		
 				// Get the minimal line
-				min_line = (line_t*) allocate(sizeof(line_t)); // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+				min_line = (line_t*) allocate(sizeof(line_t)); 
 				point_t *p = (point_t*) allocate(sizeof(point_t));
 				point_t *q = (point_t*) allocate(sizeof(point_t));
 				p->x = recv_buf[min_line_index*5 + X0];
 				p->y = recv_buf[min_line_index*5 + Y0];
 				q->x = recv_buf[min_line_index*5 + X1];
 				q->y = recv_buf[min_line_index*5 + Y1];
-				min_line->p = p;
-				min_line->q = q;
+				min_line_points[mlp_index] = *p;
+				min_line->p = &min_line_points[mlp_index];
+				mlp_index++;
+
+				min_line_points[mlp_index] = *q;
+				min_line->q = &min_line_points[mlp_index];
+				mlp_index++;
+
 				min_line->len = recv_buf[min_line_index*5 + LEN];
-				// free(p);																		// FREE THESE
-				// free(q);																		// FREE THESE
+
+
+				// free(p);
+				// free(q);
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
@@ -431,11 +439,6 @@ void triangulate() {
 			}
 			free(recv_buf); 
 
-			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
-				// free(min_line->p);
-				// free(min_line->q);
-				free(min_line);
-			}
 		} // end else
 
 
@@ -545,6 +548,7 @@ int main(int argc, char *argv[]) {
 
 	if (my_rank == ROOT) {
 		free(triang);
+		free(min_line_points);
 	}
 
 	MPI_Finalize();
