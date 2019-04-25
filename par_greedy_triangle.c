@@ -416,7 +416,7 @@ void triangulate() {
 			if (count == nprocs) {
 				finished = true;
 			}
-			// free(recv_buf); 
+			free(recv_buf); 
 
 		} // end else
 
@@ -525,7 +525,7 @@ int main(int argc, char *argv[]) {
 	free(ln_my_lines);
 
 	if (my_rank == ROOT) {
-		// free(triang);
+		free(triang);
 	}
 
 	MPI_Finalize();
