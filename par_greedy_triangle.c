@@ -320,14 +320,15 @@ void triangulate() {
 				min_line->p = p;
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
-				// free(p);																		// FREE THESE
-				// free(q);																		// FREE THESE
 			}
 
-			// Have process zero add min_line to the triangulation.
+			// Have process 'root' (zero) add min_line to the triangulation.
 			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
+				if (my_rank != min_line_index) {
+					free(min_line);
+				}
 			}
 
 			// Free the receive buffer
@@ -362,7 +363,7 @@ void triangulate() {
 
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
-			if ((my_rank != min_line_index)) {
+			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
 				free(min_line->p);
 				free(min_line->q);
 				free(min_line);
