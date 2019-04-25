@@ -328,10 +328,11 @@ void triangulate() {
 			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
-				free(min_line);
 			}
+
 			// Free the receive buffer
 			free(recv_buf);
+
 			// Allocate an array of lines to hold the lines that don't 
 			// intersect with the global minimum.
 			line_t* temp = (line_t*) allocate(my_line_count*sizeof(line_t));
@@ -361,7 +362,7 @@ void triangulate() {
 
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
-			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
+			if ((my_rank != min_line_index)) {
 				free(min_line->p);
 				free(min_line->q);
 				free(min_line);
