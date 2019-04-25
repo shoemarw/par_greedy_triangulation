@@ -328,6 +328,7 @@ void triangulate() {
 			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
+				free(min_line);
 			}
 			// Free the receive buffer
 			free(recv_buf);
