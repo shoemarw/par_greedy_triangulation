@@ -260,6 +260,9 @@ void triangulate() {
 	while (!finished) {
 		// If this process still has lines of unknown status it must
 		// work to resolve them.
+
+		int min_line_index = 0; // Will hold index of the global min line.
+
 		if (my_unknown > 0) {
 			// Convert this processes' minimal (smallest) line to an array of
 			// five doubles for Allgather.
@@ -279,7 +282,6 @@ void triangulate() {
 				          recv_buf, 5, MPI_DOUBLE, MPI_COMM_WORLD);
 
 			// Find the global minimal line.
-			int min_line_index = 0; // Will hold index of the global min line.
 			for (int i = 0; i < nprocs; i++) {
 				if (recv_buf[i*5+LEN] != -1) {	// If not an impossible line		
 					// Compare the length of the current smallest line to the
@@ -381,7 +383,6 @@ void triangulate() {
 			if (my_rank == ROOT) {
 
 				// Find the global minimal line.
-				int min_line_index = 0; // Will hold index of the global min line.
 				for (int i = 0; i < nprocs; i++) {
 					if (recv_buf[i*5+LEN] != -1) {	// If not an impossible line		
 						// Compare the length of the current smallest line to the
