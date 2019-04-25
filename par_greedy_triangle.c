@@ -390,7 +390,7 @@ void triangulate() {
 				free(min_line);
 			}
 			else if (my_rank == ROOT && (my_rank != min_line_index)) {
-				// free(min_line);
+				free(min_line);
 			}
 		} // end if (my_unknown > 0)
 
