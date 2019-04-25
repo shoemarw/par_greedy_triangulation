@@ -347,8 +347,6 @@ void triangulate() {
 				min_line->p = p;
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
-				// free(p);																		// FREE THESE
-				// free(q);																		// FREE THESE
 			}
 
 			// Free the receive buffer
@@ -387,7 +385,7 @@ void triangulate() {
 				free(min_line->q);
 				free(min_line);
 			}
-			else if (my_rank == ROOT) {
+			else if (my_rank == ROOT && (my_rank != min_line_index)) {
 				free(min_line);
 			}
 		} // end if (my_unknown > 0)
