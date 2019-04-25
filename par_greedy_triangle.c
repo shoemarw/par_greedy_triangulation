@@ -314,6 +314,7 @@ void triangulate() {
 				p->y = recv_buf[min_line_index*5 + Y0];
 				q->x = recv_buf[min_line_index*5 + X1];
 				q->y = recv_buf[min_line_index*5 + Y1];
+
 				min_line->p = p;
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
@@ -430,6 +431,12 @@ void triangulate() {
 			free(recv_buf); 
 
 		} // end else
+
+		if ((my_rank != ROOT) && (my_rank != min_line_index)) {
+			// free(min_line->p);
+			// free(min_line->q);
+			free(min_line);
+		}
 
 	} // end while
 }
