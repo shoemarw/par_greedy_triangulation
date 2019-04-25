@@ -365,9 +365,6 @@ void triangulate() {
 				free(min_line->q);
 				free(min_line);
 			}
-			else {
-				free(min_line);
-			}
 		} // end if (my_unknown > 0)
 
 		// If this process has no more lines of unknown status then it must still
