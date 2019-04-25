@@ -333,7 +333,6 @@ void triangulate() {
 				// Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
-				free(min_line);
 			}
 			else {
 				// Get the minimal line
@@ -386,6 +385,9 @@ void triangulate() {
 			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
 				free(min_line->p);
 				free(min_line->q);
+				free(min_line);
+			}
+			else if (my_rank == ROOT) {
 				free(min_line);
 			}
 		} // end if (my_unknown > 0)
