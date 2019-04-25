@@ -326,9 +326,6 @@ void triangulate() {
 			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
-				if (my_rank != min_line_index) {
-					free(min_line);
-				}
 			}
 
 			// Free the receive buffer
@@ -366,6 +363,9 @@ void triangulate() {
 			if ((my_rank != ROOT) && (my_rank != min_line_index)) {
 				free(min_line->p);
 				free(min_line->q);
+				free(min_line);
+			}
+			else {
 				free(min_line);
 			}
 		} // end if (my_unknown > 0)
