@@ -337,6 +337,7 @@ void triangulate() {
 			}
 			else {
 				// Get the minimal line
+				min_line = (line_t*) allocate(sizeof(line_t));
 				point_t *p = (point_t*) allocate(sizeof(point_t));
 				point_t *q = (point_t*) allocate(sizeof(point_t));
 				p->x = recv_buf[min_line_index*5 + X0];
