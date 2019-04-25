@@ -308,6 +308,32 @@ void triangulate() {
 			// Otherwise we must build the min_line from data in the recv_buf
 			// (While making sure to use the appropriate index!)
 			}
+			else if (my_rank == ROOT) {
+				point_t *p = (point_t*) allocate(sizeof(point_t));
+				point_t *q = (point_t*) allocate(sizeof(point_t));
+				p->x = recv_buf[min_line_index*5 + X0];
+				p->y = recv_buf[min_line_index*5 + Y0];
+				q->x = recv_buf[min_line_index*5 + X1];
+				q->y = recv_buf[min_line_index*5 + Y1];
+
+				min_line_points[mlp_index] = *p;
+				min_line->p = &min_line_points[mlp_index];
+				mlp_index++;
+				free(p);
+
+				min_line_points[mlp_index] = *q;
+				min_line->q = &min_line_points[mlp_index];
+				mlp_index++;
+				free(q);
+
+				min_line->len = recv_buf[min_line_index*5 + LEN];
+
+
+				// Add line to triagulation
+				triang[tlines] = *min_line;
+				tlines++;
+				free(min_line);
+			}
 			else {
 				// Get the minimal line
 				point_t *p = (point_t*) allocate(sizeof(point_t));
@@ -324,11 +350,6 @@ void triangulate() {
 				// free(q);																		// FREE THESE
 			}
 
-			// Have process zero add min_line to the triangulation.
-			if (my_rank == ROOT) {
-				triang[tlines] = *min_line;
-				tlines++;
-			}
 			// Free the receive buffer
 			free(recv_buf);
 			// Allocate an array of lines to hold the lines that don't 
