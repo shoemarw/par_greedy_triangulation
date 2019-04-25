@@ -43,7 +43,7 @@ double IMPOSSIBLE_LINE[5] = {0, 0, 0, 0, -1}; // Processes send this during
 
 int nprocs;         	// number of processes
 int my_rank;        	// rank of a particular process
-line_t*  ln_my_lines;  	// a processes' portion of lines.
+line_t* ln_my_lines;  	// a processes' portion of lines.
 double* d_my_lines;		// a processes' portion of lines while in double format.
 double* d_all_lines;	// all lines in double format, used by root
 
@@ -53,6 +53,8 @@ long my_line_count = 0; // Count of how many lines a processes is responsible fo
 long l_num_points;
 point_t* points;
 point_t* points_to_free;
+point_t* min_line_points;
+long mlp_index = 0;			// index of next point to be stored
 
 
 void double_array_to_struct(double* arr, line_t* new_arr, long size){
@@ -106,7 +108,6 @@ void read_points(char *argv[]) {
 	// Open the input file for reading. 
 	char *fn = argv[1];
 	FILE* fin = open_file(fn, "r");
-	
 
 	// The first line of a file must contain a number indicating
 	// the number of points in the file. Read this value and use
@@ -169,6 +170,9 @@ void gen_lines() {
 		}
 	}
 
+	// Kept by root only, used to free up all points in min lines saved by root.
+	min_line_points = (point_t*) allocate(sizeof(point_t) * my_line_count * 2);
+
 	free(points);
 }
 
@@ -182,9 +186,15 @@ void distrib_lines() {
 	int *i_displs;
 
 	if(my_rank==ROOT) {
-	 	l_base = my_line_count/nprocs;		// Base number of lines to send (lines being 5 doubles)
-	 	remainder = my_line_count%nprocs;	// if there are any remaining lines after the base amount is split up
-	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); // Amount of lines (5 doubles) to send to each process 
+		// Base number of lines to send (lines being 5 doubles)
+	 	l_base = my_line_count/nprocs;
+	 	
+	 	// if there are any remaining lines after the base amount is split up
+	 	remainder = my_line_count%nprocs;
+
+		// Amount of lines (5 doubles) to send to each process 
+	 	i_send_counts = (int*) allocate(sizeof(int) * nprocs); 
+	 	
 	 	// Calculate i_send_counts
 	 	for (int i = 0; i < nprocs; i++) {
 	 		i_send_counts[i] = l_base*5;	// (*5) is to account for lines being five doubles
@@ -212,7 +222,8 @@ void distrib_lines() {
 	d_my_lines = (double*) allocate(i_recv_doubs*sizeof(double));
 
 	// scatter lines
-	MPI_Scatterv(d_all_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
+	MPI_Scatterv(d_all_lines, i_send_counts, i_displs, MPI_DOUBLE, d_my_lines, 
+		i_recv_doubs, MPI_DOUBLE, ROOT, MPI_COMM_WORLD);
 
 	ln_my_lines = (line_t *) allocate(my_line_count*sizeof(line_t));
 
@@ -285,7 +296,7 @@ void triangulate() {
 			} // end for
 
 			// Will hold the minimal line.
-			line_t* min_line = (line_t*) allocate(sizeof(line_t));;
+			line_t* min_line = (line_t*) allocate(sizeof(line_t)); // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
 			// See if this process has the global min line, if so we must
 			// adjust its number of lines of unknown status and set min_line.
 			if (my_rank == min_line_index) {
@@ -345,11 +356,11 @@ void triangulate() {
 
 			free(temp);
 			// Have everyone but the root deallocate space associated with min_line
-			// if (my_rank != ROOT) {
-			// 	free(min_line->p);
-			// 	free(min_line->q);
-			// 	free(min_line);
-			// }
+			if (my_rank != ROOT) {
+				free(min_line->p);
+				free(min_line->q);
+				free(min_line);
+			}
 		} // end if (my_unknown > 0)
 
 		// If this process has no more lines of unknown status then it must still
@@ -389,7 +400,7 @@ void triangulate() {
 
 		
 				// Get the minimal line
-				min_line = (line_t*) allocate(sizeof(line_t));
+				min_line = (line_t*) allocate(sizeof(line_t)); // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
 				point_t *p = (point_t*) allocate(sizeof(point_t));
 				point_t *q = (point_t*) allocate(sizeof(point_t));
 				p->x = recv_buf[min_line_index*5 + X0];
@@ -401,7 +412,6 @@ void triangulate() {
 				min_line->len = recv_buf[min_line_index*5 + LEN];
 				// free(p);																		// FREE THESE
 				// free(q);																		// FREE THESE
-// add to a triagulation point array to free
 				// // Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
