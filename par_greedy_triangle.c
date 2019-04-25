@@ -427,6 +427,7 @@ void triangulate() {
 				// Add line to triagulation
 				triang[tlines] = *min_line;
 				tlines++;
+				free(min_line);
 			}
 			// Check if all of the lines have distance of -1. If so then we are done!
 			int count = 0;
