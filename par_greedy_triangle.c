@@ -320,9 +320,11 @@ void triangulate() {
 				min_line->p = p;
 				min_line->q = q;
 				min_line->len = recv_buf[min_line_index*5 + LEN];
+				// free(p);																		// FREE THESE
+				// free(q);																		// FREE THESE
 			}
 
-			// Have process 'root' (zero) add min_line to the triangulation.
+			// Have process zero add min_line to the triangulation.
 			if (my_rank == ROOT) {
 				triang[tlines] = *min_line;
 				tlines++;
